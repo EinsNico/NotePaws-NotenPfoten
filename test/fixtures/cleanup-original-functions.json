@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "provenance": {
+    "description": "Exact original function declarations extracted from the immutable pre-cleanup snapshot; production behavior oracle, never regenerated from current src.",
+    "snapshot": "control-system-2026-10-08/baseline",
+    "baselineManifestSha256": "559ce6d0cdc3c2f9a25f28b442689f768af5f51837c70d530f4a680bac6a2d9a"
+  },
+  "originals": {
+    "src/model/AdaptiveHistory.js": {
+      "sourceSha256": "a0df649906f0054df3611a08194771270eea71e53c3f0f6c152a5d92e7c6568b",
+      "functions": {
+        "canonicalize": {
+          "source": "function canonicalize(value) {\n  if (Array.isArray(value)) {\n    return value.map(canonicalize);\n  }\n  if (value && typeof value === \"object\") {\n    return Object.keys(value).sort().reduce((result, key) => {\n      result[key] = canonicalize(value[key]);\n      return result;\n    }, {});\n  }\n  return value;\n}",
+          "sha256": "6e91a2c917c6a5b5592037d6f99ff83e2b11784e718abb78d8167d704172acf2",
+          "bodySha256": "e345bf5e4d70aba91de3badd1a8258ab25524846bcd685d7e8e5483edf52f2a9",
+          "originalStart": 539,
+          "originalEnd": 847
+        }
+      }
+    },
+    "src/model/SaveDataImport.js": {
+      "sourceSha256": "b099b127629ce86a8c2ef07f3220b2a3ed632e0ac7142737ce0201cb72c02175",
+      "functions": {
+        "canonicalize": {
+          "source": "function canonicalize(value) {\n  if (Array.isArray(value)) {\n    return value.map(canonicalize);\n  }\n  if (value && typeof value === \"object\") {\n    return Object.keys(value).sort().reduce((result, key) => {\n      result[key] = canonicalize(value[key]);\n      return result;\n    }, {});\n  }\n  return value;\n}",
+          "sha256": "6e91a2c917c6a5b5592037d6f99ff83e2b11784e718abb78d8167d704172acf2",
+          "bodySha256": "e345bf5e4d70aba91de3badd1a8258ab25524846bcd685d7e8e5483edf52f2a9",
+          "originalStart": 937,
+          "originalEnd": 1245
+        },
+        "recoverPendingLearningWrites": {
+          "source": "async function recoverPendingLearningWrites(learningStorage) {\n  await learningStorage.flush();\n  if (\n    typeof learningStorage.getStatus !== \"function\"\n    || learningStorage.getStatus().failedWrites === 0\n  ) {\n    return;\n  }\n  const retry = await learningStorage.retryFailedWrites();\n  if (!retry.saved || retry.failedWrites > 0) {\n    throw retry.error || new Error(\"Pending learning data could not be saved.\");\n  }\n}",
+          "sha256": "1956dcac09f946ea253e920c59f6f01adeb270b4cb4c02af524eb4f0199a774e",
+          "bodySha256": "67d29d7efeba6088755885f229d146271831322b132b9200f35f6223c2e32d02",
+          "originalStart": 11325,
+          "originalEnd": 11749
+        }
+      }
+    },
+    "src/model/SaveDataMerge.js": {
+      "sourceSha256": "2158f698f516562936ef8c0d0ed00b931d6eb519e8e662d7b8bb91c1ce84ddfa",
+      "functions": {
+        "canonicalize": {
+          "source": "function canonicalize(value) {\n  if (Array.isArray(value)) {\n    return value.map(canonicalize);\n  }\n  if (value && typeof value === \"object\") {\n    return Object.keys(value).sort().reduce((result, key) => {\n      result[key] = canonicalize(value[key]);\n      return result;\n    }, {});\n  }\n  return value;\n}",
+          "sha256": "6e91a2c917c6a5b5592037d6f99ff83e2b11784e718abb78d8167d704172acf2",
+          "bodySha256": "e345bf5e4d70aba91de3badd1a8258ab25524846bcd685d7e8e5483edf52f2a9",
+          "originalStart": 638,
+          "originalEnd": 946
+        }
+      }
+    },
+    "src/model/SaveDataLargeMergePreparation.js": {
+      "sourceSha256": "a18252fb5f0e2bfd98178090e313fb485990dd948b78023eaf50e7b00b5ad6a2",
+      "functions": {
+        "canonical": {
+          "source": "function canonical(value) {\n  if (Array.isArray(value)) return value.map(canonical);\n  if (value && typeof value === \"object\") {\n    return Object.keys(value).sort().reduce((result, key) => {\n      result[key] = canonical(value[key]);\n      return result;\n    }, {});\n  }\n  return value;\n}",
+          "sha256": "5856e472d3ef71fade9693bfdfe71c64823452a5c314ef9c9f3b0d4c88ff079e",
+          "bodySha256": "f75226d16c3a4a56b5cec1421f95fa19f2e7b0e8612ecd447748dd52598115dc",
+          "originalStart": 1160,
+          "originalEnd": 1449
+        }
+      }
+    },
+    "src/model/SaveDataLargeMergePreview.js": {
+      "sourceSha256": "82e07baef5b899d6add10275289fb35c8f0f5b417a6b2ebe79749e199b61af3f",
+      "functions": {
+        "canonical": {
+          "source": "function canonical(value) {\n  if (Array.isArray(value)) return value.map(canonical);\n  if (value && typeof value === \"object\") {\n    return Object.keys(value).sort().reduce((result, key) => {\n      result[key] = canonical(value[key]);\n      return result;\n    }, {});\n  }\n  return value;\n}",
+          "sha256": "5856e472d3ef71fade9693bfdfe71c64823452a5c314ef9c9f3b0d4c88ff079e",
+          "bodySha256": "f75226d16c3a4a56b5cec1421f95fa19f2e7b0e8612ecd447748dd52598115dc",
+          "originalStart": 634,
+          "originalEnd": 923
+        }
+      }
+    },
+    "src/model/SaveDataLargeMergeRoundWriter.js": {
+      "sourceSha256": "81d54919687da88f53b40c2f834c7bb05e97b47e2a4591ebae6be01effb1d896",
+      "functions": {
+        "canonical": {
+          "source": "function canonical(value) {\n  if (Array.isArray(value)) return value.map(canonical);\n  if (value && typeof value === \"object\") {\n    return Object.keys(value).sort().reduce((result, key) => {\n      result[key] = canonical(value[key]);\n      return result;\n    }, {});\n  }\n  return value;\n}",
+          "sha256": "5856e472d3ef71fade9693bfdfe71c64823452a5c314ef9c9f3b0d4c88ff079e",
+          "bodySha256": "f75226d16c3a4a56b5cec1421f95fa19f2e7b0e8612ecd447748dd52598115dc",
+          "originalStart": 900,
+          "originalEnd": 1189
+        }
+      }
+    },
+    "src/model/SaveDataFiles.js": {
+      "sourceSha256": "d7c3af6730b660871db75985bf909b170b77dc958464af809f34781813839475",
+      "functions": {
+        "recoverPendingLearningWrites": {
+          "source": "async function recoverPendingLearningWrites(learningStorage) {\n  await learningStorage.flush();\n  if (\n    typeof learningStorage.getStatus !== \"function\"\n    || learningStorage.getStatus().failedWrites === 0\n  ) {\n    return;\n  }\n  const retry = await learningStorage.retryFailedWrites();\n  if (!retry.saved || retry.failedWrites > 0) {\n    throw retry.error || new Error(\"Pending learning data could not be saved.\");\n  }\n}",
+          "sha256": "1956dcac09f946ea253e920c59f6f01adeb270b4cb4c02af524eb4f0199a774e",
+          "bodySha256": "67d29d7efeba6088755885f229d146271831322b132b9200f35f6223c2e32d02",
+          "originalStart": 3908,
+          "originalEnd": 4332
+        }
+      }
+    }
+  }
+}

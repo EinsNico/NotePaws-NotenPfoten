@@ -1,0 +1,10 @@
+packages:
+  - "."
+  - "cordova"
+
+allowBuilds:
+  core-js: false
+  ejs: false
+  es5-ext: false
+  fsevents: false
+  uglifyjs-webpack-plugin: false

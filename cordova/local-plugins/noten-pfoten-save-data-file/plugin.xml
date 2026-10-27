@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    id="de.nico.notenpfoten.savedatafile"
+    version="1.0.0">
+    <name>NotenPfotenSaveDataFile</name>
+    <description>Opens Android's system document picker for local save-data exports.</description>
+    <license>AGPL-3.0-only</license>
+
+    <js-module src="www/save-data-file.js" name="NotenPfotenSaveDataFile">
+        <clobbers target="cordova.plugins.saveDataFile" />
+    </js-module>
+
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="NotenPfotenSaveDataFile">
+                <param
+                    name="android-package"
+                    value="de.nico.notenpfoten.savedata.SaveDataFilePlugin" />
+            </feature>
+        </config-file>
+        <source-file
+            src="src/android/SaveDataFilePlugin.java"
+            target-dir="src/de/nico/notenpfoten/savedata" />
+        <source-file
+            src="src/android/BackupFileSizeVerifier.java"
+            target-dir="src/de/nico/notenpfoten/savedata" />
+    </platform>
+</plugin>

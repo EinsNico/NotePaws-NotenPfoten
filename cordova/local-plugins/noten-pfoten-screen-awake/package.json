@@ -1,0 +1,7 @@
+{
+  "name": "cordova-plugin-noten-pfoten-screen-awake",
+  "version": "1.0.0",
+  "description": "Local Android screen-awake window flag for active exercises",
+  "cordova": { "id": "de.nico.notenpfoten.screenawake", "platforms": ["android"] },
+  "license": "AGPL-3.0-only"
+}

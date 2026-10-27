@@ -1,0 +1,34 @@
+# Installed dependencies and generated output
+node_modules/
+dist/
+cordova/www/
+cordova/platforms/
+cordova/plugins/
+.gradle/
+**/local.properties
+
+# Signing material and local credentials
+*.jks
+*.keystore
+*.p12
+*.pfx
+*.key
+*.pem
+.env
+.env.*
+!.env.example
+cordova/build.json
+
+# Local builds, backups and internal work records
+apk/
+releases/
+Release-Vorbereitung/
+Backup/
+backups/
+*.apk
+*.aab
+*.idsig
+*.log
+.DS_Store
+.idea/
+.vscode/

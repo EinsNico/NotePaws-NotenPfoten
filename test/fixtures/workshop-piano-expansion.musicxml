@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<score-partwise version="4.0">
+ <work><work-title>Klavierzeichen – Editorprüfung</work-title></work>
+ <part-list><score-part id="P1"><part-name>Piano</part-name></score-part></part-list>
+ <part id="P1">
+  <measure number="1">
+   <attributes><divisions>4</divisions><key><fifths>0</fifths></key><time><beats>4</beats><beat-type>4</beat-type></time><staves>2</staves><clef number="1"><sign>G</sign><line>2</line><clef-octave-change>1</clef-octave-change></clef><clef number="2"><sign>F</sign><line>4</line></clef></attributes>
+   <direction><direction-type><segno/></direction-type><staff>1</staff><sound segno="A"/></direction>
+   <direction><direction-type><words>Swing</words></direction-type><staff>1</staff><sound><swing><first>2</first><second>1</second><swing-type>eighth</swing-type></swing></sound></direction>
+   <direction><direction-type><pedal type="sostenuto" line="yes" sign="yes" number="2"/></direction-type><staff>2</staff><sound sostenuto-pedal="100"/></direction>
+   <note><grace slash="yes" steal-time-following="20"/><pitch><step>D</step><octave>5</octave></pitch><voice>1</voice><type>eighth</type><staff>1</staff></note>
+   <note><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff><notations><technical><fingering>1</fingering><fingering substitution="yes">2</fingering><fingering alternate="yes">3</fingering></technical><ornaments><delayed-turn/><accidental-mark placement="above">sharp</accidental-mark><accidental-mark placement="below">flat</accidental-mark><wavy-line type="start" number="1"/></ornaments></notations></note>
+   <note><pitch><step>D</step><octave>5</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>
+   <note><pitch><step>E</step><octave>5</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>
+   <note><pitch><step>F</step><octave>5</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>
+   <backup><duration>16</duration></backup><note><pitch><step>C</step><octave>3</octave></pitch><duration>16</duration><voice>2</voice><type>whole</type><staff>2</staff></note>
+  </measure>
+  <measure number="2">
+   <direction><direction-type><pedal type="change" line="yes" sign="no" number="2"/></direction-type><staff>2</staff><sound sostenuto-pedal="100"/></direction>
+   <note><pitch><step>G</step><octave>5</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><staff>1</staff><notations><ornaments><wavy-line type="stop" number="1"/></ornaments></notations></note>
+   <note><pitch><step>F</step><octave>5</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><staff>1</staff></note>
+   <direction><direction-type><words>al Coda B</words></direction-type><staff>1</staff><sound tocoda="B" time-only="2"/></direction>
+   <backup><duration>16</duration></backup><note><pitch><step>G</step><octave>2</octave></pitch><duration>16</duration><voice>2</voice><type>whole</type><staff>2</staff></note>
+  </measure>
+  <measure number="3">
+   <direction><direction-type><pedal type="stop" line="yes" sign="no" number="2"/></direction-type><staff>2</staff><sound sostenuto-pedal="0"/></direction>
+   <note><pitch><step>E</step><octave>5</octave></pitch><duration>16</duration><voice>1</voice><type>whole</type><staff>1</staff></note>
+   <direction><direction-type><words>D.S. A</words></direction-type><staff>1</staff><sound dalsegno="A"/></direction>
+   <backup><duration>16</duration></backup><note><pitch><step>C</step><octave>3</octave></pitch><duration>16</duration><voice>2</voice><type>whole</type><staff>2</staff></note>
+  </measure>
+  <measure number="4">
+   <direction><direction-type><coda/></direction-type><staff>1</staff><sound coda="B"/></direction>
+   <direction><direction-type><words>una corda</words></direction-type><staff>2</staff><sound soft-pedal="100"/></direction>
+   <note><pitch><step>C</step><octave>5</octave></pitch><duration>16</duration><voice>1</voice><type>whole</type><staff>1</staff></note>
+   <direction><direction-type><words>Fine</words></direction-type><staff>1</staff><sound fine="yes" time-only="2"/></direction>
+   <backup><duration>16</duration></backup><note><pitch><step>C</step><octave>3</octave></pitch><duration>16</duration><voice>2</voice><type>whole</type><staff>2</staff></note>
+  </measure>
+ </part>
+</score-partwise>

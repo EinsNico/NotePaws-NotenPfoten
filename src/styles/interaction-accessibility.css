@@ -1,0 +1,50 @@
+/* Keyboard focus is separate from the selected option in every app mode. */
+#app button:focus-visible,
+#app a[href]:focus-visible,
+#app input:focus-visible,
+#app select:focus-visible,
+#app textarea:focus-visible,
+#app summary:focus-visible,
+#app [tabindex]:not([tabindex="-1"]):focus-visible,
+#app [role="button"]:focus-visible,
+#app [role="tab"]:focus-visible,
+#app .app-focus-ring:focus-visible {
+  outline: 3px solid #17434e !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 2px #fff !important;
+}
+
+/* Shared recovery action; component copy, font sizes and retry logic stay local. */
+#app .persistence-retry {
+  box-sizing: border-box;
+  min-height: 44px !important;
+  max-width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #2d6e7b;
+  border-radius: 12px;
+  background: #fffdf8;
+  color: #29464d;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+#app .persistence-retry:disabled {
+  cursor: wait;
+}
+
+@media (forced-colors: active) {
+  #app button:focus-visible,
+  #app a[href]:focus-visible,
+  #app input:focus-visible,
+  #app select:focus-visible,
+  #app textarea:focus-visible,
+  #app summary:focus-visible,
+  #app [tabindex]:not([tabindex="-1"]):focus-visible,
+  #app [role="button"]:focus-visible,
+  #app [role="tab"]:focus-visible,
+  #app .app-focus-ring:focus-visible {
+    outline-color: Highlight !important;
+  }
+}

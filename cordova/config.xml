@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="de.nico.notenpfoten" version="2.5.37" android-versionCode="20537" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Noten Pfoten</name>
+    <description>
+        Learn to read sheet music. Based on the open-source project by MelvilQ.
+    </description>
+    <author href="https://github.com/MelvilQ/noten-lernen">
+        NicronTheFox; based on the original work by MelvilQ
+    </author>
+    <icon density="mdpi" src="res/icon-48.png" />
+    <icon density="hdpi" src="res/icon-72.png" />
+    <icon density="xhdpi" src="res/icon-96.png" />
+    <icon density="xxhdpi" src="res/icon-144.png" />
+    <icon density="xxxhdpi" src="res/icon-192.png" />
+    <content src="index.html" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <platform name="android">
+        <preference name="Orientation" value="fullSensor" />
+        <preference name="android-targetSdkVersion" value="36" />
+        <allow-intent href="market:*" />
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
+            <application android:allowBackup="false" android:dataExtractionRules="@xml/data_extraction_rules" android:fullBackupContent="@xml/backup_rules" />
+        </edit-config>
+        <resource-file src="locales/android/values-en/strings.xml" target="app/src/main/res/values-en/strings.xml" />
+        <resource-file src="resources/android/xml/backup_rules.xml" target="app/src/main/res/xml/backup_rules.xml" />
+        <resource-file src="resources/android/xml/data_extraction_rules.xml" target="app/src/main/res/xml/data_extraction_rules.xml" />
+    </platform>
+    <hook src="scripts/prepare-android-privacy.js" type="after_prepare" />
+    <hook src="scripts/prepare-android-save-data-plugin.js" type="after_prepare" />
+    <hook src="scripts/prepare-android-audio-route.js" type="after_prepare" />
+    <hook src="scripts/prepare-android-screen-awake.js" type="after_prepare" />
+    <platform name="ios">
+        <allow-intent href="itms:*" />
+        <allow-intent href="itms-apps:*" />
+    </platform>
+    <plugin name="cordova-plugin-vibration" spec="^3.1.0" />
+</widget>

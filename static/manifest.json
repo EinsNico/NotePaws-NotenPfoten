@@ -1,0 +1,23 @@
+{
+  "name": "Noten Pfoten",
+  "short_name": "Noten Pfoten",
+  "start_url": "/",
+  "lang": "de-DE",
+  "description": "Noten lesen lernen",
+  "icons": [
+    {
+      "src": "/static/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/static/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "background_color": "white",
+  "theme_color": "lightblue",
+  "display": "standalone",
+  "orientation": "any"
+}

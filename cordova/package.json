@@ -1,0 +1,34 @@
+{
+  "name": "de.nico.notenpfoten",
+  "displayName": "Noten Pfoten",
+  "version": "2.5.37",
+  "description": "Learn to read sheet music",
+  "main": "index.js",
+  "scripts": {
+    "copy-locales": "cp -r ./locales/android/values-en ./platforms/android/app/src/main/res/",
+    "build": "npm run copy-locales && cordova build android --release -- --packageType apk"
+  },
+  "author": "NicronTheFox (based on original work by MelvilQ)",
+  "license": "AGPL-3.0-only",
+  "dependencies": {
+    "cordova-plugin-noten-pfoten-audio-route": "file:local-plugins/noten-pfoten-audio-route",
+    "cordova-plugin-noten-pfoten-save-data-file": "file:local-plugins/noten-pfoten-save-data-file",
+    "cordova-plugin-noten-pfoten-screen-awake": "file:local-plugins/noten-pfoten-screen-awake",
+    "cordova-plugin-vibration": "^3.1.1"
+  },
+  "cordova": {
+    "plugins": {
+      "cordova-plugin-vibration": {},
+      "de.nico.notenpfoten.savedatafile": {},
+      "de.nico.notenpfoten.audioroute": {},
+      "de.nico.notenpfoten.screenawake": {}
+    },
+    "platforms": [
+      "android"
+    ]
+  },
+  "devDependencies": {
+    "cordova": "13.0.0",
+    "cordova-android": "15.1.0"
+  }
+}

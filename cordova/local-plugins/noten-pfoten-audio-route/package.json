@@ -1,0 +1,7 @@
+{
+  "name": "cordova-plugin-noten-pfoten-audio-route",
+  "version": "1.0.0",
+  "description": "Local Android media-output route observation without microphone access",
+  "cordova": { "id": "de.nico.notenpfoten.audioroute", "platforms": ["android"] },
+  "license": "AGPL-3.0-only"
+}

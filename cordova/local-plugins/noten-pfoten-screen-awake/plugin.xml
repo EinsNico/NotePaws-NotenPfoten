@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" id="de.nico.notenpfoten.screenawake" version="1.0.0">
+    <name>NotenPfotenScreenAwake</name>
+    <description>Keeps the active exercise screen awake; requests no Android permissions.</description>
+    <license>AGPL-3.0-only</license>
+    <js-module src="www/screen-awake.js" name="NotenPfotenScreenAwake">
+        <clobbers target="cordova.plugins.screenAwake" />
+    </js-module>
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="NotenPfotenScreenAwake">
+                <param name="android-package" value="de.nico.notenpfoten.screen.ScreenAwakePlugin" />
+            </feature>
+        </config-file>
+        <source-file src="src/android/ScreenAwakePlugin.java" target-dir="src/de/nico/notenpfoten/screen" />
+    </platform>
+</plugin>

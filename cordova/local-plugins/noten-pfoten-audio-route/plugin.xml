@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" id="de.nico.notenpfoten.audioroute" version="1.0.0">
+    <name>NotenPfotenAudioRoute</name>
+    <description>Observes the routed media output; never records audio.</description>
+    <license>AGPL-3.0-only</license>
+    <js-module src="www/audio-route.js" name="NotenPfotenAudioRoute">
+        <clobbers target="cordova.plugins.audioRoute" />
+    </js-module>
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="NotenPfotenAudioRoute">
+                <param name="android-package" value="de.nico.notenpfoten.audio.AudioRoutePlugin" />
+            </feature>
+        </config-file>
+        <source-file src="src/android/AudioRoutePlugin.java" target-dir="src/de/nico/notenpfoten/audio" />
+    </platform>
+</plugin>
