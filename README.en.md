@@ -55,7 +55,7 @@ Report bugs through this repository’s Issues. Please include the app version, 
 
 ## License and credits
 
-This project was further developed with the help of AI. ChatGPT 5.5 Sol, 5.6 Sol, 6.1 Sol and Astra were used, together with the Codex harness as the development environment. EinsNico provided the ideas, design decisions and review of the results.
+This project was further developed with the help of AI. The models ChatGPT 5.5 Sol, 5.6 Sol, 6.1 Sol and Astra were used within the Codex harness. EinsNico provided the ideas, design decisions and review of the results.
 
 Adapted and maintained by **EinsNico**, based on [noten-lernen by MelvilQ](https://github.com/MelvilQ/noten-lernen).
 
