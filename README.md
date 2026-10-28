@@ -60,3 +60,9 @@ Dieses Projekt wurde mithilfe von KI weiterentwickelt. Dabei kamen die Modelle C
 Angepasst und gepflegt von **EinsNico**. Grundlage ist [noten-lernen von MelvilQ](https://github.com/MelvilQ/noten-lernen).
 
 Dieses Projekt steht unter **AGPL-3.0-only**; siehe [LICENSE](LICENSE). Der MIT-Lizenztext und die Urheberhinweise des ursprünglichen Projekts bleiben in [LICENSE-MIT-ORIGINAL](LICENSE-MIT-ORIGINAL) erhalten. Weitere Komponenten und deren Lizenztexte sind in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) dokumentiert. Namen und Logos können eigenen Markenrechten unterliegen.
+
+## Urheberrecht an Inhalten
+
+Bilder, Texte, Grafiken, Illustrationen und andere kreative Inhalte dieses Projekts sind urheberrechtlich geschützt, soweit sie die gesetzlichen Schutzvoraussetzungen erfüllen. Die Rechte verbleiben bei den jeweiligen Urhebern beziehungsweise Rechteinhabern.
+
+Nutzung, Bearbeitung und Weitergabe richten sich nach den jeweils geltenden Lizenzbedingungen. Dieser Hinweis ändert weder die AGPL-3.0-only-Lizenz des Projekts noch die gesonderten Lizenzbedingungen und Urheberhinweise für Inhalte Dritter und schränkt die dort gewährten Nutzungsrechte nicht ein.

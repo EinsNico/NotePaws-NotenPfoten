@@ -60,3 +60,9 @@ This project was further developed with the help of AI. The models ChatGPT 5.5 S
 Adapted and maintained by **EinsNico**, based on [noten-lernen by MelvilQ](https://github.com/MelvilQ/noten-lernen).
 
 This project is licensed under **AGPL-3.0-only**; see [LICENSE](LICENSE). The original project’s MIT license and copyright notices are preserved in [LICENSE-MIT-ORIGINAL](LICENSE-MIT-ORIGINAL). Other components and their license texts are documented in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Names and logos may be subject to separate trademark rights.
+
+## Copyright in content
+
+Images, texts, graphics, illustrations and other creative content in this project are protected by copyright to the extent that they meet the applicable legal requirements. Rights remain with the respective authors or rights holders.
+
+Use, modification and redistribution are governed by the applicable license terms. This notice does not change the project's AGPL-3.0-only license or the separate license terms and copyright notices for third-party content, and does not restrict the permissions granted by those licenses.
