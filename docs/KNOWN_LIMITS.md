@@ -7,4 +7,4 @@
 - Der tatsächliche Web-Abhängigkeitsstand folgt dem pnpm-Lockfile; das ältere npm-Lockfile weicht davon ab.
 - Das bereinigte Quellpaket wurde nicht auf einem frischen Fremdrechner neu installiert und gebaut. Historische Tests können ausgeschlossene interne Auditbelege voraussetzen.
 - Android 7.0 / API 24 ist die deklarierte Mindestversion. Es wurden nicht alle Geräte einzeln geprüft. Die Oberfläche unterstützt Deutsch und Englisch.
-- APK und Quellcode sind lokal vorbereitet. Durch diese Vorbereitung wird nichts auf GitHub oder im Play Store veröffentlicht; kein neues AAB wurde gebaut.
+- Verfügbare Downloads und der Veröffentlichungsstatus stehen unter [GitHub-Releases](https://github.com/EinsNico/NotePaws-NotenPfoten/releases). Ein gespeicherter Release-Entwurf ist noch keine freigegebene Veröffentlichung. Kein neues AAB wurde gebaut.

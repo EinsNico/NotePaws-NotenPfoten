@@ -8,6 +8,8 @@ Practice reading notes, playing melodies and keeping rhythm — using on-screen 
 
 **Version 2.5.37 · Android 7.0 or later · German and English**
 
+[Downloads & releases](https://github.com/EinsNico/NotePaws-NotenPfoten/releases) · [Changelog](CHANGELOG.md) · [Report a bug](https://github.com/EinsNico/NotePaws-NotenPfoten/issues/new/choose)
+
 ## The app
 
 - **Single notes:** Guided learning with personal progress tracking and free practice. Choose bass clef, treble clef or both; notes appear one at a time.
@@ -22,7 +24,7 @@ Practice reading notes, playing melodies and keeping rhythm — using on-screen 
 
 ## Installation
 
-The signed Android APK is provided in this repository’s **Releases** section: `Noten-Pfoten-2.5.37-release.apk`.
+The signed Android APK is available under **[Releases and downloads](https://github.com/EinsNico/NotePaws-NotenPfoten/releases)**: `Noten-Pfoten-2.5.37-release.apk`.
 
 1. Download the APK to your Android device and open it.
 2. If Android asks, allow installation from the app you used to open the file.
@@ -51,7 +53,7 @@ See [docs/BUILDING.md](docs/BUILDING.md) for the full build guide and [docs/KNOW
 
 ## Feedback
 
-Report bugs through this repository’s Issues. Please include the app version, device, Android version, input method and brief steps to reproduce the problem. Do not attach private learning-progress backups publicly.
+Report bugs through this repository’s [Issues](https://github.com/EinsNico/NotePaws-NotenPfoten/issues/new/choose). Please include the app version, device, Android version, input method and brief steps to reproduce the problem. Do not attach private learning-progress backups publicly.
 
 ## License and credits
 
