@@ -55,7 +55,7 @@ Fehler können über die Issues des Repositorys gemeldet werden. Hilfreich sind 
 
 ## Lizenz und Herkunft
 
-Dieses Projekt wurde mithilfe von KI weiterentwickelt. Dabei kamen ChatGPT 5.5, 5.6, Soul, 6.1 Soul und Astra sowie das Codex-Harness als Entwicklungsumgebung zum Einsatz. Ideen, Gestaltung, Entscheidungen und die Prüfung der Ergebnisse lagen bei EinsNico.
+Dieses Projekt wurde mithilfe von KI weiterentwickelt. Dabei kamen ChatGPT 5.5 Sol, 5.6 Sol, 6.1 Sol und Astra sowie das Codex-Harness als Entwicklungsumgebung zum Einsatz. Ideen, Gestaltung, Entscheidungen und die Prüfung der Ergebnisse lagen bei EinsNico.
 
 Angepasst und gepflegt von **EinsNico**. Grundlage ist [noten-lernen von MelvilQ](https://github.com/MelvilQ/noten-lernen).
 
