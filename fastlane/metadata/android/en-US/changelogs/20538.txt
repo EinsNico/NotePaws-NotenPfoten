@@ -1,0 +1,1 @@
+Melody and chord note-range selectors now share the Single Notes design: bass and treble clefs, coloured fields, range handles and fine adjustment. Upper limits appear above lower limits. Includes the revised introduction, specific import notices and updated app information.

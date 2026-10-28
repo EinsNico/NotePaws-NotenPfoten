@@ -1,0 +1,22 @@
+Note Paws helps you practise reading music step by step. Choose your own note range and tempo. Practise on screen or with a MIDI instrument. The app works offline and does not require an account.
+
+<b>Four ways to practise</b>
+<ul>
+<li><b>Single Notes:</b> Find the right key for each note. Learning Mode takes your previous progress into account; Free Training lets you choose your own settings.</li>
+<li><b>Note Flow:</b> Practise flowing melodies and playing several notes together in chord mode. Chord practice requires a MIDI instrument.</li>
+<li><b>Rhythm Sense:</b> Read rhythm notation and tap the on-screen drum at the right time. Adjust the tempo, time signature and note values.</li>
+<li><b>Notebench:</b> Create and edit your own pieces, import MusicXML or MIDI files and practise selected sections. The score view includes tools for notes, rests and accidentals.</li>
+</ul>
+
+<b>Your practice, your choices</b>
+<ul>
+<li>Practise bass clef, treble clef or both.</li>
+<li>Set note ranges on a graphical keyboard with handles and fine adjustment.</li>
+<li>Include black keys if you want to, and choose accidentals and keys yourself.</li>
+<li>View learning statistics, round history and daily tasks.</li>
+<li>Keep your progress locally and create manual backups.</li>
+</ul>
+
+Available on-screen input methods depend on the selected mode. The introduction shows the main features and can be reopened later. Select German or English in the app, and choose the note-naming system independently.
+
+No advertising, account or paywall. Licensed under AGPL-3.0-only. Further developed and maintained by EinsNico, based on “noten-lernen” by MelvilQ. Fox design by Beeko. AI assisted the development; EinsNico provided the ideas, design decisions and review of the results.

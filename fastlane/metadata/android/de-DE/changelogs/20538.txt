@@ -1,0 +1,1 @@
+Notenbereiche in Melodie und Akkorden an die Einzelnoten-Ansicht angeglichen: gemeinsame Gestaltung mit Bass-/Violinschlüssel, farbigen Feldern, Bereichsgriffen und Feineinstellung. Obergrenzen stehen oben, Untergrenzen darunter. Enthält die überarbeitete Einführung, konkrete Importhinweise und die aktuelle App-Info.

@@ -1,0 +1,22 @@
+Noten Pfoten hilft dir dabei, Notenlesen Schritt für Schritt zu üben. Wähle deinen Notenbereich und dein Tempo selbst. Übe am Bildschirm oder mit einem MIDI-Instrument. Die App funktioniert offline und benötigt kein Konto.
+
+<b>Vier Bereiche zum Üben</b>
+<ul>
+<li><b>Einzelnoten:</b> Finde zu jeder Note die richtige Taste. Der Lernmodus berücksichtigt deinen bisherigen Lernstand; im freien Training bestimmst du deine Auswahl selbst.</li>
+<li><b>Notenfluss:</b> Übe fließende Melodien und das gemeinsame Spielen mehrerer Töne im Akkordmodus. Für das Akkordtraining benötigst du ein MIDI-Instrument.</li>
+<li><b>Taktgefühl:</b> Lies Rhythmusnotation und tippe im passenden Moment auf die Bildschirmtrommel. Tempo, Taktart und Notenwerte sind einstellbar.</li>
+<li><b>Notenwerkstatt:</b> Erstelle und bearbeite eigene Stücke, importiere MusicXML- oder MIDI-Dateien und übe ausgewählte Abschnitte. Die Notenansicht bietet Werkzeuge für Noten, Pausen und Vorzeichen.</li>
+</ul>
+
+<b>Dein Training, deine Auswahl</b>
+<ul>
+<li>Bass- und Violinschlüssel einzeln oder gemeinsam üben.</li>
+<li>Notenbereiche auf einer grafischen Klaviatur mit Griffen und Feineinstellung festlegen.</li>
+<li>Schwarze Tasten optional einbeziehen; Vorzeichen und Tonarten selbst auswählen.</li>
+<li>Lernstatistiken, Rundenverlauf und tägliche Aufgaben ansehen.</li>
+<li>Persönlichen Lernstand lokal speichern und manuell sichern.</li>
+</ul>
+
+Die verfügbaren Bildschirm-Eingaben hängen vom gewählten Modus ab. Die Einführung zeigt die wichtigsten Funktionen und lässt sich später erneut öffnen. Deutsch und Englisch sind in der App auswählbar; die Notenbenennung lässt sich davon unabhängig einstellen.
+
+Keine Werbung, kein Konto und keine Paywall. Die App steht unter AGPL-3.0-only. Weiterentwickelt und gepflegt von EinsNico auf Grundlage von „noten-lernen“ von MelvilQ. Fuchsdesign: Beeko. Die Weiterentwicklung erfolgte mithilfe von KI; Ideen, Gestaltung, Entscheidungen und Prüfung der Ergebnisse lagen bei EinsNico.

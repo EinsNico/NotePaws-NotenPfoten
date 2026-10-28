@@ -32,6 +32,10 @@ The signed Android APK is available under **[Releases and downloads](https://git
 
 The release includes source code and a SHA-256 checksum file. This version does not include a new Play Store bundle and has not been published on the Play Store.
 
+## F-Droid
+
+Submission to F-Droid is in preparation. German and English store texts, the icon and screenshots are in `fastlane/metadata/android/`. See [docs/FDROID.md](docs/FDROID.md) for the current status and pending build checks (currently in German). The app has not yet been published in the official F-Droid repository.
+
 ## Development and building
 
 The app uses Vue 2, Webpack and Cordova. The distributed build uses the web dependencies recorded in **pnpm-lock.yaml**. The retained older npm lockfile contains different versions; use pnpm to obtain the matching web dependencies.

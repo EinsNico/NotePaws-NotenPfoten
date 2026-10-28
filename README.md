@@ -32,6 +32,10 @@ Die signierte Android-APK wird unter **[Releases und Downloads](https://github.c
 
 Der Quellcode und eine SHA-256-Prüfsummendatei gehören zum Release. Es gibt für diese Version kein neues Play-Store-Bundle und keine behauptete Play-Store-Veröffentlichung.
 
+## F-Droid
+
+Die Einreichung bei F-Droid wird vorbereitet. Deutsche und englische Store-Texte, Symbol und Screenshots stehen unter `fastlane/metadata/android/`. Aktueller Stand und noch offene Build-Prüfungen: [docs/FDROID.md](docs/FDROID.md). Die App ist noch nicht im offiziellen F-Droid-Repository veröffentlicht.
+
 ## Entwicklung und Nachbauen
 
 Die App verwendet Vue 2, Webpack und Cordova. Der ausgelieferte Build wurde mit den in **pnpm-lock.yaml** festgehaltenen Web-Abhängigkeiten erstellt. Das zusätzlich erhaltene ältere npm-Lockfile enthält abweichende Versionen; für den passenden Web-Abhängigkeitsstand bitte pnpm verwenden.
