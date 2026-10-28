@@ -55,6 +55,8 @@ Fehler können über die Issues des Repositorys gemeldet werden. Hilfreich sind 
 
 ## Lizenz und Herkunft
 
+Dieses Projekt wurde mithilfe von KI weiterentwickelt. Dabei kamen ChatGPT 5.5, 5.6, Soul, 6.1 Soul und Astra sowie das Codex-Harness als Entwicklungsumgebung zum Einsatz. Ideen, Gestaltung, Entscheidungen und die Prüfung der Ergebnisse lagen bei EinsNico.
+
 Angepasst und gepflegt von **EinsNico**. Grundlage ist [noten-lernen von MelvilQ](https://github.com/MelvilQ/noten-lernen).
 
 Dieses Projekt steht unter **AGPL-3.0-only**; siehe [LICENSE](LICENSE). Der MIT-Lizenztext und die Urheberhinweise des ursprünglichen Projekts bleiben in [LICENSE-MIT-ORIGINAL](LICENSE-MIT-ORIGINAL) erhalten. Weitere Komponenten und deren Lizenztexte sind in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) dokumentiert. Namen und Logos können eigenen Markenrechten unterliegen.

@@ -55,6 +55,8 @@ Report bugs through this repository’s Issues. Please include the app version, 
 
 ## License and credits
 
+This project was further developed with the help of AI. ChatGPT 5.5, 5.6, Soul, 6.1 Soul and Astra were used, together with the Codex harness as the development environment. EinsNico provided the ideas, design decisions and review of the results.
+
 Adapted and maintained by **EinsNico**, based on [noten-lernen by MelvilQ](https://github.com/MelvilQ/noten-lernen).
 
 This project is licensed under **AGPL-3.0-only**; see [LICENSE](LICENSE). The original project’s MIT license and copyright notices are preserved in [LICENSE-MIT-ORIGINAL](LICENSE-MIT-ORIGINAL). Other components and their license texts are documented in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Names and logos may be subject to separate trademark rights.
