@@ -63,7 +63,7 @@ This project is licensed under **AGPL-3.0-only**; see [LICENSE](LICENSE). The or
 
 ## Copyright in content
 
-Fox design by **Beeko** ([Telegram profile](https://t.me/yeoldejackalcoon)).
+Fox design by **Beeko** ([Telegram channel](https://t.me/yeoldejackalcoon)).
 
 Images, texts, graphics, illustrations and other creative content in this project are protected by copyright to the extent that they meet the applicable legal requirements. Rights remain with the respective authors or rights holders.
 
