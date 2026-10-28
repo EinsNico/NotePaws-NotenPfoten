@@ -63,6 +63,8 @@ Dieses Projekt steht unter **AGPL-3.0-only**; siehe [LICENSE](LICENSE). Der MIT-
 
 ## Urheberrecht an Inhalten
 
+Urheber des Fuchsdesigns: **Beeko** ([Telegram-Profil](https://t.me/yeoldejackalcoon)).
+
 Bilder, Texte, Grafiken, Illustrationen und andere kreative Inhalte dieses Projekts sind urheberrechtlich geschützt, soweit sie die gesetzlichen Schutzvoraussetzungen erfüllen. Die Rechte verbleiben bei den jeweiligen Urhebern beziehungsweise Rechteinhabern.
 
 Nutzung, Bearbeitung und Weitergabe richten sich nach den jeweils geltenden Lizenzbedingungen. Dieser Hinweis ändert weder die AGPL-3.0-only-Lizenz des Projekts noch die gesonderten Lizenzbedingungen und Urheberhinweise für Inhalte Dritter und schränkt die dort gewährten Nutzungsrechte nicht ein.

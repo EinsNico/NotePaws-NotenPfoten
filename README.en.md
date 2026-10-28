@@ -63,6 +63,8 @@ This project is licensed under **AGPL-3.0-only**; see [LICENSE](LICENSE). The or
 
 ## Copyright in content
 
+Fox design by **Beeko** ([Telegram profile](https://t.me/yeoldejackalcoon)).
+
 Images, texts, graphics, illustrations and other creative content in this project are protected by copyright to the extent that they meet the applicable legal requirements. Rights remain with the respective authors or rights holders.
 
 Use, modification and redistribution are governed by the applicable license terms. This notice does not change the project's AGPL-3.0-only license or the separate license terms and copyright notices for third-party content, and does not restrict the permissions granted by those licenses.
