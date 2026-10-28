@@ -1,4 +1,6 @@
-# Noten Pfoten / Note Paws
+# Notenpfoten
+
+**Deutsch** | [English](README.en.md)
 
 <img src="docs/images/app-icon.png" alt="Noten Pfoten" width="96" />
 
@@ -56,7 +58,3 @@ Fehler können über die Issues des Repositorys gemeldet werden. Hilfreich sind 
 Angepasst und gepflegt von **EinsNico**. Grundlage ist [noten-lernen von MelvilQ](https://github.com/MelvilQ/noten-lernen).
 
 Dieses Projekt steht unter **AGPL-3.0-only**; siehe [LICENSE](LICENSE). Der MIT-Lizenztext und die Urheberhinweise des ursprünglichen Projekts bleiben in [LICENSE-MIT-ORIGINAL](LICENSE-MIT-ORIGINAL) erhalten. Weitere Komponenten und deren Lizenztexte sind in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) dokumentiert. Namen und Logos können eigenen Markenrechten unterliegen.
-
-## English
-
-**Note Paws** is an Android and web app for practicing note reading, melodies, chords and rhythm. It supports on-screen controls and MIDI input, local progress, backups and a skippable introduction. The interface is available in German and English. See [BUILDING.md](docs/BUILDING.md) for the development setup and [KNOWN_LIMITS.md](docs/KNOWN_LIMITS.md) for validation limits.
