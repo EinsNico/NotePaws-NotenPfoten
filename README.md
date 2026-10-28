@@ -1,4 +1,4 @@
-# Notenpfoten
+# Noten Pfoten
 
 **Deutsch** | [English](README.en.md)
 
