@@ -1,5 +1,13 @@
 # Änderungen
 
+## 2.5.38 – 28. Oktober 2026
+
+- Notenbereich-Auswahl in Melodie und Akkorden an die Einzelnoten-Ansicht angeglichen: gemeinsame Gestaltung, Petrol für Bass und Gold für Violin, mit Notenschlüsseln an den Feldern.
+- Bei Bass + Violin stehen die beiden Obergrenzen in der ersten Zeile und die Untergrenzen darunter. Alte Hand-Karten im Notenbereich entfallen; die eigentliche Handauswahl bleibt erhalten.
+- Gemeinsame Klaviatur mit Bereichsgriffen und Feineinstellung bleibt in allen vier Einstellungsansichten verfügbar.
+- pnpm-Lockfile an den bereits verwendeten Android-Stand 15.1.0 und das vorhandene Bildschirm-Wachhalte-Plugin angeglichen.
+- 28 gezielte Prüfgruppen für Melodie-/Akkord-Menüs und Griffpräzision bestanden; kleine Handyansichten kontrolliert. Signierte APK 2.5.38 / 20538 mit passendem Quellcode. Praktische Geräteabnahme der neuen APK bleibt offen.
+
 ## 2.5.37 – 27. Oktober 2026
 
 - Einführung für kleine Bildschirme überarbeitet: kompakte Navigation und animierte Vorschauen für Spielmodi, Eingabe und persönliche Einstellungen.

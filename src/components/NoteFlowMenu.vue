@@ -92,26 +92,20 @@
                 </div>
               </div>
 
-              <div class="flow-custom-range">
-                <div v-for="clef in customRangeClefs" :key="clef" class="flow-hand-range"
-                  role="group" :aria-label="rangeHandLabel(clef)">
-                  <h3>{{rangeHandLabel(clef)}}</h3>
-                  <div class="flow-range-grid">
-                    <div class="flow-notes-field">
-                      <label :for="`flow-${clef}-min`">{{$t('FLOW_CHORD_RANGE_FROM')}}</label>
-                      <select :id="`flow-${clef}-min`" :value="rangeValues[rangeField(clef, 'min')]"
-                        @change="updateRange(clef, 'min', Number($event.target.value))">
-                        <option v-for="note in noteOptions" :key="note.value" :value="note.value">{{note.label}}</option>
-                      </select>
-                    </div>
-                    <div class="flow-notes-field">
-                      <label :for="`flow-${clef}-max`">{{$t('FLOW_CHORD_RANGE_TO')}}</label>
-                      <select :id="`flow-${clef}-max`" :value="rangeValues[rangeField(clef, 'max')]"
-                        @change="updateRange(clef, 'max', Number($event.target.value))">
-                        <option v-for="note in noteOptions" :key="note.value" :value="note.value">{{note.label}}</option>
-                      </select>
-                    </div>
-                  </div>
+              <div class="flow-custom-range custom-range">
+                <div class="label">{{$t('FLOW_NOTE_RANGE')}}</div>
+                <div class="range-selectors" :class="{ 'clef-range-grid': showCustomClefSettings }">
+                  <label v-for="field in customRangeFields" :key="`${field.clef}-${field.bound}`"
+                    :for="`flow-${field.clef}-${field.bound}`"
+                    :class="{ 'clef-range-field': showCustomClefSettings,
+                      'bass-range-field': showCustomClefSettings && field.clef === 'bass',
+                      'treble-range-field': showCustomClefSettings && field.clef === 'treble' }">
+                    <span><span v-if="showCustomClefSettings" class="field-clef-symbol" aria-hidden="true">{{field.clef === 'bass' ? '𝄢' : '𝄞'}}</span>{{$t(field.label)}}</span>
+                    <select :id="`flow-${field.clef}-${field.bound}`" :value="rangeValues[rangeField(field.clef, field.bound)]"
+                      @change="updateRange(field.clef, field.bound, Number($event.target.value))">
+                      <option v-for="note in noteOptions" :key="note.value" :value="note.value">{{note.label}}</option>
+                    </select>
+                  </label>
                 </div>
                 <CustomKeyboardPreview
                   :min-value="displayedCustomMinValue"
@@ -125,6 +119,7 @@
                   @update:treble-min-value="updateRange('treble', 'min', $event)"
                   @update:bass-max-value="updateRange('bass', 'max', $event)"
                 />
+                <div v-if="showCustomClefSettings" class="range-hint">{{$t('CUSTOM_CLEF_RANGES_HINT')}}</div>
               </div>
 
               <div class="flow-notes-field">
@@ -681,6 +676,15 @@ export default {
       return this.showCustomClefSettings ? ["bass", "treble"]
         : [this.previewOptions.clef.includes("bass") ? "bass" : "treble"];
     },
+    customRangeFields() {
+      const bounds = this.showCustomClefSettings ? ["max", "min"] : ["min", "max"];
+      return bounds.reduce((fields, bound) => fields.concat(this.customRangeClefs.map(clef => ({
+        clef, bound,
+        label: this.showCustomClefSettings
+          ? `${clef.toUpperCase()}_${bound === "min" ? "LOWEST" : "HIGHEST"}_NOTE`
+          : (bound === "min" ? "LOWEST_NOTE" : "HIGHEST_NOTE")
+      }))), []);
+    },
     currentNoteNaming() {
       return Options.noteNaming;
     },
@@ -1000,11 +1004,6 @@ export default {
     updateDifficulty(value) {
       const fields = getRangePresetValues(value, this.previewOptions.clef);
       if (Object.keys(fields).length) Object.assign(this.previewOptions, fields, {difficulty:value});
-    },
-    rangeHandLabel(clef) {
-      return this.$t(this.showCustomClefSettings
-        ? (clef === "bass" ? "FLOW_CHORD_LEFT_HAND" : "FLOW_CHORD_RIGHT_HAND")
-        : (clef === "bass" ? "bassClef" : "trebleClef"));
     },
     rangeField(clef, bound) {
       return clef === "bass" ? (bound === "min" ? "customMinValue" : "customBassMaxValue")
@@ -1561,28 +1560,9 @@ export default {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.flow-hand-range {
-  margin-top: 18px;
-  padding: 14px;
-  border: 1px solid #d4e0e2;
-  border-radius: 14px;
-}
 
-.flow-hand-range:first-child {
-  margin-top: 0;
-}
 
-.flow-hand-range h3 {
-  margin: 0;
-  color: #355864;
-  font-size: 14px;
-}
 
-.flow-range-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
 
 .flow-notes-field select {
   width: 100%;
@@ -1732,10 +1712,6 @@ export default {
   }
 }
 
-@media (max-width: 350px) {
-  .flow-range-grid {
-    grid-template-columns: 1fr;
-  }
-
-}
 </style>
+
+<style scoped src="../styles/note-range-controls.css"></style>

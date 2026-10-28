@@ -6,7 +6,7 @@
 
 Practice reading notes, playing melodies and keeping rhythm — using on-screen controls or a MIDI instrument.
 
-**Version 2.5.37 · Android 7.0 or later · German and English**
+**Version 2.5.38 · Android 7.0 or later · German and English**
 
 [Downloads & releases](https://github.com/EinsNico/NotePaws-NotenPfoten/releases) · [Changelog](CHANGELOG.md) · [Report a bug](https://github.com/EinsNico/NotePaws-NotenPfoten/issues/new/choose)
 
@@ -24,7 +24,7 @@ Practice reading notes, playing melodies and keeping rhythm — using on-screen 
 
 ## Installation
 
-The signed Android APK is available under **[Releases and downloads](https://github.com/EinsNico/NotePaws-NotenPfoten/releases)**: `Noten-Pfoten-2.5.37-release.apk`.
+The signed Android APK is available under **[Releases and downloads](https://github.com/EinsNico/NotePaws-NotenPfoten/releases)**: `Noten-Pfoten-2.5.38-release.apk`.
 
 1. Download the APK to your Android device and open it.
 2. If Android asks, allow installation from the app you used to open the file.

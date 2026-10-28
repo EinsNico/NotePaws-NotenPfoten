@@ -1,0 +1,154 @@
+.custom-range {
+  margin: 17px 0 2px;
+  padding: 15px 12px 13px;
+  border: 1px solid rgba(45, 110, 123, 0.22);
+  border-radius: 18px;
+  background:
+    linear-gradient(145deg, rgba(232, 244, 244, 0.82), rgba(255, 250, 243, 0.76));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.78),
+    0 7px 16px rgba(55, 76, 78, 0.07);
+}
+
+.custom-range > .label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #315f68;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-align: left;
+}
+
+.custom-range > .label::before {
+  width: 4px;
+  height: 19px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #ed7440, #cd4e22);
+  box-shadow: 0 2px 5px rgba(205, 78, 34, 0.18);
+  content: "";
+}
+
+.range-selectors {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 8px;
+}
+
+.custom-range > .range-selectors {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid rgba(43, 70, 77, 0.11);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.62);
+}
+
+.custom-range > .clef-range-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 9px 8px;
+}
+
+.clef-range-field {
+  box-sizing: border-box;
+  padding: 8px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+}
+
+.clef-range-field > span {
+  display: flex;
+  min-height: 27px;
+  align-items: center;
+  gap: 5px;
+  line-height: 1.2;
+}
+
+.field-clef-symbol {
+  flex: 0 0 auto;
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.bass-range-field {
+  border-color: rgba(45, 110, 123, 0.2);
+  background: rgba(207, 231, 233, 0.5);
+  color: #2d6874 !important;
+}
+
+.treble-range-field {
+  border-color: rgba(181, 119, 51, 0.2);
+  background: rgba(249, 224, 185, 0.48);
+  color: #98632e !important;
+}
+
+.bass-range-field select:focus-visible {
+  border-color: #2d6e7b;
+  outline-color: rgba(45, 110, 123, 0.2);
+}
+
+.treble-range-field select:focus-visible {
+  border-color: #c9853c;
+  outline-color: rgba(201, 133, 60, 0.2);
+}
+
+.range-selectors label {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 0;
+  flex-direction: column;
+  align-items: stretch;
+  color: #53686d;
+  font-size: 10px;
+  font-weight: 700;
+  text-align: left;
+}
+
+.range-selectors select {
+  box-sizing: border-box;
+  width: 100%;
+  height: 44px;
+  margin: 6px 0 0;
+  padding: 0 30px 0 11px;
+  border: 1px solid rgba(43, 70, 77, 0.2);
+  border-radius: 12px;
+  background: rgba(255, 253, 248, 0.96);
+  box-shadow:
+    0 3px 8px rgba(58, 68, 65, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  color: #26383d;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.range-selectors select:focus-visible {
+  border-color: #e76530;
+  outline: 3px solid rgba(231, 101, 48, 0.2);
+  outline-offset: 2px;
+}
+
+.range-separator {
+  margin-bottom: 14px;
+  color: #8a999b;
+  font-weight: bold;
+}
+
+.range-hint {
+  margin: 7px 2px 0;
+  color: #64777b;
+  font-size: 10px;
+  line-height: 1.45;
+  text-align: left;
+}
+
+@media (max-width: 370px) {
+  .custom-range { padding-right: 9px; padding-left: 9px; }
+  .range-selectors { gap: 5px; }
+  .custom-range > .clef-range-grid { gap: 7px 5px; padding: 7px; }
+  .clef-range-field { padding: 7px 6px; }
+}

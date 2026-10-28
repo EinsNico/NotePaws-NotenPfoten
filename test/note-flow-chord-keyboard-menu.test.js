@@ -130,10 +130,19 @@ function test(name, body) { tests.push({ name, body }); }
 for (const locale of ["de", "en"]) test(locale + " places the real graphical keyboard in Notes & keys and keeps only hand/count controls in Hands", () => {
   const vm = view(locale);
   vm.openSettingSection("tonality");
+  vm.updateHands("two");
   const noteView = vm._render();
   assert(child(noteView, "CustomKeyboardPreview"));
   assert(text(noteView).includes(dictionaries[locale].FLOW_MENU_NOTES_TITLE));
   assert(nodes(noteView).some(node => node.tag === "select" && node.data.attrs.id === "chord-treble-min"));
+  const rangePanel = findByClass(noteView, "custom-range");
+  const fields = nodes(rangePanel).filter(node => node.tag === "label");
+  assert.deepStrictEqual(fields.map(node => node.data.attrs.for), ["chord-bass-max", "chord-treble-max", "chord-bass-min", "chord-treble-min"]);
+  for (const [index, key] of ["BASS_HIGHEST_NOTE", "TREBLE_HIGHEST_NOTE", "BASS_LOWEST_NOTE", "TREBLE_LOWEST_NOTE"].entries()) {
+    assert(text(fields[index]).includes(dictionaries[locale][key]));
+  }
+  assert(!text(rangePanel).includes(dictionaries[locale].FLOW_CHORD_LEFT_HAND));
+  assert(!text(rangePanel).includes(dictionaries[locale].FLOW_CHORD_RIGHT_HAND));
   assert(!text(noteView).includes(dictionaries[locale].FLOW_CHORD_TOTAL_TONES));
   vm.openSettingSection("hands");
   const handView = vm._render();

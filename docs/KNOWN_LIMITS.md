@@ -1,7 +1,7 @@
-# Bekannte Grenzen von Version 2.5.37
+# Bekannte Grenzen von Version 2.5.38
 
 - Web- und Android-Build sowie Paketversion, Signatur, ZIP-Ausrichtung und Übereinstimmung der eingebetteten Webdateien wurden bei der Paketvorbereitung geprüft.
-- Die Tutorial- und App-Info-Änderungen wurden vor der Paketvorbereitung gezielt in der lokalen Browservorschau kontrolliert, einschließlich kleiner Handygrößen. Es wurde keine zusätzliche Testsuite für diesen Release-Build ausgeführt.
+- Die vereinheitlichte Notenbereich-Auswahl wurde mit 28 gezielten Prüfgruppen und in der lokalen Browservorschau bei 320 und 360 Pixel Breite geprüft. Ein Gesamttestlauf und eine praktische Geräteabnahme dieser neuen APK wurden nicht durchgeführt.
 - Die praktische Abnahme der neuen APK auf einem echten Handy/Tablet mit MIDI-Hardware steht noch aus.
 - Das Projekt verwendet einen älteren Vue-2-/Webpack-Unterbau. Moderne Node-Versionen benötigen die in BUILDING.md beschriebene OpenSSL-Option.
 - Der tatsächliche Web-Abhängigkeitsstand folgt dem pnpm-Lockfile; das ältere npm-Lockfile weicht davon ab.

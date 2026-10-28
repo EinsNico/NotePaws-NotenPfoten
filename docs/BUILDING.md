@@ -2,7 +2,7 @@
 
 ## Verwendeter Stand
 
-Version **2.5.37**, Android-Paket **de.nico.notenpfoten**, VersionCode **20537**.
+Version **2.5.38**, Android-Paket **de.nico.notenpfoten**, VersionCode **20538**.
 
 Für den bestehenden APK-Build wurden verwendet:
 
@@ -57,4 +57,4 @@ Der private Originalschlüssel ist absichtlich nicht enthalten. Selbst signierte
 
 Im Projekt sind vorhandene Prüfungen enthalten, z. B. `pnpm test` und gezielt `node test/welcome-tutorial.test.js`. Sie sind keine Voraussetzung zum bloßen Lesen des Codes. Einzelne historische Audit-/Integrationsprüfungen können auf interne Auditdateien verweisen, die nicht Teil dieses bereinigten Quellpakets sind.
 
-Für dieses Veröffentlichungspaket wurden keine zusätzlichen Testsuiten ausgeführt und keine neuen Testdateien angelegt. Web-/Android-Build, Signatur, Paketversion und 94 eingebettete Webdateien wurden am fertigen Paket geprüft; die früheren gezielten Komponentenprüfungen bleiben als vorherige Prüfbasis bestehen.
+Für die Notenbereich-Korrektur wurden 28 gezielte Prüfgruppen aus den bestehenden Melodie-/Akkord-Menü- und Griffpräzisionsprüfungen ausgeführt. Die Oberfläche wurde auch bei 320 und 360 Pixel Breite kontrolliert. Es wurden keine neue Testdatei und kein Gesamttestlauf ergänzt. Web-/Android-Build, Signatur, Paketversion und Übereinstimmung der eingebetteten Webdateien wurden am fertigen Paket geprüft.

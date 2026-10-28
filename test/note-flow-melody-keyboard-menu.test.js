@@ -166,8 +166,16 @@ for (const locale of ["de", "en"]) test(locale + " Notes & keys exposes native c
   for (const clef of ["bass", "treble"]) {
     const low = select(rendered, "flow-" + clef + "-min");
     const high = select(rendered, "flow-" + clef + "-max");
-    assert(nodes(rendered).indexOf(low) < nodes(rendered).indexOf(high), "lowest note precedes highest within each pair");
+    assert(nodes(rendered).indexOf(high) < nodes(rendered).indexOf(low), "upper limits precede lower limits, matching Single Notes");
   }
+  const rangePanel = nodes(rendered).find(node => node.data && String(node.data.staticClass || "").split(/\s+/).includes("custom-range"));
+  const fields = nodes(rangePanel).filter(node => node.tag === "label");
+  assert.deepStrictEqual(fields.map(node => attrs(node).for), ["flow-bass-max", "flow-treble-max", "flow-bass-min", "flow-treble-min"]);
+  for (const [index, key] of ["BASS_HIGHEST_NOTE", "TREBLE_HIGHEST_NOTE", "BASS_LOWEST_NOTE", "TREBLE_LOWEST_NOTE"].entries()) {
+    assert(text(fields[index]).includes(dictionaries[locale][key]));
+  }
+  assert(!text(rangePanel).includes(dictionaries[locale].FLOW_CHORD_LEFT_HAND));
+  assert(!text(rangePanel).includes(dictionaries[locale].FLOW_CHORD_RIGHT_HAND));
   for (const option of vm.clefOptions.concat(vm.tonalityModeOptions)) {
     assert.notStrictEqual(attrs(button(rendered, option.label))["aria-pressed"], undefined);
   }

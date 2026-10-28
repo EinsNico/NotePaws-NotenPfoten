@@ -160,35 +160,32 @@
                 @click="applyRangePreset(preset)">{{$t(preset)}}</button>
             </div>
           </div>
-          <div v-for="hand in activeHands" :key="hand" class="chord-hand-range">
-            <h3>{{handLabel(hand)}}</h3>
-            <div class="chord-range-fields">
-              <div class="chord-field">
-                <label :for="`chord-${hand}-min`">{{$t('FLOW_CHORD_RANGE_FROM')}}</label>
-                <select :id="`chord-${hand}-min`" :value="localOptions[rangeField(hand, 'min')]"
-                  @change="updateRange(hand, 'min', Number($event.target.value))">
+          <div class="custom-range">
+            <div class="label">{{$t('FLOW_NOTE_RANGE')}}</div>
+            <div class="range-selectors" :class="{ 'clef-range-grid': localOptions.handMode === 'two' }">
+              <label v-for="field in customRangeFields" :key="`${field.clef}-${field.bound}`"
+                :for="`chord-${field.clef}-${field.bound}`"
+                :class="{ 'clef-range-field': localOptions.handMode === 'two',
+                  'bass-range-field': localOptions.handMode === 'two' && field.clef === 'bass',
+                  'treble-range-field': localOptions.handMode === 'two' && field.clef === 'treble' }">
+                <span><span v-if="localOptions.handMode === 'two'" class="field-clef-symbol" aria-hidden="true">{{field.clef === 'bass' ? '𝄢' : '𝄞'}}</span>{{$t(field.label)}}</span>
+                <select :id="`chord-${field.clef}-${field.bound}`" :value="localOptions[rangeField(field.clef, field.bound)]"
+                  @change="updateRange(field.clef, field.bound, Number($event.target.value))">
                   <option v-for="note in noteOptions" :key="note.value" :value="note.value">{{note.label}}</option>
                 </select>
-              </div>
-              <div class="chord-field">
-                <label :for="`chord-${hand}-max`">{{$t('FLOW_CHORD_RANGE_TO')}}</label>
-                <select :id="`chord-${hand}-max`" :value="localOptions[rangeField(hand, 'max')]"
-                  @change="updateRange(hand, 'max', Number($event.target.value))">
-                  <option v-for="note in noteOptions" :key="note.value" :value="note.value">{{note.label}}</option>
-                </select>
-              </div>
+              </label>
             </div>
+            <CustomKeyboardPreview
+              :min-value="keyboardMinValue" :max-value="keyboardMaxValue"
+              :accidentals="localOptions.accidentals" :show-clef-assignment="localOptions.handMode === 'two'"
+              :treble-min-value="localOptions.customTrebleMinValue" :bass-max-value="localOptions.customBassMaxValue"
+              @update:min-value="updateRange(localOptions.handMode === 'two' ? 'bass' : localOptions.singleHand, 'min', $event)"
+              @update:max-value="updateRange(localOptions.handMode === 'two' ? 'treble' : localOptions.singleHand, 'max', $event)"
+              @update:treble-min-value="updateRange('treble', 'min', $event)"
+              @update:bass-max-value="updateRange('bass', 'max', $event)"
+            />
+            <div v-if="localOptions.handMode === 'two'" class="range-hint">{{$t('CUSTOM_CLEF_RANGES_HINT')}}</div>
           </div>
-          <CustomKeyboardPreview
-            :min-value="keyboardMinValue" :max-value="keyboardMaxValue"
-            :accidentals="localOptions.accidentals" :show-clef-assignment="localOptions.handMode === 'two'"
-            :treble-min-value="localOptions.customTrebleMinValue" :bass-max-value="localOptions.customBassMaxValue"
-            @update:min-value="updateRange(localOptions.handMode === 'two' ? 'bass' : localOptions.singleHand, 'min', $event)"
-            @update:max-value="updateRange(localOptions.handMode === 'two' ? 'treble' : localOptions.singleHand, 'max', $event)"
-            @update:treble-min-value="updateRange('treble', 'min', $event)"
-            @update:bass-max-value="updateRange('bass', 'max', $event)"
-          />
-          <p v-if="localOptions.handMode === 'two'" class="chord-hand-hint">{{$t('FLOW_CHORD_HANDS_OVERLAP')}}</p>
           <div class="chord-field">
             <span>{{$t('FLOW_TONALITY_MODE')}}</span>
             <div class="chord-choice">
@@ -385,13 +382,22 @@ export default {
     },
     selectedHands() { return this.localOptions.handMode === "two" ? "two" : this.localOptions.singleHand; },
     activeHands() { return this.localOptions.handMode === "two" ? ["bass", "treble"] : [this.localOptions.singleHand]; },
+    customRangeFields() {
+      const combined = this.localOptions.handMode === "two";
+      const bounds = combined ? ["max", "min"] : ["min", "max"];
+      return bounds.reduce((fields, bound) => fields.concat(this.activeHands.map(clef => ({
+        clef, bound,
+        label: combined ? `${clef.toUpperCase()}_${bound === "min" ? "LOWEST" : "HIGHEST"}_NOTE`
+          : (bound === "min" ? "LOWEST_NOTE" : "HIGHEST_NOTE")
+      }))), []);
+    },
     keyboardMinValue() { return this.localOptions[this.rangeField(this.localOptions.handMode === "two" ? "bass" : this.localOptions.singleHand, "min")]; },
     keyboardMaxValue() { return this.localOptions[this.rangeField(this.localOptions.handMode === "two" ? "treble" : this.localOptions.singleHand, "max")]; },
     handsSummary() {
       return this.activeHands.map(hand => `${this.handLabel(hand)}: ${this.localOptions[hand === "bass" ? "bassNotesPerChord" : "trebleNotesPerChord"]}`).join(" · ");
     },
     rangesSummary() {
-      return this.activeHands.map(hand => `${this.handLabel(hand)}: ${this.rangeNoteLabel(this.localOptions[this.rangeField(hand, "min")])}–${this.rangeNoteLabel(this.localOptions[this.rangeField(hand, "max")])}`).join(" · ");
+      return this.activeHands.map(hand => `${this.$t(hand === "bass" ? "bassClef" : "trebleClef")}: ${this.rangeNoteLabel(this.localOptions[this.rangeField(hand, "min")])}–${this.rangeNoteLabel(this.localOptions[this.rangeField(hand, "max")])}`).join(" · ");
     },
     previewKey() {
       return this.previewPlan ? getNoteFlowTonality(this.previewPlan.keyId)
@@ -766,9 +772,8 @@ p { margin: 0; color: #647a7f; font-size: 12px; line-height: 1.45; }
 .chord-start span:last-child { font-size: 24px; }
 .chord-start:disabled { opacity: .5; cursor: not-allowed; }
 .chord-field { margin-top: 17px; }
-.chord-hand-range,.chord-hand-count { margin-top: 18px; padding: 14px; border: 1px solid #d4e0e2; border-radius: 14px; }
-.chord-hand-range h3,.chord-hand-count h3 { margin: 0; font-size: 14px; color: #355864; }
-.chord-range-fields { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
+.chord-hand-count { margin-top: 18px; padding: 14px; border: 1px solid #d4e0e2; border-radius: 14px; }
+.chord-hand-count h3 { margin: 0; font-size: 14px; color: #355864; }
 .chord-hand-hint { margin-top: 12px; }
 .chord-hand-choice button { min-width: 0; padding: 7px; font-size: 12px; }
 .chord-field > span, .chord-field > label { display: block; margin-bottom: 8px; color: #526970; font-size: 11px; font-weight: 800; text-transform: uppercase; }
@@ -830,3 +835,5 @@ p { margin: 0; color: #647a7f; font-size: 12px; line-height: 1.45; }
 .chord-preview-footnote { margin-top: 13px; }
 .chord-preview-error { margin-top: 12px; color: #9d3e2a; }
 </style>
+
+<style scoped src="../styles/note-range-controls.css"></style>
