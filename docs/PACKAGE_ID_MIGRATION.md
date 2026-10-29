@@ -1,7 +1,7 @@
 # Neue Paketidentität vorbereiten
 
 Der Arbeitsstand für **2.5.40 / 20540** verwendet `de.nico.notenpfoten`.
-Die neue APK ist noch nicht gebaut oder veröffentlicht. Die bisherigen
+Die neue APK ist lokal gebaut, signiert und technisch geprüft; sie ist noch nicht veröffentlicht. Die bisherigen
 Veröffentlichungen sind noch nicht durch einen neuen geprüften Build ersetzt.
 
 ## Bestehende Installationen und Lernstände

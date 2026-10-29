@@ -1,6 +1,6 @@
 # Bauvorbereitung 2.5.40 – noch keine neue APK veröffentlicht
 
-Die neue Paketidentität ist `de.nico.notenpfoten`. Diese Anleitung beschreibt den nächsten, noch ausstehenden Android-Bau. Bestehende Installationen benötigen die in [PACKAGE_ID_MIGRATION.md](PACKAGE_ID_MIGRATION.md) beschriebene Datenübernahme.
+Die neue Paketidentität ist `de.nico.notenpfoten`. Die APK ist lokal gebaut und signiert; diese Anleitung beschreibt ihren Neubau. Bestehende Installationen benötigen die in [PACKAGE_ID_MIGRATION.md](PACKAGE_ID_MIGRATION.md) beschriebene Datenübernahme.
 
 # Entwicklung und Build
 
@@ -15,7 +15,7 @@ Für diese Version sind die folgenden Werkzeugstände vorgesehen:
 - Cordova CLI 13.0.0 und cordova-android 15.1.0
 - JDK 17, Android SDK / Build Tools 36.0.0, Gradle 8.14.2
 
-Die Befehle unten sind für eine macOS-/Linux-Shell angegeben. Für die neue Paketidentität stehen der Android-Bau und der lokale Linux-/Signaturabgleich zunächst aus; siehe [REPRODUCIBILITY.md](REPRODUCIBILITY.md). Frühere Prüfungen gelten ausschließlich für die frühere Paketidentität. Eine F-Droid-Aufnahme ist noch nicht erfolgt.
+Die Befehle unten sind für eine macOS-/Linux-Shell angegeben. Für die neue Paketidentität ist der lokale Android-Bau bestanden; der unabhängige Linux-/Signaturabgleich steht aus; siehe [REPRODUCIBILITY.md](REPRODUCIBILITY.md). Frühere Prüfungen gelten ausschließlich für die frühere Paketidentität. Eine F-Droid-Aufnahme ist noch nicht erfolgt.
 
 ## Abhängigkeiten installieren
 
@@ -68,4 +68,4 @@ Im Projekt sind vorhandene Prüfungen enthalten, z. B. `pnpm test` und gezielt `
 
 Für die Notenbereich-Korrektur wurden 28 gezielte Prüfgruppen aus den bestehenden Melodie-/Akkord-Menü- und Griffpräzisionsprüfungen ausgeführt. Die Oberfläche wurde auch bei 320 und 360 Pixel Breite kontrolliert. Es wurden keine neue Testdatei und kein Gesamttestlauf ergänzt. Diese früheren Paketprüfungen sind historische Belege; die neue Identität wird getrennt geprüft.
 
-Für 2.5.40 bestanden bisher neun gezielte Prüfgruppen und der Web-Bau. Ein frischer Abhängigkeitsabgleich, Android-Bau sowie reproduzierbarer Linux-/Signaturvergleich werden getrennt protokolliert. Die Metadatenprüfung eines deaktivierten Bauplans ersetzt diese Prüfungen nicht.
+Für 2.5.40 bestanden neun gezielte Prüfgruppen, 87 Modellprüfungen, frischer Abhängigkeitsabgleich, Web-/Android-Bau, Signatur, Ausrichtung und APK-Inhaltsvergleich. Der unabhängige reproduzierbare Linux-/Signaturvergleich steht aus. Die Metadatenprüfung eines deaktivierten Bauplans ersetzt diese Prüfungen nicht.

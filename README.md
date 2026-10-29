@@ -1,6 +1,6 @@
 # Noten Pfoten
 
-> **Umstellung in Vorbereitung:** Dieser Quellstand bereitet 2.5.40 mit neuer Paketidentität vor. Eine neue APK ist noch nicht gebaut oder veröffentlicht. Bisherige Downloads verwenden die vorherige Identität; Datenübernahme: [Anleitung](docs/PACKAGE_ID_MIGRATION.md).
+> **Umstellung in Vorbereitung:** Dieser Quellstand bereitet 2.5.40 mit neuer Paketidentität vor. Die neue APK ist lokal gebaut, signiert und technisch geprüft; die öffentliche Veröffentlichung steht noch aus. Bisherige Downloads verwenden die vorherige Identität; Datenübernahme: [Anleitung](docs/PACKAGE_ID_MIGRATION.md).
 
 **Deutsch** | [English](README.en.md)
 
