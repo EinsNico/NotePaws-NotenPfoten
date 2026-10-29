@@ -289,9 +289,9 @@ test("keeps the enabled German and English translations aligned", () => {
   assert.strictEqual(englishStrings.APP_EXTERNAL_NAME, "Note Paws");
   assert(germanStrings.APP_INFO_PRIVACY_NO_CLOUD_BACKUP.indexOf("Cloud") !== -1);
   assert(englishStrings.APP_INFO_PRIVACY_NO_CLOUD_BACKUP.indexOf("cloud") !== -1);
-  assert(germanStrings.APP_INFO_MAINTAINED.indexOf("NicronTheFox") !== -1);
+  assert(germanStrings.APP_INFO_MAINTAINED.indexOf("EinsNico") !== -1);
   assert(germanStrings.APP_INFO_ORIGINAL_PROJECT.indexOf("MelvilQ") !== -1);
-  assert(englishStrings.APP_INFO_MAINTAINED.indexOf("NicronTheFox") !== -1);
+  assert(englishStrings.APP_INFO_MAINTAINED.indexOf("EinsNico") !== -1);
   assert(englishStrings.APP_INFO_ORIGINAL_PROJECT.indexOf("MelvilQ") !== -1);
 });
 

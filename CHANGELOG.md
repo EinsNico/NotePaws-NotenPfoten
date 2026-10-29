@@ -1,5 +1,12 @@
 # Änderungen
 
+## 2.5.39 – 29. Oktober 2026
+
+- Wechselnde Webpack-Bootstrap-Kennung in Source-Maps stabilisiert, damit unabhängige Android-Bauten dieselbe Entwicklersignatur verwenden können. Debug-Quellen und Positionszuordnung bleiben erhalten.
+- Bauanleitung für einen frischen Checkout ergänzt: lokale Cordova-Plugins ausdrücklich und in fester Reihenfolge installieren.
+- Veraltete Namens-Erwartung in der vorhandenen Modellprüfung auf EinsNico berichtigt. Keine Änderung am Lernverhalten oder an der Oberfläche.
+- Neue APK-Version 2.5.39 / 20539. F-Droid-Aufnahme und praktische Geräteabnahme bleiben getrennte Schritte.
+
 ## 2.5.38 – 28. Oktober 2026
 
 - Notenbereich-Auswahl in Melodie und Akkorden an die Einzelnoten-Ansicht angeglichen: gemeinsame Gestaltung, Petrol für Bass und Gold für Violin, mit Notenschlüsseln an den Feldern.
