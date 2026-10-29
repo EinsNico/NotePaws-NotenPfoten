@@ -5,5 +5,5 @@
 - Der frische Android-Bau, Signatur, Paketidentität, native Klassen und eingebettete Webdateien sind geprüft. Der unabhängige Linux-/Signaturvergleich ist bestanden. Native Geräte-/MIDI-Abnahme und persönliche Datenübernahme stehen aus.
 - Die normale Lernstandssicherung übernimmt die getrennte Notenwerkstatt nicht vollständig. Eigene Stücke müssen zusätzlich exportiert und praktisch geprüft werden.
 - Vue 2 und Webpack benötigen mit aktuellen Node-Versionen die OpenSSL-Option aus BUILDING.md. Für passende Abhängigkeiten pnpm und das vorhandene Lockfile verwenden.
-- Die App ist noch nicht im offiziellen F-Droid-Katalog verfügbar. Der bisherige Antrag wurde geschlossen; ein neuer ist noch nicht eingereicht.
+- Die App ist noch nicht im offiziellen F-Droid-Katalog verfügbar. Der frühere Antrag bleibt geschlossen; [Ersatzantrag !54845](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/54845) ist eingereicht und noch nicht angenommen. Die GitLab-Prüfläufe starten wegen einer zusätzlichen Kontoverifizierung noch keine Jobs; im Antrag wurde F-Droid um Start der eigenen CI gebeten.
 - Ältere GitHub-Veröffentlichungen wurden zurückgezogen und die erreichbare Git-Geschichte auf den aktuellen Namen umgestellt. Bereits verbreitete Kopien oder gespeicherte Plattformansichten können dadurch nicht vollständig entfernt werden; siehe HISTORY_CLEANUP.md.

@@ -38,7 +38,7 @@ Der Quellcode und eine SHA-256-Prüfsummendatei gehören zum Release. Es gibt f�
 
 ## F-Droid
 
-Die Einreichung bei F-Droid wird vorbereitet. Deutsche und englische Store-Texte, Symbol und Screenshots stehen unter `fastlane/metadata/android/`. Der unabhängige Linux-Neubau und Signaturabgleich für 2.5.40 sind bestanden; die rekonstruierte signierte APK ist bytegleich zum GitHub-Download. Aktueller Stand und nächste Schritte: [docs/FDROID.md](docs/FDROID.md). Die App ist noch nicht im offiziellen F-Droid-Repository veröffentlicht.
+Der neue [F-Droid-Aufnahmeantrag !54845](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/54845) wurde am 29. Oktober 2026 eingereicht und ist offen. Die Prüfung und Annahme durch F-Droid stehen aus. Deutsche und englische Store-Texte, Symbol und Screenshots stehen unter `fastlane/metadata/android/`. Der unabhängige Linux-Neubau und Signaturabgleich für 2.5.40 sind bestanden; die rekonstruierte signierte APK ist bytegleich zum GitHub-Download. Aktueller Stand und nächste Schritte: [docs/FDROID.md](docs/FDROID.md). Die App ist noch nicht im offiziellen F-Droid-Repository veröffentlicht.
 
 ## Entwicklung und Nachbauen
 
