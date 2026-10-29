@@ -15,7 +15,7 @@ Für diese Version sind die folgenden Werkzeugstände vorgesehen:
 - Cordova CLI 13.0.0 und cordova-android 15.1.0
 - JDK 17, Android SDK / Build Tools 36.0.0, Gradle 8.14.2
 
-Die Befehle unten sind für eine macOS-/Linux-Shell angegeben. Das bestehende Projekt wurde erfolgreich gebaut. Der lokale F-Droid-Neubau und der Abgleich mit der Entwicklersignatur sind bestanden; siehe [REPRODUCIBILITY.md](REPRODUCIBILITY.md). Eine F-Droid-Aufnahme ist noch nicht erfolgt.
+Die Befehle unten sind für eine macOS-/Linux-Shell angegeben. Für die neue Paketidentität stehen der Android-Bau und der lokale Linux-/Signaturabgleich zunächst aus; siehe [REPRODUCIBILITY.md](REPRODUCIBILITY.md). Frühere Prüfungen gelten ausschließlich für die frühere Paketidentität. Eine F-Droid-Aufnahme ist noch nicht erfolgt.
 
 ## Abhängigkeiten installieren
 
@@ -60,12 +60,12 @@ Die unsignierte Release-APK liegt anschließend unter `cordova/platforms/android
 
 Für einen reproduzierbaren Vergleich mit der Entwicklersignatur muss bei Android Build Tools ab 35 die vorhandene ZIP-Ausrichtung erhalten bleiben: vorab `zipalign -P 16 -f 4` ausführen und beim anschließenden `apksigner sign` ausdrücklich `--alignment-preserved true` setzen. Das ist die vom [Signaturkopierer dokumentierte Vorgehensweise](https://github.com/obfusk/apksigcopier#what-about-signatures-made-by-apksigner-from-build-tools--3500-rc1). Signatur und 16-KB-Ausrichtung anschließend prüfen.
 
-Der private Originalschlüssel ist absichtlich nicht enthalten. Selbst signierte Fremdbuilds können die mit dem Originalschlüssel installierte App nicht regulär aktualisieren. Die beigefügte originale Release-APK ist bereits dauerhaft signiert.
+Der private Originalschlüssel ist absichtlich nicht enthalten. Selbst signierte Fremdbuilds können die mit dem Originalschlüssel installierte App nicht regulär aktualisieren. Ein neuer signierter Download wird erst nach erfolgreichem Bau und Prüfung bereitgestellt.
 
 ## Vorhandene Prüfskripte
 
 Im Projekt sind vorhandene Prüfungen enthalten, z. B. `pnpm test` und gezielt `node test/welcome-tutorial.test.js`. Sie sind keine Voraussetzung zum bloßen Lesen des Codes. Einzelne historische Audit-/Integrationsprüfungen können auf interne Auditdateien verweisen, die nicht Teil dieses bereinigten Quellpakets sind.
 
-Für die Notenbereich-Korrektur wurden 28 gezielte Prüfgruppen aus den bestehenden Melodie-/Akkord-Menü- und Griffpräzisionsprüfungen ausgeführt. Die Oberfläche wurde auch bei 320 und 360 Pixel Breite kontrolliert. Es wurden keine neue Testdatei und kein Gesamttestlauf ergänzt. Web-/Android-Build, Signatur, Paketversion und Übereinstimmung der eingebetteten Webdateien wurden am fertigen Paket geprüft.
+Für die Notenbereich-Korrektur wurden 28 gezielte Prüfgruppen aus den bestehenden Melodie-/Akkord-Menü- und Griffpräzisionsprüfungen ausgeführt. Die Oberfläche wurde auch bei 320 und 360 Pixel Breite kontrolliert. Es wurden keine neue Testdatei und kein Gesamttestlauf ergänzt. Diese früheren Paketprüfungen sind historische Belege; die neue Identität wird getrennt geprüft.
 
-Für 2.5.40 bestanden zusätzlich 87 vorhandene Modellprüfungen und der vollständige lokale F-Droid-Lauf. Der Vergleich wurde am Quellcommit aus REPRODUCIBILITY.md durchgeführt; spätere Veröffentlichungsänderungen betreffen ausschließlich die Dokumentation.
+Für 2.5.40 bestanden bisher neun gezielte Prüfgruppen und der Web-Bau. Ein frischer Abhängigkeitsabgleich, Android-Bau sowie reproduzierbarer Linux-/Signaturvergleich werden getrennt protokolliert. Die Metadatenprüfung eines deaktivierten Bauplans ersetzt diese Prüfungen nicht.
