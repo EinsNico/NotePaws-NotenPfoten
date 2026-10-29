@@ -1,0 +1,1 @@
+Neue technische App-Identität und bereinigte Plugin- und Sicherungskennungen. Separate Installation nötig: Lernstände vorher exportieren und über eine konvertierte Kopie übernehmen. Eigene Werkstattstücke zusätzlich exportieren.

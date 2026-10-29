@@ -1,3 +1,9 @@
+## 2.5.40 – vorbereitet, noch nicht veröffentlicht
+
+- Neue Paketidentität und einheitliche technische Plugin-, Modul- und Sicherungskennungen.
+- Eigene ältere Lernstandssicherungen über eine getrennte konvertierte Kopie übernehmen; Original unverändert erhalten.
+- Separate Android-Installation nötig. APK-, Geräte- und reproduzierbare Linux-Prüfung stehen aus.
+
 # Änderungen
 
 ## 2.5.39 – 29. Oktober 2026

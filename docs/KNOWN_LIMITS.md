@@ -1,12 +1,9 @@
-# Bekannte Grenzen von Version 2.5.39
+# Grenzen der Vorbereitung 2.5.40
 
-- Web- und Android-Build sowie Paketversion, Signatur, ZIP-Ausrichtung und Übereinstimmung der eingebetteten Webdateien wurden bei der Paketvorbereitung geprüft.
-- Die vereinheitlichte Notenbereich-Auswahl wurde mit 28 gezielten Prüfgruppen und in der lokalen Browservorschau bei 320 und 360 Pixel Breite geprüft. Ein Gesamttestlauf und eine praktische Geräteabnahme dieser neuen APK wurden nicht durchgeführt.
-- Die praktische Abnahme der neuen APK auf einem echten Handy/Tablet mit MIDI-Hardware steht noch aus.
-- Das Projekt verwendet einen älteren Vue-2-/Webpack-Unterbau. Moderne Node-Versionen benötigen die in BUILDING.md beschriebene OpenSSL-Option.
-- Der tatsächliche Web-Abhängigkeitsstand folgt dem pnpm-Lockfile; das ältere npm-Lockfile weicht davon ab.
-- Ein unabhängiger Neubau in einem lokalen Linux-amd64-Container ist einschließlich F-Droid-Quellscan und Signaturvergleich bestanden. Das ersetzt keine Geräteabnahme und keine Aufnahmeprüfung durch F-Droid. Historische Tests können ausgeschlossene interne Auditbelege voraussetzen.
-- Android 7.0 / API 24 ist die deklarierte Mindestversion. Es wurden nicht alle Geräte einzeln geprüft. Die Oberfläche unterstützt Deutsch und Englisch.
-- Verfügbare Downloads und der Veröffentlichungsstatus stehen unter [GitHub-Releases](https://github.com/EinsNico/NotePaws-NotenPfoten/releases). Ein gespeicherter Release-Entwurf ist noch keine freigegebene Veröffentlichung. Kein neues AAB wurde gebaut.
-
-Für 2.5.39 bestanden 87 vorhandene Modellprüfungen; ein Gesamttestlauf aller historischen Suiten wurde nicht durchgeführt. Die reproduzierbare Prüfung ist in [REPRODUCIBILITY.md](REPRODUCIBILITY.md) beschrieben.
+- Die neue Paketidentität benötigt eine separate Android-Installation und eine geprüfte Übernahme der Lernstände.
+- Gezielte Prüfungen für Sicherungen, Import, native Brücken und Paketmetadaten bestehen. Die alte Sicherung wird nur über eine getrennte konvertierte Kopie übernommen; Originaldateien bleiben erhalten.
+- Ein neuer Android-Bau, native Geräte-/MIDI-Abnahme und der reproduzierbare Linux-/Signaturvergleich stehen aus. Vorherige Prüfergebnisse ersetzen diese Prüfungen nicht.
+- Die normale Lernstandssicherung übernimmt die getrennte Notenwerkstatt nicht vollständig. Eigene Stücke müssen zusätzlich exportiert und praktisch geprüft werden.
+- Vue 2 und Webpack benötigen mit aktuellen Node-Versionen die OpenSSL-Option aus BUILDING.md. Für passende Abhängigkeiten pnpm und das vorhandene Lockfile verwenden.
+- Die App ist noch nicht im offiziellen F-Droid-Katalog verfügbar. Der bisherige Antrag wurde geschlossen; ein neuer ist noch nicht eingereicht.
+- Ältere öffentliche GitHub-Veröffentlichungen und ihre Historie sind durch diesen vorbereiteten Quellstand noch nicht bereinigt. Es wurde noch keine neue APK veröffentlicht.

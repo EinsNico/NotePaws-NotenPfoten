@@ -1,7 +1,7 @@
 {
   "name": "cordova-plugin-noten-pfoten-save-data-file",
   "version": "1.0.0",
-  "description": "Android system file picker for Noten-Pfoten save-data exports",
+  "description": "Android system file picker for Noten Pfoten save-data exports",
   "cordova": {
     "id": "de.nico.notenpfoten.savedatafile",
     "platforms": [

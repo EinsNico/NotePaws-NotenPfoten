@@ -371,7 +371,7 @@ export function createSaveDataBackup(storage = localStorage, options = {}) {
     format: SAVE_DATA_BACKUP_FORMAT,
     version: SAVE_DATA_BASE_VERSION,
     app: {
-      name: "Noten-Pfoten",
+      name: "Noten Pfoten",
       version: String(options.appVersion || packageMetadata.version)
     },
     createdAt: normalizeCreatedAt(createdAt),
@@ -573,7 +573,7 @@ export function validateSaveDataBackup(backup) {
   }
   if (
     !isPlainObject(backup.app)
-    || backup.app.name !== "Noten-Pfoten"
+    || backup.app.name !== "Noten Pfoten"
     || typeof backup.app.version !== "string"
     || typeof backup.createdAt !== "string"
     || !Number.isFinite(new Date(backup.createdAt).getTime())

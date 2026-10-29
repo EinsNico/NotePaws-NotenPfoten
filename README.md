@@ -1,5 +1,7 @@
 # Noten Pfoten
 
+> **Umstellung in Vorbereitung:** Dieser Quellstand bereitet 2.5.40 mit neuer Paketidentität vor. Eine neue APK ist noch nicht gebaut oder veröffentlicht. Bisherige Downloads verwenden die vorherige Identität; Datenübernahme: [Anleitung](docs/PACKAGE_ID_MIGRATION.md).
+
 **Deutsch** | [English](README.en.md)
 
 <img src="docs/images/app-icon.png" alt="Noten Pfoten" width="96" />

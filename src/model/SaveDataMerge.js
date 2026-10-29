@@ -361,7 +361,7 @@ export function mergeSaveDataBackups(
       format: SAVE_DATA_BACKUP_FORMAT,
       version: dailyHistory ? 6 : rhythmBars ? 4 : 3,
       app: {
-        name: "Noten-Pfoten",
+        name: "Noten Pfoten",
         version: String(options.appVersion || currentBackup.app.version)
       },
       createdAt: normalizeMergeDate(createdAt),

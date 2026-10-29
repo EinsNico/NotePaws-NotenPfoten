@@ -1,0 +1,1 @@
+New application identity and consistent plugin and backup identifiers. Requires a separate installation: export your learning data first and import a converted copy. Export your own workshop pieces separately.

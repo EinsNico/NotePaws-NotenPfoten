@@ -1,8 +1,12 @@
+# Bauvorbereitung 2.5.40 – noch keine neue APK veröffentlicht
+
+Die neue Paketidentität ist `de.nico.notenpfoten`. Diese Anleitung beschreibt den nächsten, noch ausstehenden Android-Bau. Bestehende Installationen benötigen die in [PACKAGE_ID_MIGRATION.md](PACKAGE_ID_MIGRATION.md) beschriebene Datenübernahme.
+
 # Entwicklung und Build
 
 ## Verwendeter Stand
 
-Version **2.5.39**, Android-Paket **de.nico.notenpfoten**, VersionCode **20539**.
+Version **2.5.40**, Android-Paket **de.nico.notenpfoten**, VersionCode **20540**.
 
 Für diese Version sind die folgenden Werkzeugstände vorgesehen:
 
@@ -64,4 +68,4 @@ Im Projekt sind vorhandene Prüfungen enthalten, z. B. `pnpm test` und gezielt `
 
 Für die Notenbereich-Korrektur wurden 28 gezielte Prüfgruppen aus den bestehenden Melodie-/Akkord-Menü- und Griffpräzisionsprüfungen ausgeführt. Die Oberfläche wurde auch bei 320 und 360 Pixel Breite kontrolliert. Es wurden keine neue Testdatei und kein Gesamttestlauf ergänzt. Web-/Android-Build, Signatur, Paketversion und Übereinstimmung der eingebetteten Webdateien wurden am fertigen Paket geprüft.
 
-Für 2.5.39 bestanden zusätzlich 87 vorhandene Modellprüfungen und der vollständige lokale F-Droid-Lauf. Der Vergleich wurde am Quellcommit aus REPRODUCIBILITY.md durchgeführt; spätere Veröffentlichungsänderungen betreffen ausschließlich die Dokumentation.
+Für 2.5.40 bestanden zusätzlich 87 vorhandene Modellprüfungen und der vollständige lokale F-Droid-Lauf. Der Vergleich wurde am Quellcommit aus REPRODUCIBILITY.md durchgeführt; spätere Veröffentlichungsänderungen betreffen ausschließlich die Dokumentation.

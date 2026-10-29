@@ -1,5 +1,7 @@
 # Note Paws
 
+> **Identity migration in progress:** This source prepares 2.5.40 with a new application ID. No new APK has been built or published yet. Existing downloads use the previous identity; see the [migration guide](docs/PACKAGE_ID_MIGRATION.md) before moving learning data.
+
 [Deutsch](README.md) | **English**
 
 <img src="docs/images/app-icon.png" alt="Note Paws" width="96" />

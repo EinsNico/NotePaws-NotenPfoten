@@ -133,7 +133,7 @@ function createCompleteStorage(options = { language: "de", clef: ["bass", "trebl
   });
 }
 
-test("collects all Noten-Pfoten save areas but ignores unrelated storage", () => {
+test("collects all Noten Pfoten save areas but ignores unrelated storage", () => {
   const data = backupModel.collectSaveData(createCompleteStorage());
   assert.deepStrictEqual(data.options, {
     language: "de",
@@ -172,7 +172,7 @@ test("creates a deterministic versioned backup document", () => {
   assert.strictEqual(backup.format, "noten-pfoten-save-data");
   assert.strictEqual(backup.version, 2);
   assert.deepStrictEqual(backup.app, {
-    name: "Noten-Pfoten",
+    name: "Noten Pfoten",
     version: "1.10.4"
   });
   assert.strictEqual(backup.createdAt, "2026-09-09T12:30:00.000Z");

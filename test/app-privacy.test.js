@@ -84,13 +84,13 @@ test("uses the localized Noten Pfoten and Note Paws in-app wordmark", () => {
   assert(infoDialog.indexOf('<BrandWordmark />') !== -1);
 });
 
-test("keeps the technical backup identity stable for existing save files", () => {
+test("uses the current backup identity consistently for exports and merges", () => {
   const backup = read("src/model/SaveDataBackup.js");
   const merge = read("src/model/SaveDataMerge.js");
 
   assert(backup.indexOf('SAVE_DATA_BACKUP_FORMAT = "noten-pfoten-save-data"') !== -1);
-  assert(backup.indexOf('name: "Noten-Pfoten"') !== -1);
-  assert(merge.indexOf('name: "Noten-Pfoten"') !== -1);
+  assert(backup.indexOf('name: "Noten Pfoten"') !== -1);
+  assert(merge.indexOf('name: "Noten Pfoten"') !== -1);
 });
 
 test("keeps Android app data out of automatic backups and transfers", () => {
