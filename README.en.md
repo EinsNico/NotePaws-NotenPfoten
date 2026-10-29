@@ -38,7 +38,7 @@ The release includes source code and a SHA-256 checksum file. This version does 
 
 ## F-Droid
 
-Submission to F-Droid is in preparation. German and English store texts, the icon and screenshots are in `fastlane/metadata/android/`. The independent Linux rebuild and developer-signature comparison for 2.5.40 passed; the reconstructed signed APK is byte-identical to the GitHub download. See [docs/FDROID.md](docs/FDROID.md) for the current status and next steps (currently in German). The app has not yet been published in the official F-Droid repository.
+The replacement [F-Droid inclusion request !54845](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/54845) was submitted on 29 October 2026 and is open. F-Droid review and acceptance are pending. German and English store texts, the icon and screenshots are in `fastlane/metadata/android/`. The independent Linux rebuild and developer-signature comparison for 2.5.40 passed; the reconstructed signed APK is byte-identical to the GitHub download. See [docs/FDROID.md](docs/FDROID.md) for the current status and next steps (currently in German). The app has not yet been published in the official F-Droid repository.
 
 ## Development and building
 
