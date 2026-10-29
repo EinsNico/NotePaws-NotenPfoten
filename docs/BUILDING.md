@@ -1,4 +1,4 @@
-# Bauvorbereitung 2.5.40 – noch keine neue APK veröffentlicht
+# Bauanleitung für 2.5.40
 
 Die neue Paketidentität ist `de.nico.notenpfoten`. Die APK ist lokal gebaut und signiert; diese Anleitung beschreibt ihren Neubau. Bestehende Installationen benötigen die in [PACKAGE_ID_MIGRATION.md](PACKAGE_ID_MIGRATION.md) beschriebene Datenübernahme.
 
@@ -60,7 +60,7 @@ Die unsignierte Release-APK liegt anschließend unter `cordova/platforms/android
 
 Für einen reproduzierbaren Vergleich mit der Entwicklersignatur muss bei Android Build Tools ab 35 die vorhandene ZIP-Ausrichtung erhalten bleiben: vorab `zipalign -P 16 -f 4` ausführen und beim anschließenden `apksigner sign` ausdrücklich `--alignment-preserved true` setzen. Das ist die vom [Signaturkopierer dokumentierte Vorgehensweise](https://github.com/obfusk/apksigcopier#what-about-signatures-made-by-apksigner-from-build-tools--3500-rc1). Signatur und 16-KB-Ausrichtung anschließend prüfen.
 
-Der private Originalschlüssel ist absichtlich nicht enthalten. Selbst signierte Fremdbuilds können die mit dem Originalschlüssel installierte App nicht regulär aktualisieren. Ein neuer signierter Download wird erst nach erfolgreichem Bau und Prüfung bereitgestellt.
+Der private Originalschlüssel ist absichtlich nicht enthalten. Selbst signierte Fremdbuilds können die mit dem Originalschlüssel installierte App nicht regulär aktualisieren. Die geprüfte Entwickler-APK ist im [Release v2.5.40](https://github.com/EinsNico/NotePaws-NotenPfoten/releases/tag/v2.5.40) bereitgestellt.
 
 ## Vorhandene Prüfskripte
 

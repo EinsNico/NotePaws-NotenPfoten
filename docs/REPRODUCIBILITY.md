@@ -23,4 +23,4 @@ aus. Die Konvertierung einer synthetischen älteren Sicherung erhält deren komp
 Lern-/Statistikdaten und wurde vom aktuellen Importvalidator akzeptiert.
 
 Siehe [Bauanleitung](BUILDING.md), [Datenübernahme](PACKAGE_ID_MIGRATION.md)
-und [F-Droid-Stand](FDROID.md). Die APK ist lokal fertig, aber noch nicht öffentlich veröffentlicht.
+und [F-Droid-Stand](FDROID.md). Die geprüfte APK und ihre Quellen gehören zum [Release v2.5.40](https://github.com/EinsNico/NotePaws-NotenPfoten/releases/tag/v2.5.40); der unabhängige Linux-Vergleich bleibt offen.

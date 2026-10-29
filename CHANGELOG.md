@@ -1,10 +1,11 @@
-## 2.5.40 – vorbereitet, noch nicht veröffentlicht
-
-- Neue Paketidentität und einheitliche technische Plugin-, Modul- und Sicherungskennungen.
-- Eigene ältere Lernstandssicherungen über eine getrennte konvertierte Kopie übernehmen; Original unverändert erhalten.
-- Separate Android-Installation nötig. APK-, Geräte- und reproduzierbare Linux-Prüfung stehen aus.
-
 # Änderungen
+
+## 2.5.40 – 29. Oktober 2026
+
+- Neue App-ID `de.nico.notenpfoten`; einheitliche technische Plugin-, Modul- und Sicherungskennungen sowie ein Zertifikat mit aktuellem App-Namen.
+- Separate Android-Installation beim Wechsel von 2.5.39 oder älter. Bisherige App behalten; ältere Lernstandssicherungen über eine konvertierte Kopie übernehmen und eigene Werkstattstücke separat exportieren.
+- Lernalgorithmus und Übungsabläufe durch diese technische Umstellung unverändert.
+- Frischer Web-/Android-Bau und technische APK-Prüfungen bestanden. Persönliche Datenübernahme, praktische Geräte-/MIDI-Abnahme und unabhängiger Linux-/Signaturvergleich stehen noch aus.
 
 ## 2.5.39 – 29. Oktober 2026
 

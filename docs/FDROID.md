@@ -5,7 +5,7 @@ wurde am 29. Oktober 2026 auf Wunsch des Maintainers geschlossen und nicht über
 Die App ist noch nicht im offiziellen F-Droid-Katalog verfügbar.
 
 Der neue Arbeitsstand **2.5.40 / 20540** verwendet `de.nico.notenpfoten`.
-Die neue APK ist lokal signiert und technisch geprüft. Ihr unabhängiger Linux-/Signaturvergleich steht aus. Der lokale Bauplan ist
+Die neue APK ist signiert und technisch geprüft und gehört zum [GitHub-Release v2.5.40](https://github.com/EinsNico/NotePaws-NotenPfoten/releases/tag/v2.5.40). Ihr unabhängiger Linux-/Signaturvergleich steht aus. Der lokale Bauplan ist
 während der Umstellung deaktiviert und darf noch nicht eingereicht werden.
 
 Deutsche und englische Texte, Symbole und zehn Bilder je Sprache liegen unter

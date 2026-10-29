@@ -1,6 +1,6 @@
 # Note Paws
 
-> **Identity migration in progress:** This source prepares 2.5.40 with a new application ID. The new APK has been built, signed and checked locally; public publication is still pending. Existing downloads use the previous identity; see the [migration guide](docs/PACKAGE_ID_MIGRATION.md) before moving learning data.
+> **Moving from 2.5.39 or earlier:** Version 2.5.40 uses a new application ID and installs as a separate app. Keep the previous app until your learning data and workshop pieces have been transferred and checked. See the [migration guide](docs/PACKAGE_ID_MIGRATION.md) (currently in German).
 
 [Deutsch](README.md) | **English**
 
@@ -8,7 +8,7 @@
 
 Practice reading notes, playing melodies and keeping rhythm — using on-screen controls or a MIDI instrument.
 
-**Version 2.5.39 · Android 7.0 or later · German and English**
+**Version 2.5.40 · Android 7.0 or later · German and English**
 
 [Downloads & releases](https://github.com/EinsNico/NotePaws-NotenPfoten/releases) · [Changelog](CHANGELOG.md) · [Report a bug](https://github.com/EinsNico/NotePaws-NotenPfoten/issues/new/choose)
 
@@ -26,17 +26,17 @@ Practice reading notes, playing melodies and keeping rhythm — using on-screen 
 
 ## Installation
 
-The signed Android APK is available under **[Releases and downloads](https://github.com/EinsNico/NotePaws-NotenPfoten/releases)**: `Noten-Pfoten-2.5.39-release.apk`.
+The signed Android APK is available under **[Releases and downloads](https://github.com/EinsNico/NotePaws-NotenPfoten/releases)**: `Noten-Pfoten-2.5.40-release.apk`.
 
 1. Download the APK to your Android device and open it.
 2. If Android asks, allow installation from the app you used to open the file.
-3. An existing installation signed with the same key can be updated with this APK.
+3. When moving from 2.5.39 or earlier, this installs as a separate app. Transfer learning data using a converted copy of your backup and export workshop pieces separately. Keep the previous app until the transfer is confirmed.
 
 The release includes source code and a SHA-256 checksum file. This version does not include a new Play Store bundle and has not been published on the Play Store.
 
 ## F-Droid
 
-Submission to F-Droid is in preparation. German and English store texts, the icon and screenshots are in `fastlane/metadata/android/`. The local Linux rebuild and developer-signature comparison passed. See [docs/FDROID.md](docs/FDROID.md) for the current status and next steps (currently in German). The app has not yet been published in the official F-Droid repository.
+Submission to F-Droid is in preparation. German and English store texts, the icon and screenshots are in `fastlane/metadata/android/`. The new local Android build and APK checks passed; an independent Linux rebuild and developer-signature comparison for 2.5.40 are still pending. See [docs/FDROID.md](docs/FDROID.md) for the current status and next steps (currently in German). The app has not yet been published in the official F-Droid repository.
 
 ## Development and building
 

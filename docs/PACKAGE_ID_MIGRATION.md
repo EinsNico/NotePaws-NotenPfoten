@@ -1,8 +1,6 @@
-# Neue Paketidentität vorbereiten
+# Datenübernahme ab Version 2.5.40
 
-Der Arbeitsstand für **2.5.40 / 20540** verwendet `de.nico.notenpfoten`.
-Die neue APK ist lokal gebaut, signiert und technisch geprüft; sie ist noch nicht veröffentlicht. Die bisherigen
-Veröffentlichungen sind noch nicht durch einen neuen geprüften Build ersetzt.
+Version **2.5.40 / 20540** verwendet `de.nico.notenpfoten`. Die signierte und technisch geprüfte APK steht im [Release v2.5.40](https://github.com/EinsNico/NotePaws-NotenPfoten/releases/tag/v2.5.40). Bei einer bisherigen Installation handelt es sich um einen Umzug in eine separate App.
 
 ## Bestehende Installationen und Lernstände
 
@@ -28,17 +26,14 @@ ihre Daten müssen erhalten bleiben, bis die Übernahme praktisch geprüft ist.
    zusätzlich exportieren und ihre Übernahme separat prüfen. Die normale
    Lernstandssicherung übernimmt die Werkstatt nicht vollständig.
 
-## Vor der nächsten Veröffentlichung
+## Technischer Stand und offene Prüfungen
 
-- Die drei lokalen Cordova-Plugins und sämtliche Paket-/Modul-/Java-Kennungen sind
-  auf den aktuellen Namen umzustellen. Einen sauberen Android-Aufbau verwenden;
-  den alten generierten Plattformordner nicht als Veröffentlichungsquelle nutzen.
-- Neue signierte APK bauen, Version, Paketkennung, Webdateien, Berechtigungen,
-  native Plugins und Lernstandsimport prüfen. Den bisherigen Signierschlüssel
-  behalten; allein dieser ermöglicht bei geänderter Paketidentität kein direktes Update.
+- Die drei lokalen Cordova-Plugins und sämtliche Paket-/Modul-/Java-Kennungen sind umgestellt. Die neue APK wurde aus einem frischen Android-Aufbau erzeugt.
+- Version, Paketkennung, Webdateien, Berechtigungen, native Plugins und Signatur sind geprüft. Die synthetische Backup-Konvertierung ist geprüft; die persönliche Datenübernahme auf einem echten Gerät bleibt offen.
+- Der private Schlüssel wurde erhalten; das neue Zertifikat verwendet den aktuellen App-Namen. Die andere Paketidentität erfordert weiterhin eine separate Installation.
 - F-Droid-Rezept, reproduzierbaren Linux-Bau und Signaturvergleich neu prüfen.
   Der Vergleich der vorherigen Version belegt die neue Paketidentität nicht.
-- GitHub-Quellstand, Beschreibungen, ZIP, Prüfsummen und APK gemeinsam abgleichen.
+- GitHub-Quellstand, Beschreibungen, ZIP, Prüfsummen und APK sind als Veröffentlichungspaket aufeinander abgestimmt.
 - Alte öffentliche Releases, Tags, Commits, GitLab-Zweige und frühere Antragstexte
   getrennt behandeln. Das Umschreiben oder Entfernen historischer Veröffentlichungen
   ist nicht durch eine Quellcode-Umbenennung erledigt.
