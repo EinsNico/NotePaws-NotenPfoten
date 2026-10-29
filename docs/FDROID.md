@@ -24,22 +24,21 @@ Die vorgesehenen Schritte sind:
 3. Web-Abhängigkeiten aus `pnpm-lock.yaml` installieren und den Produktions-Web-Build erstellen.
 4. `dist/` nach `cordova/www/` kopieren und Android 15.1.0 samt den drei lokalen Plugins vorbereiten.
 5. Die Quellen mit F-Droids Scanner prüfen und die unsignierte Release-APK mit Gradle bauen.
-6. Das Paket auf App-ID `de.nico.notenpfoten`, Version `2.5.38` und VersionCode `20538` prüfen.
+6. Das Paket auf App-ID `de.nico.notenpfoten`, Version `2.5.39` und VersionCode `20539` prüfen.
 
-Die Versionsinformationen für spätere Updates stehen in `cordova/config.xml`. Ein Linux-Testbau in F-Droids Build-Umgebung steht noch aus. Eine erfolgreiche YAML-/Textprüfung ist kein Nachweis eines vollständigen F-Droid-Builds.
+Die Versionsinformationen für spätere Updates stehen in `cordova/config.xml`. Ein vollständiger lokaler Linux-Bau mit fdroidserver 2.4.5 in einem Debian-amd64-Container unter Lima/VZ/Rosetta ist bestanden (Status 0). Die unsignierten Mac-/Linux-APKs und die mit der Entwicklersignatur rekonstruierte APK sind bytegleich. Das ist eine lokale Bauprüfung; die Aufnahmeprüfung durch das F-Droid-Team bleibt offen. Einzelheiten: [REPRODUCIBILITY.md](REPRODUCIBILITY.md).
 
 ## Signierung und Updates
 
-F-Droid kann einen eigenen Schlüssel verwenden oder nach einem erfolgreichen reproduzierbaren Build eine Entwickler-Signatur übernehmen. Für gegenseitige Updates mit der GitHub-APK muss dieselbe Entwickler-Signatur erhalten bleiben. Dafür muss F-Droid bestätigen, dass sein Build zur veröffentlichten APK passt. Der private Schlüssel und das Passwort gehören niemals in das Repository oder zu F-Droid.
+Für dieses Projekt wurde die Übernahme der bisherigen Entwickler-Signatur gewählt, damit GitHub- und F-Droid-Installationen sich gegenseitig aktualisieren können. Der lokale reproduzierbare Vergleich zur GitHub-APK 2.5.39 ist bestanden. F-Droid muss den Bau und die Signatur vor einer Aufnahme selbst prüfen. Der private Schlüssel und das Passwort gehören niemals in das Repository oder zu F-Droid.
 
 Die veröffentlichte GitHub-APK und die bestehenden Release-Tags werden durch das Hinzufügen der Store-Metadaten nicht ersetzt. F-Droid muss für den ersten Build einen Commit verwenden, der die Metadaten bereits enthält; ältere veröffentlichte Tags bleiben unverändert.
 
 ## Noch offen
 
-- Linux-Build und F-Droid-Quellscanner für die während des Builds aufgelösten Abhängigkeiten.
-- Festlegung und Prüfung der Signaturstrategie.
+- Die Einreichung ist noch nicht abgesendet; der Bauplan muss beim F-Droid-Projekt eingereicht werden.
 - Aufnahmeprüfung durch das F-Droid-Team, einschließlich Wartungshistorie und freier Abhängigkeiten.
-- Einreichung über einen GitLab-Merge-Request und gegebenenfalls eine GitLab-Anmeldung.
+- Angaben zur Entwicklungshistorie und externen Nutzung vervollständigen und Einreichung über einen GitLab-Merge-Request vornehmen.
 
 ## Offizielle Dokumentation
 

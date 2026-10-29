@@ -11,7 +11,7 @@ Für diese Version sind die folgenden Werkzeugstände vorgesehen:
 - Cordova CLI 13.0.0 und cordova-android 15.1.0
 - JDK 17, Android SDK / Build Tools 36.0.0, Gradle 8.14.2
 
-Die Befehle unten sind für eine macOS-/Linux-Shell angegeben. Das bestehende Projekt wurde erfolgreich gebaut. Der F-Droid-Neubau und der Abgleich mit der Entwicklersignatur werden separat geprüft; eine erfolgreiche F-Droid-Aufnahme ist damit noch nicht zugesagt.
+Die Befehle unten sind für eine macOS-/Linux-Shell angegeben. Das bestehende Projekt wurde erfolgreich gebaut. Der lokale F-Droid-Neubau und der Abgleich mit der Entwicklersignatur sind bestanden; siehe [REPRODUCIBILITY.md](REPRODUCIBILITY.md). Eine F-Droid-Aufnahme ist noch nicht erfolgt.
 
 ## Abhängigkeiten installieren
 
@@ -63,3 +63,5 @@ Der private Originalschlüssel ist absichtlich nicht enthalten. Selbst signierte
 Im Projekt sind vorhandene Prüfungen enthalten, z. B. `pnpm test` und gezielt `node test/welcome-tutorial.test.js`. Sie sind keine Voraussetzung zum bloßen Lesen des Codes. Einzelne historische Audit-/Integrationsprüfungen können auf interne Auditdateien verweisen, die nicht Teil dieses bereinigten Quellpakets sind.
 
 Für die Notenbereich-Korrektur wurden 28 gezielte Prüfgruppen aus den bestehenden Melodie-/Akkord-Menü- und Griffpräzisionsprüfungen ausgeführt. Die Oberfläche wurde auch bei 320 und 360 Pixel Breite kontrolliert. Es wurden keine neue Testdatei und kein Gesamttestlauf ergänzt. Web-/Android-Build, Signatur, Paketversion und Übereinstimmung der eingebetteten Webdateien wurden am fertigen Paket geprüft.
+
+Für 2.5.39 bestanden zusätzlich 87 vorhandene Modellprüfungen und der vollständige lokale F-Droid-Lauf. Der Vergleich wurde am Quellcommit aus REPRODUCIBILITY.md durchgeführt; spätere Veröffentlichungsänderungen betreffen ausschließlich die Dokumentation.
