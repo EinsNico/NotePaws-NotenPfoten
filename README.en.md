@@ -10,6 +10,8 @@ Practice reading notes, playing melodies and keeping rhythm — using on-screen 
 
 **Version 2.5.40 · Android 7.0 or later · German and English**
 
+[Project history cleanup](docs/HISTORY_CLEANUP.md) (currently in German)
+
 [Downloads & releases](https://github.com/EinsNico/NotePaws-NotenPfoten/releases) · [Changelog](CHANGELOG.md) · [Report a bug](https://github.com/EinsNico/NotePaws-NotenPfoten/issues/new/choose)
 
 ## The app
@@ -36,7 +38,7 @@ The release includes source code and a SHA-256 checksum file. This version does 
 
 ## F-Droid
 
-Submission to F-Droid is in preparation. German and English store texts, the icon and screenshots are in `fastlane/metadata/android/`. The new local Android build and APK checks passed; an independent Linux rebuild and developer-signature comparison for 2.5.40 are still pending. See [docs/FDROID.md](docs/FDROID.md) for the current status and next steps (currently in German). The app has not yet been published in the official F-Droid repository.
+Submission to F-Droid is in preparation. German and English store texts, the icon and screenshots are in `fastlane/metadata/android/`. The independent Linux rebuild and developer-signature comparison for 2.5.40 passed; the reconstructed signed APK is byte-identical to the GitHub download. See [docs/FDROID.md](docs/FDROID.md) for the current status and next steps (currently in German). The app has not yet been published in the official F-Droid repository.
 
 ## Development and building
 

@@ -31,12 +31,9 @@ ihre Daten müssen erhalten bleiben, bis die Übernahme praktisch geprüft ist.
 - Die drei lokalen Cordova-Plugins und sämtliche Paket-/Modul-/Java-Kennungen sind umgestellt. Die neue APK wurde aus einem frischen Android-Aufbau erzeugt.
 - Version, Paketkennung, Webdateien, Berechtigungen, native Plugins und Signatur sind geprüft. Die synthetische Backup-Konvertierung ist geprüft; die persönliche Datenübernahme auf einem echten Gerät bleibt offen.
 - Der private Schlüssel wurde erhalten; das neue Zertifikat verwendet den aktuellen App-Namen. Die andere Paketidentität erfordert weiterhin eine separate Installation.
-- F-Droid-Rezept, reproduzierbaren Linux-Bau und Signaturvergleich neu prüfen.
-  Der Vergleich der vorherigen Version belegt die neue Paketidentität nicht.
+- Der unabhängige Linux-Bau und Entwickler-Signaturvergleich für 2.5.40 sind bestanden. Der neue F-Droid-Aufnahmeantrag bleibt ein eigener Schritt.
 - GitHub-Quellstand, Beschreibungen, ZIP, Prüfsummen und APK sind als Veröffentlichungspaket aufeinander abgestimmt.
-- Alte öffentliche Releases, Tags, Commits, GitLab-Zweige und frühere Antragstexte
-  getrennt behandeln. Das Umschreiben oder Entfernen historischer Veröffentlichungen
-  ist nicht durch eine Quellcode-Umbenennung erledigt.
+- Die historischen GitHub-Veröffentlichungen wurden getrennt zurückgezogen und die erreichbaren Git-Stände bereinigt. Plattformhistorie und fremde Kopien haben eigene Grenzen; siehe [Hinweise](HISTORY_CLEANUP.md).
 
 Der bisherige F-Droid-Antrag wurde vorläufig geschlossen. Erst nach erfolgreicher
 Prüfung der neuen Identität ist eine erneute Einreichung vorgesehen.

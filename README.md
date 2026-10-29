@@ -10,6 +10,8 @@ Noten lesen, Melodien spielen und Rhythmus üben – auf dem Bildschirm oder mit
 
 **Version 2.5.40 · Android 7.0 oder neuer · Deutsch und Englisch**
 
+[Hinweis zur bereinigten Projektgeschichte](docs/HISTORY_CLEANUP.md)
+
 [Downloads & Releases](https://github.com/EinsNico/NotePaws-NotenPfoten/releases) · [Änderungsverlauf](CHANGELOG.md) · [Fehler melden](https://github.com/EinsNico/NotePaws-NotenPfoten/issues/new/choose)
 
 ## Die App
@@ -36,7 +38,7 @@ Der Quellcode und eine SHA-256-Prüfsummendatei gehören zum Release. Es gibt f�
 
 ## F-Droid
 
-Die Einreichung bei F-Droid wird vorbereitet. Deutsche und englische Store-Texte, Symbol und Screenshots stehen unter `fastlane/metadata/android/`. Der neue lokale Android-Bau und die APK-Prüfungen sind bestanden; der unabhängige Linux-Neubau und Signaturabgleich für 2.5.40 stehen noch aus. Aktueller Stand und nächste Schritte: [docs/FDROID.md](docs/FDROID.md). Die App ist noch nicht im offiziellen F-Droid-Repository veröffentlicht.
+Die Einreichung bei F-Droid wird vorbereitet. Deutsche und englische Store-Texte, Symbol und Screenshots stehen unter `fastlane/metadata/android/`. Der unabhängige Linux-Neubau und Signaturabgleich für 2.5.40 sind bestanden; die rekonstruierte signierte APK ist bytegleich zum GitHub-Download. Aktueller Stand und nächste Schritte: [docs/FDROID.md](docs/FDROID.md). Die App ist noch nicht im offiziellen F-Droid-Repository veröffentlicht.
 
 ## Entwicklung und Nachbauen
 
