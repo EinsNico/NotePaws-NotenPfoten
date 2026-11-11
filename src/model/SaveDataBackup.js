@@ -80,6 +80,7 @@ const NORMAL_OPTION_KEYS = [
   "noteFlowChordMovement",
   "noteFlowMelodySettings",
   "noteFlowChordSettings",
+  "noteFlowMixedChordPercent",
   "rhythmSenseSettings"
 ];
 
@@ -94,6 +95,7 @@ const ADAPTIVE_OPTION_KEYS = NORMAL_OPTION_KEYS.filter(key => (
   && key !== "noteFlowChordMovement"
   && key !== "noteFlowMelodySettings"
   && key !== "noteFlowChordSettings"
+  && key !== "noteFlowMixedChordPercent"
   && key !== "rhythmSenseSettings"
 )).concat("rangeExpansionEnabled");
 
@@ -165,6 +167,10 @@ function isValidNormalOptions(value) {
     && (!hasOwn(value, "preparationSeconds") || PREPARATION_SECONDS.indexOf(value.preparationSeconds) !== -1)
     && (!hasOwn(value, "noteFlowMelodySettings") || isValidNoteFlowMelodyPreferences(value.noteFlowMelodySettings))
     && (!hasOwn(value, "noteFlowChordSettings") || isValidNoteFlowChordPreferences(value.noteFlowChordSettings))
+    && (!hasOwn(value, "noteFlowMixedChordPercent") || (
+      Number.isInteger(value.noteFlowMixedChordPercent)
+      && value.noteFlowMixedChordPercent >= 0 && value.noteFlowMixedChordPercent <= 100
+    ))
     && (!hasOwn(value, "rhythmSenseSettings") || isValidRhythmSensePreferences(value.rhythmSenseSettings))
     && ["noteFlowMelodyMovement", "noteFlowChordMovement"].every(key => (
       !hasOwn(value, key) || NOTE_FLOW_MOVEMENTS.indexOf(value[key]) !== -1

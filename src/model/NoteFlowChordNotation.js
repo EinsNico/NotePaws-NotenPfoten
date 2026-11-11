@@ -1,3 +1,5 @@
+import { formatNoteFlowTonic } from "./NoteFlowKeyLabels";
+
 const SHARP_STEPS = [0, 0, 1, 1, 2, 3, 3, 4, 4, 5, 5, 6];
 const FLAT_STEPS = [0, 1, 1, 2, 2, 3, 4, 4, 5, 5, 6, 6];
 const ACCIDENTAL_PITCH_CLASSES = [1, 3, 6, 8, 10];
@@ -25,7 +27,12 @@ function ledgerLines(writtenStep, staff) {
 function spellChordPitch(value, chord, tonality) {
   const chordToneIndex = chord.pitchClasses.indexOf(value % 12);
   if (chordToneIndex < 0) throw new Error("Pitch is not part of the planned chord.");
-  const scaleDegree = (chord.scaleDegree - 1 + chordToneIndex * 2) % 7;
+  let scaleSteps = chordToneIndex * 2;
+  if (chordToneIndex === 1) {
+    if (chord.quality === "sus2") scaleSteps = 1;
+    if (chord.quality === "sus4") scaleSteps = 3;
+  }
+  const scaleDegree = (chord.scaleDegree - 1 + scaleSteps) % 7;
   const tonicIndex = LETTERS.indexOf(String(tonality.tonic).charAt(0).toUpperCase());
   const letter = LETTERS[(tonicIndex + scaleDegree) % 7];
   let adjustment = (value % 12 - NATURAL_PITCH_CLASSES[letter] + 12) % 12;
@@ -34,6 +41,13 @@ function spellChordPitch(value, chord, tonality) {
   const octave = (value - NATURAL_PITCH_CLASSES[letter] - adjustment) / 12;
   if (!Number.isInteger(octave)) throw new Error("Invalid written octave.");
   return { letter, adjustment, writtenStep: octave * 7 + LETTERS.indexOf(letter) };
+}
+
+export function formatNoteFlowExtendedChord(chord, tonality, noteNaming) {
+  const { letter, adjustment } = spellChordPitch(chord.pitchClasses[0], chord, tonality);
+  const tonic = letter + (adjustment > 0 ? "-sharp" : adjustment < 0 ? "-flat" : "");
+  const suffix = { dominant7: "7", major7: "maj7", minor7: "m7" }[chord.quality] || chord.quality;
+  return formatNoteFlowTonic(tonic, "major", noteNaming) + suffix;
 }
 
 function createKeySignature(staff, tonality, display) {

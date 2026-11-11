@@ -54,6 +54,16 @@
           <span class="flow-hub-arrow" aria-hidden="true">→</span>
         </button>
 
+        <button type="button" class="flow-hub-card flow-hub-card-active" @click="$emit('openMixed')">
+          <span class="flow-hub-card-icon" aria-hidden="true">♫</span>
+          <span class="flow-hub-card-copy">
+            <span class="flow-hub-card-top">
+              <strong>{{$t('FLOW_HUB_MIXED')}}</strong>
+            </span>
+            <span>{{$t('FLOW_HUB_MIXED_DESCRIPTION')}}</span>
+          </span>
+          <span class="flow-hub-arrow" aria-hidden="true">→</span>
+        </button>
       </section>
 
     </div>

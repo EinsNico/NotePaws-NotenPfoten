@@ -7,6 +7,11 @@ import { clampCustomValue } from "./NoteRanges";
 
 const VALID_ACCIDENTALS = ["no", "onlySharp", "onlyFlat", "sharpAndFlat"];
 const VALID_ROUND_LENGTHS = [0, 20, 60, 300];
+export const NOTE_FLOW_SUSPENSION_TYPES = Object.freeze(["sus2", "sus4"]);
+export const NOTE_FLOW_DIATONIC_SEVENTH_TYPES = Object.freeze(["major7", "minor7"]);
+export const NOTE_FLOW_SEVENTH_TYPES = Object.freeze(["dominant7", ...NOTE_FLOW_DIATONIC_SEVENTH_TYPES]);
+export const NOTE_FLOW_CHORD_EXTENSION_TYPES = Object.freeze([...NOTE_FLOW_SUSPENSION_TYPES, ...NOTE_FLOW_SEVENTH_TYPES]);
+const DEFAULT_EXTENSION_WEIGHT = 35;
 const DEFAULT_RHYTHM_VALUES = {
   "3/4": ["quarter", "eighth"],
   "4/4": ["quarter", "eighth"],
@@ -39,6 +44,18 @@ function handRange(options, hand, minField, maxField, defaultMin, defaultMax) {
   const minimum = clampCustomValue(options[minField] === undefined ? requested.min : options[minField], defaultMin);
   const maximum = clampCustomValue(options[maxField] === undefined ? requested.max : options[maxField], defaultMax);
   return { min: Math.min(minimum, maximum), max: Math.max(minimum, maximum) };
+}
+
+function normalizeChordExtensions(value) {
+  return NOTE_FLOW_CHORD_EXTENSION_TYPES.reduce((settings, type) => {
+    const extension = value && value[type] || {};
+    settings[type] = {
+      enabled: extension.enabled === true,
+      weight: Number.isFinite(extension.weight)
+        ? Math.max(1, Math.min(100, Math.round(extension.weight))) : DEFAULT_EXTENSION_WEIGHT
+    };
+    return settings;
+  }, {});
 }
 
 export function normalizeNoteFlowChordOptions(options = {}) {
@@ -86,6 +103,7 @@ export function normalizeNoteFlowChordOptions(options = {}) {
     customMaxValue: ranges.treble.max,
     movement: normalizeNoteFlowMovement(options.movement),
     algorithmSettings: normalizeNoteFlowAlgorithmSettings(options.algorithmSettings, "chord"),
+    chordExtensions: normalizeChordExtensions(options.chordExtensions || options.suspensions),
     bassNote: bassCount > 0,
     inputMode: "midi",
     displayNote: typeof options.displayNote === "boolean" ? options.displayNote : true,

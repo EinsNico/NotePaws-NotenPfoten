@@ -1,6 +1,6 @@
 <template>
   <div class="algorithm-controls">
-    <p class="algorithm-hint">{{$t('FLOW_ALGORITHM_CUSTOM_HINT')}}</p>
+    <p class="algorithm-hint">{{$t(kind === 'chord' ? 'FLOW_ALGORITHM_CUSTOM_HINT' : 'FLOW_MELODY_ALGORITHM_HINT')}}</p>
     <div v-for="control in controls" :key="control.key" class="algorithm-control">
       <label :for="'algorithm-' + kind + '-' + control.key">
         <span>{{$t(control.label)}}</span>
@@ -14,9 +14,6 @@
         :value="settings[control.key]" @input="update(control.key, $event.target.value)" />
       <div class="algorithm-scale"><span>{{$t(control.low)}}</span><span>{{$t(control.high)}}</span></div>
     </div>
-    <button type="button" class="algorithm-reset" @click="$emit('input', normalize({}, kind))">
-      {{$t('FLOW_ALGORITHM_RESET')}}
-    </button>
   </div>
 </template>
 
@@ -59,7 +56,6 @@ export default {
     }
   },
   methods: {
-    normalize: normalizeNoteFlowAlgorithmSettings,
     update(key, value) {
       this.$emit("input", normalizeNoteFlowAlgorithmSettings(
         Object.assign({}, this.settings, { [key]: Number(value) }), this.kind));
@@ -76,5 +72,4 @@ export default {
 .algorithm-control strong { color: #2d7180; white-space: nowrap; }
 .algorithm-control input { display: block; box-sizing: border-box; width: 100%; min-height: 34px; margin: 5px 0 0; accent-color: #2d7180; }
 .algorithm-scale { display: flex; justify-content: space-between; color: #647a7f; font-size: 11px; }
-.algorithm-reset { min-height: 40px; margin-top: 18px; padding: 8px 12px; border: 1px solid #b9d2d8; border-radius: 11px; background: #fff; color: #355864; font: inherit; font-size: 11px; font-weight: 700; cursor: pointer; }
 </style>

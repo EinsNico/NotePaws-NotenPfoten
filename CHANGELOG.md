@@ -1,5 +1,12 @@
 # Änderungen
 
+## 2.5.41 – 11. November 2026
+
+- Einzelnoten-Lernmodus verarbeitet neue Antworten, ohne den bisherigen Verlauf bei jeder Eingabe neu einzulesen und zu sortieren.
+- Notenfluss bietet mit „Gemischt“ einen dritten Übungsmodus. Der Akkordanteil lässt sich von 0 bis 100 Prozent einstellen.
+- Melodie und Akkorde zeigen die Regler für ihre Voreinstellungen direkt im Algorithmus-Menü an. Die Werte lassen sich anschließend einzeln anpassen.
+- Sus2, Sus4, Dominantsept-, Dursept- und Mollseptakkorde lassen sich einzeln einschalten und gewichten. Der Generator berücksichtigt die Tonart und die spielbaren Handbereiche.
+
 ## 2.5.40 – 29. Oktober 2026
 
 - Neue App-ID `de.nico.notenpfoten`; einheitliche technische Plugin-, Modul- und Sicherungskennungen sowie ein Zertifikat mit aktuellem App-Namen.

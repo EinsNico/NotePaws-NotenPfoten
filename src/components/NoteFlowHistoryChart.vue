@@ -81,7 +81,10 @@ export default {
   computed: {
     settings() { return this.selectedRound && this.selectedRound.settings || {}; },
     evaluatedInputs() { return evaluatedNoteFlowInputs(this.selectedRound); },
-    movementKey() { return getNoteFlowMovementLabelKey(this.settings.movement); },
+    movementKey() {
+      return this.exerciseType === "chord" && this.settings.movement === "custom"
+        ? "FLOW_CHORD_MOVEMENT_ADJUSTED" : getNoteFlowMovementLabelKey(this.settings.movement);
+    },
     noteDensity() {
       const value = this.settings.rhythm && this.settings.rhythm.noteDensity;
       return typeof value === "number" && Number.isFinite(value) ? value : null;

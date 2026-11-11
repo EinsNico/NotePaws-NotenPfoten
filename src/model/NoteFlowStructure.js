@@ -5,7 +5,7 @@ import {
   DEFAULT_CUSTOM_BASS_MAX_VALUE,
   clampCustomValue
 } from "./NoteRanges";
-import { normalizeNoteFlowMovement, normalizeNoteFlowAlgorithmSettings } from "./NoteFlowMovement";
+import { normalizeNoteFlowMovement, resolveNoteFlowMelodyAlgorithmSettings } from "./NoteFlowMovement";
 
 export const NOTE_FLOW_STRUCTURE_VERSION = 1;
 export const DEFAULT_POSITIONS_PER_BLOCK = 16;
@@ -113,7 +113,7 @@ export function normalizeNoteFlowConfig(input = {}) {
     handMode,
     secondaryNotesPerBlock,
     movement: normalizeNoteFlowMovement(requested.movement),
-    algorithmSettings: normalizeNoteFlowAlgorithmSettings(requested.algorithmSettings),
+    algorithmSettings: resolveNoteFlowMelodyAlgorithmSettings(requested.movement, requested.algorithmSettings),
     difficulty: normalizeEnum(
       requested.difficulty,
       VALID_DIFFICULTIES,

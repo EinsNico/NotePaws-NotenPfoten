@@ -4,9 +4,9 @@
     <div class="chord-shell">
       <button type="button" class="chord-back" @click="goBack"><span aria-hidden="true">←</span> {{$t('BACK')}}</button>
       <NoteFlowModeHeader
-        :title="$t('FLOW_HUB_CHORDS')"
-        :description="$t('FLOW_CHORD_INTRO')"
-        icon="♬"
+        :title="$t(mixed ? 'FLOW_HUB_MIXED' : 'FLOW_HUB_CHORDS')"
+        :description="$t(mixed ? 'FLOW_HUB_MIXED_DESCRIPTION' : 'FLOW_CHORD_INTRO')"
+        :icon="mixed ? '♫' : '♬'"
       />
 
       <NoteFlowViewTabs :active-view="tab" @select-view="selectTab" />
@@ -208,11 +208,51 @@
         <section v-if="activeSettingSection === 'algorithm'" class="chord-panel chord-preview">
           <h2>{{$t('FLOW_ALGORITHM_TITLE')}}</h2>
           <p>{{$t('FLOW_ALGORITHM_DESCRIPTION')}}</p>
-          <NoteFlowMovementSelector kind="chord" :value="localOptions.movement" @input="update('movement', $event)" />
-          <NoteFlowAlgorithmControls v-if="localOptions.movement === 'custom'" kind="chord"
+          <section v-if="mixed" class="chord-mix" aria-labelledby="chord-mix-title">
+            <h3 id="chord-mix-title">{{$t('FLOW_MIX_RATIO')}}</h3>
+            <output class="chord-mix-values" for="chord-mix-percent">
+              <span><strong>{{100 - chordPercent}} %</strong> {{$t('FLOW_MIX_SINGLE_NOTES')}}</span>
+              <span><strong>{{chordPercent}} %</strong> {{$t('FLOW_HUB_CHORDS')}}</span>
+            </output>
+            <label for="chord-mix-percent">{{$t('FLOW_MIX_CHORD_PERCENT')}}</label>
+            <input id="chord-mix-percent" class="chord-bpm-range" type="range"
+              min="0" max="100" step="1" :value="chordPercent" :aria-valuetext="mixSummary"
+              @input="setChordPercent(Number($event.target.value))" />
+            <div class="chord-choice chord-mix-presets" role="group" :aria-label="$t('FLOW_MIX_RATIO')">
+              <button v-for="preset in mixPresets" :key="preset.percent" type="button"
+                :class="{ selected: chordPercent === preset.percent }"
+                :aria-pressed="chordPercent === preset.percent"
+                @click="setChordPercent(preset.percent)">{{$t(preset.label)}}</button>
+            </div>
+          </section>
+          <NoteFlowMovementSelector kind="chord" :value="localOptions.movement" @input="selectChordMovement" />
+          <NoteFlowAlgorithmControls kind="chord"
             :value="localOptions.algorithmSettings" :bass-note="localOptions.bassNote"
             :primary-hand="localOptions.handMode === 'single' ? localOptions.singleHand : 'treble'"
-            @input="update('algorithmSettings', $event)" />
+            @input="updateChordAlgorithmSettings" />
+          <details class="chord-advanced">
+            <summary>{{$t('FLOW_CHORD_ADVANCED')}}</summary>
+            <p>{{$t('FLOW_CHORD_EXTENSION_HINT')}}</p>
+            <p v-if="localOptions.chordSize < 4">{{$t('FLOW_CHORD_SEVENTH_MINIMUM')}}</p>
+            <div v-for="type in chordExtensionTypes" :key="type" class="chord-extension">
+              <label class="chord-extension-toggle">
+                <input type="checkbox" :checked="localOptions.chordExtensions[type].enabled"
+                  @change="updateChordExtension(type, { enabled: $event.target.checked })" />
+                {{chordExtensionLabel(type)}}
+              </label>
+              <label class="chord-extension-weight" :for="'chord-weight-' + type">
+                <span>{{$t('FLOW_CHORD_EXTENSION_WEIGHT', { type: chordExtensionLabel(type) })}}</span>
+                <strong>{{localOptions.chordExtensions[type].weight}} / 100</strong>
+              </label>
+              <input :id="'chord-weight-' + type" class="chord-bpm-range" type="range"
+                min="1" max="100" step="1" :value="localOptions.chordExtensions[type].weight"
+                :disabled="!localOptions.chordExtensions[type].enabled"
+                @input="updateChordExtension(type, { weight: Number($event.target.value) })" />
+            </div>
+            <button type="button" class="chord-regenerate" @click="toggleAllChordExtensions">
+              {{$t(allChordExtensionsEnabled ? 'FLOW_CHORD_DISABLE_EXTENSIONS' : 'FLOW_CHORD_ENABLE_EXTENSIONS')}}
+            </button>
+          </details>
           <div class="chord-algorithm-preview">
             <div class="chord-preview-heading">
               <h3>{{$t('FLOW_ALGORITHM_PREVIEW')}}</h3>
@@ -221,7 +261,11 @@
             <p v-if="previewError || !rhythmScore" class="chord-preview-error" role="alert">{{$t('FLOW_CHORD_PREVIEW_ERROR')}}</p>
             <template v-else>
               <p class="chord-preview-key">{{$t('FLOW_CHORD_PREVIEW_KEY')}} <strong>{{previewKeyLabel}}</strong></p>
-              <NoteFlowChordRhythmScore :score="rhythmScore" :tonality="previewKey" :active-chord-id="activeChordId" :measure-count="4" :show-heading="false" />
+              <p v-if="previewExtensionLabels.length" class="chord-preview-extensions">
+                {{$t('FLOW_CHORD_PREVIEW_EXTENSIONS')}} <strong>{{previewExtensionLabels.join(' · ')}}</strong>
+              </p>
+              <NoteFlowChordRhythmScore :score="rhythmScore" :tonality="previewKey" :active-chord-id="activeChordId"
+                :measure-count="rhythmScore.measures.length" :show-heading="false" />
               <div class="chord-audition-controls">
                 <button type="button" class="chord-audition-play" @click="nextPreview">{{$t('FLOW_ALGORITHM_NEW_EXAMPLE')}}</button>
                 <button type="button" :class="auditionPlaying ? 'chord-audition-stop' : 'chord-audition-play'"
@@ -331,12 +375,17 @@ import NoteFlowMovementSelector from "./NoteFlowMovementSelector";
 import NoteFlowHistoryChart from "./NoteFlowHistoryChart";
 import StatisticsMetric from "./StatisticsMetric";
 import NoteFlowAlgorithmControls from "./NoteFlowAlgorithmControls";
-import { normalizeNoteFlowMovement, getNoteFlowMovementLabelKey } from "../model/NoteFlowMovement";
-import { normalizeNoteFlowChordOptions } from "../model/NoteFlowChordConfig";
+import {
+  normalizeNoteFlowMovement, getNoteFlowMovementLabelKey,
+  resolveNoteFlowChordAlgorithmSettings, findNoteFlowChordMovement
+} from "../model/NoteFlowMovement";
+import { DEFAULT_NOTE_FLOW_CHORD_PERCENT, normalizeNoteFlowChordPercent } from "../model/NoteFlowMix";
+import { NOTE_FLOW_CHORD_EXTENSION_TYPES, normalizeNoteFlowChordOptions } from "../model/NoteFlowChordConfig";
 import { NOTE_FLOW_RHYTHM_VALUES } from "../model/NoteFlowMenuConfig";
 import { NOTE_FLOW_MIN_BPM, NOTE_FLOW_MAX_BPM } from "../model/NoteFlowPlayback";
 import { createNoteFlowChordPlan } from "../model/NoteFlowChordPlan";
 import { generateNoteFlowChordRhythmicScore } from "../model/NoteFlowChordRhythm";
+import { formatNoteFlowExtendedChord } from "../model/NoteFlowChordNotation";
 import { getNoteFlowTonality } from "../model/NoteFlowTonality";
 import { formatNoteFlowTonalityLabel } from "../model/NoteFlowKeyLabels";
 import { createNoteFlowChordAudition } from "../model/NoteFlowChordAudition";
@@ -348,20 +397,35 @@ import Utils from "../model/Utils";
 import { getNaturalNoteValues, getRangePresetValues, getMatchingRangePreset } from "../model/NoteRanges";
 import { normalizeNoteFlowChordPreferences } from "../model/NoteFlowPreferences";
 
+const CHORD_EXTENSION_LABELS = {
+  dominant7: "FLOW_CHORD_DOMINANT_SEVENTHS",
+  major7: "FLOW_CHORD_MAJOR_SEVENTHS",
+  minor7: "FLOW_CHORD_MINOR_SEVENTHS"
+};
+
 export default {
   name: "NoteFlowChordMenu",
   components: { FloatingTrainingStart, StatisticsMetric, HomeMusicBackdrop, NoteFlowModeHeader, NoteFlowViewTabs, SettingsSectionIcon, CustomKeyboardPreview, NoteFlowCircleSelector, NoteFlowChordRhythmScore, NoteFlowMovementSelector, NoteFlowAlgorithmControls, NoteFlowHistoryChart },
-  props: { options: { type: Object, default: null } },
+  props: { options: { type: Object, default: null }, mixed: Boolean },
   data() {
+    const localOptions = normalizeNoteFlowChordPreferences(Object.assign({}, Options.noteFlowChordSettings || this.options || {}, {
+      movement: normalizeNoteFlowMovement(Options.noteFlowChordMovement)
+    }));
+    localOptions.algorithmSettings = resolveNoteFlowChordAlgorithmSettings(localOptions.movement, localOptions.algorithmSettings);
     return {
       tab: "settings",
       activeSettingSection: null,
       summaryExpanded: false,
       bpmMin: NOTE_FLOW_MIN_BPM,
       bpmMax: NOTE_FLOW_MAX_BPM,
-      localOptions: normalizeNoteFlowChordPreferences(Object.assign({}, Options.noteFlowChordSettings || this.options || {}, {
-        movement: normalizeNoteFlowMovement(Options.noteFlowChordMovement)
-      })),
+      chordPercent: normalizeNoteFlowChordPercent(Options.noteFlowMixedChordPercent),
+      mixPresets: [
+        { percent: DEFAULT_NOTE_FLOW_CHORD_PERCENT, label: "FLOW_MIX_MORE_SINGLE_NOTES" },
+        { percent: 50, label: "FLOW_MIX_BALANCED" },
+        { percent: 75, label: "FLOW_MIX_MORE_CHORDS" }
+      ],
+      localOptions,
+      chordExtensionTypes: NOTE_FLOW_CHORD_EXTENSION_TYPES,
       previewIndex: 0,
       previewPlan: null,
       previewError: false,
@@ -374,6 +438,11 @@ export default {
     };
   },
   computed: {
+    mixSummary() {
+      return this.$t("FLOW_MIX_RATIO_VALUES", {
+        single: 100 - this.chordPercent, chords: this.chordPercent
+      });
+    },
     rangePreset() { return getMatchingRangePreset(this.localOptions, this.activeHands); },
     noteNaming() { return Options.noteNaming || "german"; },
     noteOptions() {
@@ -404,6 +473,16 @@ export default {
         : this.localOptions.tonalityMode === "circle" ? getNoteFlowTonality(this.localOptions.selectedKey) : null;
     },
     previewKeyLabel() { return formatNoteFlowTonalityLabel(this.previewKey, this.noteNaming); },
+    allChordExtensionsEnabled() {
+      return this.chordExtensionTypes.every(type => this.localOptions.chordExtensions[type].enabled);
+    },
+    previewExtensionLabels() {
+      if (!this.rhythmScore || !this.previewKey) return [];
+      const names = this.rhythmScore.targets
+        .filter(target => this.chordExtensionTypes.includes(target.chord.quality))
+        .map(target => formatNoteFlowExtendedChord(target.chord, this.previewKey, this.noteNaming));
+      return Array.from(new Set(names));
+    },
     roundLengthOptions() {
       return [
         { value: 20, label: this.$t("twentySeconds") },
@@ -426,9 +505,17 @@ export default {
         const score = generateNoteFlowChordRhythmicScore(this.previewPlan, {
           meter: this.localOptions.rhythmMeter,
           allowedValues: this.localOptions.rhythmValues,
-          bpm: this.localOptions.bpm
+          bpm: this.localOptions.bpm,
+          chordPercent: this.mixed ? this.chordPercent : undefined
         });
         const measures = score.measures.slice(0, 4);
+        const fourthMeasure = measures[3];
+        if (fourthMeasure) {
+          const lastEvent = fourthMeasure.events[fourthMeasure.events.length - 1];
+          if (lastEvent.chord && this.chordExtensionTypes.includes(lastEvent.chord.quality)) {
+            measures.push(score.measures[4]);
+          }
+        }
         const lastMeasure = measures[measures.length - 1];
         const end = lastMeasure.events[lastMeasure.events.length - 1];
         return Object.assign({}, score, { measures,
@@ -458,7 +545,8 @@ export default {
         },
         {
           id: "algorithm", title: this.$t("FLOW_ALGORITHM_TITLE"),
-          summary: this.movementLabel(this.localOptions.movement) + " · " + this.$t("FLOW_ALGORITHM_PREVIEW")
+          summary: this.mixed ? this.mixSummary
+            : this.movementLabel(this.localOptions.movement) + " · " + this.$t("FLOW_ALGORITHM_PREVIEW")
         },
         {
           id: "behavior", title: this.$t("FLOW_CHORD_BEHAVIOR_TITLE"),
@@ -514,6 +602,38 @@ export default {
     }
   },
   methods: {
+    selectChordMovement(movement) {
+      this.updatePatch({ movement, algorithmSettings: resolveNoteFlowChordAlgorithmSettings(movement) });
+    },
+    updateChordAlgorithmSettings(algorithmSettings) {
+      this.updatePatch({ movement: findNoteFlowChordMovement(algorithmSettings), algorithmSettings });
+    },
+    chordExtensionLabel(type) {
+      const key = CHORD_EXTENSION_LABELS[type];
+      return key ? this.$t(key) : type;
+    },
+    updateChordExtension(type, patch) {
+      const extensions = Object.assign({}, this.localOptions.chordExtensions, {
+        [type]: Object.assign({}, this.localOptions.chordExtensions[type], patch)
+      });
+      this.update("chordExtensions", extensions);
+    },
+    toggleAllChordExtensions() {
+      const enabled = !this.allChordExtensionsEnabled;
+      const extensions = this.chordExtensionTypes.reduce((settings, type) => {
+        settings[type] = Object.assign({}, this.localOptions.chordExtensions[type], { enabled });
+        return settings;
+      }, {});
+      this.update("chordExtensions", extensions);
+    },
+    setChordPercent(value) {
+      const percent = normalizeNoteFlowChordPercent(value);
+      if (percent === this.chordPercent) return;
+      this.stopAudition();
+      this.chordPercent = percent;
+      Options.noteFlowMixedChordPercent = percent;
+      Options.saveOptions();
+    },
     savePreferences() {
       const saved = normalizeNoteFlowChordPreferences(this.localOptions);
       if (JSON.stringify(saved) === JSON.stringify(Options.noteFlowChordSettings)
@@ -522,7 +642,9 @@ export default {
       Options.noteFlowChordMovement = saved.movement;
       Options.saveOptions();
     },
-    movementLabel(value) { return this.$t(getNoteFlowMovementLabelKey(value)); },
+    movementLabel(value) {
+      return this.$t(value === "custom" ? "FLOW_CHORD_MOVEMENT_ADJUSTED" : getNoteFlowMovementLabelKey(value));
+    },
     goBack() {
       if (this.handleBack()) return;
       this.$emit("back");
@@ -613,7 +735,8 @@ export default {
       this.localOptions = normalizeNoteFlowChordOptions(Object.assign({}, this.localOptions, patch));
       this.savePreferences();
       this.$emit("change", Object.assign({}, this.localOptions));
-      if (["bpm", "gameLength", "behavior", "displayNote", "rhythmMeter", "rhythmValues"].includes(key) && this.previewPlan) {
+      if (["bpm", "gameLength", "behavior", "displayNote", "rhythmMeter", "rhythmValues", "chordExtensions"].includes(key)
+        && this.previewPlan) {
         this.previewPlan = Object.assign({}, this.previewPlan, {
           options: Object.assign({}, this.localOptions),
           behavior: this.localOptions.behavior
@@ -644,7 +767,10 @@ export default {
     startTraining() {
       if (!this.previewPlan) return;
       this.stopAudition();
-      this.$emit("startTraining", this.previewPlan);
+      const plan = this.mixed
+        ? Object.assign({}, this.previewPlan, { chordPercent: this.chordPercent })
+        : this.previewPlan;
+      this.$emit("startTraining", plan);
     },
     async startAudition() {
       if (!this.previewPlan || !this.rhythmScore) return;
@@ -661,7 +787,8 @@ export default {
         delayMs: AudioSync.getDelayMs(),
         onStep: (chord, index, total) => {
           this.activeChordId = chord.id;
-          this.auditionProgress = this.$t("FLOW_CHORD_AUDITION_PROGRESS", { index, total });
+          this.auditionProgress = this.$t(this.mixed
+            ? "FLOW_MIX_AUDITION_PROGRESS" : "FLOW_CHORD_AUDITION_PROGRESS", { index, total });
           this.auditionPlaying = true;
         },
         onRest: () => { this.activeChordId = null; },
@@ -811,6 +938,35 @@ p { margin: 0; color: #647a7f; font-size: 12px; line-height: 1.45; }
 .chord-statistics-empty h3 { margin: 7px 0 3px; color: #3d5960; font-size: 13px; }
 .chord-statistics-empty p { margin: 0; color: #819094; font-size: 10px; line-height: 1.4; }
 .chord-algorithm-preview { margin-top: 23px; padding-top: 18px; border-top: 1px solid #d5e6e9; }
+.chord-advanced { margin-top: 16px; padding: 0 14px; border: 1px solid #d5e6e9; border-radius: 14px; background: #f1f8f9; }
+.chord-advanced summary { padding: 13px 0; color: #355864; font-size: 13px; font-weight: 800; cursor: pointer; }
+.chord-advanced > p { margin: 0 0 10px; }
+.chord-advanced > button { margin: 2px 0 14px; }
+.chord-extension { padding: 6px 0 12px; border-top: 1px solid #d5e6e9; }
+.chord-extension-toggle { display: flex; align-items: center; gap: 8px; min-height: 36px; font-weight: 800; cursor: pointer; }
+.chord-extension-toggle input { accent-color: #2d7180; }
+.chord-extension-weight { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 5px 12px; color: #355864; font-size: 12px; }
+.chord-extension-weight strong { color: #2d7180; white-space: nowrap; }
+.chord-extension .chord-bpm-range { margin: 2px 0 0; }
+.chord-mix {
+  display: grid;
+  gap: 9px;
+  margin: 14px 0;
+  padding: 13px;
+  border: 1px solid #d5e6e9;
+  border-radius: 14px;
+  background: #f3f9f9;
+  color: #355864;
+}
+.chord-mix h3 { margin: 0; font-size: 14px; }
+.chord-mix-values { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.chord-mix-values span { min-width: 0; font-size: 12px; }
+.chord-mix-values span:last-child { text-align: right; }
+.chord-mix-values strong { display: block; font-size: 22px; }
+.chord-mix label { font-size: 12px; font-weight: 700; }
+.chord-mix input { margin: 0; }
+.chord-mix-presets { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.chord-mix-presets button { padding: 6px 4px; font-size: 12px; overflow-wrap: anywhere; }
 .chord-preview-heading h3 { margin: 0; color: #355864; font-size: 12px; }
 .chord-preview-heading > span { color: #647a7f; font-size: 12px; }
 .chord-audition-controls { margin-top: 13px; }
@@ -818,6 +974,7 @@ p { margin: 0; color: #647a7f; font-size: 12px; line-height: 1.45; }
 .chord-preview-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
 .chord-regenerate { min-height: 40px; padding: 0 12px; border: 1px solid #85aeb7; border-radius: 11px; background: #e8f5f7; color: #245f6c; font: inherit; font-size: 12px; font-weight: 800; cursor: pointer; }
 .chord-preview-key { margin: 16px 0 10px; color: #385e67; }
+.chord-preview-extensions { margin: 0 0 10px; color: #385e67; }
 .chord-audition-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .chord-audition-controls button { min-height: 42px; padding: 0 13px; border: 1px solid #85aeb7; border-radius: 11px; font: inherit; font-size: 12px; font-weight: 800; cursor: pointer; }
 .chord-audition-play { background: #dff0f3; color: #245f6c; }

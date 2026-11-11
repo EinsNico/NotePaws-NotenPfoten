@@ -396,6 +396,12 @@ test("rejects incomplete data and duplicate or foreign statistics keys", () => {
   appVolumeOptions.data.options.appVolume = 101;
   assert.strictEqual(backupModel.validateSaveDataBackup(appVolumeOptions).valid, false);
 
+  const mixedOptions = backupModel.createSaveDataBackup(createCompleteStorage());
+  mixedOptions.data.options.noteFlowMixedChordPercent = 0;
+  assert.strictEqual(backupModel.validateSaveDataBackup(mixedOptions).valid, true);
+  mixedOptions.data.options.noteFlowMixedChordPercent = 101;
+  assert.strictEqual(backupModel.validateSaveDataBackup(mixedOptions).valid, false);
+
   const unsafeAdaptiveToggle = backupModel.createSaveDataBackup(
     createCompleteStorage()
   );

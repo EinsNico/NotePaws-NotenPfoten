@@ -28,11 +28,13 @@
       v-if="page === 'note-flow-hub'"
       @openMelody="showNoteFlowMenu"
       @openChords="showNoteFlowChordMenu"
+      @openMixed="showNoteFlowChordMenu(true)"
       @back="showHome"
     />
     <NoteFlowChordMenu
       ref="noteFlowChordMenu"
       v-if="page === 'note-flow-chords-menu'"
+      :mixed="noteFlowMixed"
       :options="noteFlowChordOptions"
       @change="noteFlowChordOptions = $event"
       @startTraining="startNoteFlowChordTraining"
@@ -41,8 +43,9 @@
     <NoteFlowChordTraining
       ref="chordTraining"
       v-if="page === 'note-flow-chords-training' && noteFlowChordPlan"
+      :mixed="noteFlowMixed"
       :plan="noteFlowChordPlan"
-      @back="showNoteFlowChordMenu"
+      @back="showNoteFlowChordMenu(noteFlowMixed)"
     />
     <NoteFlowGamePreview
       ref="noteFlowPreview"
@@ -176,6 +179,7 @@ export default {
       singleNotesView: 'settings',
       adaptiveView: 'settings',
       noteFlowPreview: null,
+      noteFlowMixed: false,
       noteFlowChordOptions: null,
       noteFlowChordPlan: null,
       currentGameMode: 'normal',
@@ -433,7 +437,8 @@ export default {
     showNoteFlowMenu(){
       this.page = 'note-flow-menu';
     },
-    showNoteFlowChordMenu(){
+    showNoteFlowChordMenu(mixed = false){
+      this.noteFlowMixed = mixed;
       this.page = 'note-flow-chords-menu';
     },
     startNoteFlowChordTraining(plan){

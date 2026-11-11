@@ -1,12 +1,12 @@
-# Bauanleitung für 2.5.40
+# Bauanleitung für 2.5.41
 
-Die neue Paketidentität ist `de.nico.notenpfoten`. Die APK ist lokal gebaut und signiert; diese Anleitung beschreibt ihren Neubau. Bestehende Installationen benötigen die in [PACKAGE_ID_MIGRATION.md](PACKAGE_ID_MIGRATION.md) beschriebene Datenübernahme.
+Die Paketidentität ist `de.nico.notenpfoten`. Die APK kann die mit demselben Zertifikat signierte Version 2.5.40 aktualisieren. Beim Wechsel von 2.5.39 oder älter gilt die in [PACKAGE_ID_MIGRATION.md](PACKAGE_ID_MIGRATION.md) beschriebene Datenübernahme.
 
 # Entwicklung und Build
 
 ## Verwendeter Stand
 
-Version **2.5.40**, Android-Paket **de.nico.notenpfoten**, VersionCode **20540**.
+Version **2.5.41**, Android-Paket **de.nico.notenpfoten**, VersionCode **20541**.
 
 Für diese Version sind die folgenden Werkzeugstände vorgesehen:
 
@@ -15,7 +15,7 @@ Für diese Version sind die folgenden Werkzeugstände vorgesehen:
 - Cordova CLI 13.0.0 und cordova-android 15.1.0
 - JDK 17, Android SDK / Build Tools 36.0.0, Gradle 8.14.2
 
-Die Befehle unten sind für eine macOS-/Linux-Shell angegeben. Für die neue Paketidentität ist der lokale Android-Bau bestanden; der unabhängige Linux-/Signaturabgleich ist bestanden; siehe [REPRODUCIBILITY.md](REPRODUCIBILITY.md). Frühere Prüfungen gelten ausschließlich für die frühere Paketidentität. Eine F-Droid-Aufnahme ist noch nicht erfolgt.
+Die Befehle unten sind für eine macOS-/Linux-Shell angegeben. Der unabhängige Linux- und Signaturvergleich in [REPRODUCIBILITY.md](REPRODUCIBILITY.md) dokumentiert Version 2.5.40.
 
 ## Abhängigkeiten installieren
 
@@ -60,7 +60,7 @@ Die unsignierte Release-APK liegt anschließend unter `cordova/platforms/android
 
 Für einen reproduzierbaren Vergleich mit der Entwicklersignatur muss bei Android Build Tools ab 35 die vorhandene ZIP-Ausrichtung erhalten bleiben: vorab `zipalign -P 16 -f 4` ausführen und beim anschließenden `apksigner sign` ausdrücklich `--alignment-preserved true` setzen. Das ist die vom [Signaturkopierer dokumentierte Vorgehensweise](https://github.com/obfusk/apksigcopier#what-about-signatures-made-by-apksigner-from-build-tools--3500-rc1). Signatur und 16-KB-Ausrichtung anschließend prüfen.
 
-Der private Originalschlüssel ist absichtlich nicht enthalten. Selbst signierte Fremdbuilds können die mit dem Originalschlüssel installierte App nicht regulär aktualisieren. Die geprüfte Entwickler-APK ist im [Release v2.5.40](https://github.com/EinsNico/NotePaws-NotenPfoten/releases/tag/v2.5.40) bereitgestellt.
+Der private Originalschlüssel ist absichtlich nicht enthalten. Selbst signierte Fremdbuilds können die mit dem Originalschlüssel installierte App nicht regulär aktualisieren. Die signierte Entwickler-APK steht im [Testrelease v2.5.41](https://github.com/EinsNico/NotePaws-NotenPfoten/releases/tag/v2.5.41) bereit.
 
 ## Vorhandene Prüfskripte
 

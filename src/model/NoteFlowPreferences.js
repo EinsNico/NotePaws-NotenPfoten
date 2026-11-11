@@ -1,5 +1,7 @@
 import { applyNoteFlowMenuDependencies } from "./NoteFlowMenuConfig";
-import { normalizeNoteFlowChordOptions } from "./NoteFlowChordConfig";
+import {
+  NOTE_FLOW_DIATONIC_SEVENTH_TYPES, NOTE_FLOW_SUSPENSION_TYPES, normalizeNoteFlowChordOptions
+} from "./NoteFlowChordConfig";
 import { normalizeNoteFlowBpm, NOTE_FLOW_SPEED_DURATIONS_MS } from "./NoteFlowPlayback";
 import { getCustomRangeLimits } from "./NoteRanges";
 import { normalizeNoteFlowAlgorithmSettings, isValidNoteFlowAlgorithmSettings } from "./NoteFlowMovement";
@@ -102,6 +104,25 @@ export function isValidNoteFlowChordPreferences(value) {
     compatible = Object.assign({}, compatible, { displayNote: true });
   }
   const normalized = normalizeNoteFlowChordPreferences(value);
+  if (!Object.prototype.hasOwnProperty.call(value, "chordExtensions")) {
+    if (Object.prototype.hasOwnProperty.call(value, "suspensions")) {
+      const previousSettings = NOTE_FLOW_SUSPENSION_TYPES.reduce((settings, type) => {
+        settings[type] = normalized.chordExtensions[type];
+        return settings;
+      }, {});
+      if (!matchesNormalized(value.suspensions, previousSettings)) return false;
+    }
+    compatible = Object.assign({}, compatible, { chordExtensions: normalized.chordExtensions });
+    delete compatible.suspensions;
+  } else if (value.chordExtensions && NOTE_FLOW_DIATONIC_SEVENTH_TYPES.every(
+    type => !Object.prototype.hasOwnProperty.call(value.chordExtensions, type)
+  )) {
+    const extensions = Object.assign({}, value.chordExtensions);
+    NOTE_FLOW_DIATONIC_SEVENTH_TYPES.forEach(type => {
+      extensions[type] = normalized.chordExtensions[type];
+    });
+    compatible = Object.assign({}, compatible, { chordExtensions: extensions });
+  }
   const handFields = ["handMode", "singleHand", "bassNotesPerChord", "trebleNotesPerChord", "ranges",
     "customMinValue", "customBassMaxValue", "customTrebleMinValue", "customMaxValue"];
   if (handFields.every(key => !Object.prototype.hasOwnProperty.call(value, key))) {

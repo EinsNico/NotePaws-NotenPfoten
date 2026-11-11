@@ -1,7 +1,7 @@
 {
   "name": "de.nico.notenpfoten",
   "displayName": "Noten Pfoten",
-  "version": "2.5.40",
+  "version": "2.5.41",
   "description": "Learn to read sheet music",
   "main": "index.js",
   "scripts": {

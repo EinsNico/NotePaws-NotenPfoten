@@ -1208,6 +1208,52 @@ test("does not count the same adaptive evaluation identifier twice", () => {
   assert.strictEqual(adaptiveProgress.history.evaluations.length, 1);
 });
 
+test("records a 1500-note round without reprocessing old answers", () => {
+  global.localStorage.clear();
+  adaptiveProgress.load("keyboard");
+  const sent = [];
+  const originalEnqueue = singleNotesLearningStorage.enqueueEvaluation;
+  singleNotesLearningStorage.enqueueEvaluation = entry => {
+    sent.push(entry.evaluation.id);
+    return Promise.resolve({ saved: true });
+  };
+  const exercise = { clef: "treble", staff: "treble", value: 60, isSharp: true };
+  const start = 1788960000000;
+  const record = (id, completedAt) => adaptiveProgress.recordResult(
+    exercise, true, 0, 750, { id, completedAt, sessionId: "long-round" }
+  );
+  try {
+    record("first-note", start + 10);
+    let oldReads = 0;
+    const first = adaptiveProgress.history.evaluations[0];
+    Object.defineProperty(first, "exercise", {
+      get() {
+        oldReads += 1;
+        return exercise;
+      }
+    });
+    for (let index = 1; index < 1498; index += 1) {
+      record(`note-${index}`, start + (index + 1) * 10);
+    }
+    record("earlier-timestamp", start);
+    record("equal-timestamp", start + 10);
+    record("first-note", start + 20000);
+
+    assert.strictEqual(oldReads, 0);
+    assert.strictEqual(adaptiveProgress.history.evaluations.length, 1500);
+    assert.deepStrictEqual(adaptiveProgress.history.evaluations.slice(0, 3).map(item => item.id), [
+      "earlier-timestamp", "equal-timestamp", "first-note"
+    ]);
+    assert.strictEqual(sent.length, 1500);
+    assert.strictEqual(new Set(sent).size, 1500);
+    assert.strictEqual(adaptiveProgress.getSummary().attempts, 1500);
+    adaptiveProgress.load("keyboard");
+    assert.strictEqual(adaptiveProgress.getSummary().attempts, 1500);
+  } finally {
+    singleNotesLearningStorage.enqueueEvaluation = originalEnqueue;
+  }
+});
+
 test("migrates an existing aggregate progress once without losing results", () => {
   global.localStorage.clear();
   const exercise = { clef: "treble", staff: "treble", value: 60, isSharp: true };

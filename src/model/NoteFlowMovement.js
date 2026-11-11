@@ -1,11 +1,22 @@
-export const NOTE_FLOW_MOVEMENTS = Object.freeze(["calm", "mixed", "leaping", "custom"]);
+export const NOTE_FLOW_MOVEMENT_PRESETS = Object.freeze(["calm", "mixed", "leaping"]);
+export const NOTE_FLOW_MOVEMENTS = Object.freeze([...NOTE_FLOW_MOVEMENT_PRESETS, "custom"]);
 
 const ALGORITHM_DEFAULTS = {
   melody: { jumpFrequency: 35, jumpSize: 7, repetition: 35, noteDensity: 65 },
   chord: { jumpFrequency: 30, jumpSize: 8, bassJumpFrequency: 25 }
 };
 
-const RHYTHM_DENSITIES = { calm: 35, mixed: 65, leaping: 78 };
+const MELODY_MOVEMENT_PRESETS = {
+  calm: { jumpFrequency: 10, jumpSize: 3, repetition: 10, noteDensity: 35 },
+  mixed: { jumpFrequency: 45, jumpSize: 7, repetition: 8, noteDensity: 65 },
+  leaping: { jumpFrequency: 85, jumpSize: 10, repetition: 2, noteDensity: 78 }
+};
+
+const CHORD_MOVEMENT_PRESETS = {
+  calm: { jumpFrequency: 0, jumpSize: 2, bassJumpFrequency: 0 },
+  mixed: { jumpFrequency: 40, jumpSize: 7, bassJumpFrequency: 40 },
+  leaping: { jumpFrequency: 100, jumpSize: 10, bassJumpFrequency: 100 }
+};
 
 export function normalizeNoteFlowAlgorithmSettings(value = {}, kind = "melody") {
   const defaults = ALGORITHM_DEFAULTS[kind === "chord" ? "chord" : "melody"];
@@ -40,11 +51,36 @@ export function normalizeNoteFlowMovement(value) {
   return NOTE_FLOW_MOVEMENTS.indexOf(value) !== -1 ? value : "mixed";
 }
 
+export function resolveNoteFlowMelodyAlgorithmSettings(movement, settings) {
+  return normalizeNoteFlowAlgorithmSettings(
+    MELODY_MOVEMENT_PRESETS[normalizeNoteFlowMovement(movement)] || settings
+  );
+}
+
+export function findNoteFlowMelodyMovement(settings, { pitchOnly = false } = {}) {
+  return NOTE_FLOW_MOVEMENT_PRESETS.find(movement => {
+    const preset = MELODY_MOVEMENT_PRESETS[movement];
+    return Object.keys(preset).every(key => (
+      (pitchOnly && key === "noteDensity") || settings[key] === preset[key]
+    ));
+  }) || "custom";
+}
+
+export function resolveNoteFlowChordAlgorithmSettings(movement, settings) {
+  return normalizeNoteFlowAlgorithmSettings(
+    CHORD_MOVEMENT_PRESETS[normalizeNoteFlowMovement(movement)] || settings, "chord"
+  );
+}
+
+export function findNoteFlowChordMovement(settings) {
+  return NOTE_FLOW_MOVEMENT_PRESETS.find(movement => {
+    const preset = CHORD_MOVEMENT_PRESETS[movement];
+    return Object.keys(preset).every(key => settings[key] === preset[key]);
+  }) || "custom";
+}
+
 export function getNoteFlowRhythmDensity(movement, algorithmSettings) {
-  const resolved = normalizeNoteFlowMovement(movement);
-  return resolved === "custom"
-    ? normalizeNoteFlowAlgorithmSettings(algorithmSettings).noteDensity
-    : RHYTHM_DENSITIES[resolved];
+  return resolveNoteFlowMelodyAlgorithmSettings(movement, algorithmSettings).noteDensity;
 }
 
 export function getNoteFlowMovementLabelKey(value) {

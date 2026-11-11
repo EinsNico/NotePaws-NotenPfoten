@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { NOTE_FLOW_MOVEMENTS, normalizeNoteFlowMovement, getNoteFlowMovementLabelKey } from "../model/NoteFlowMovement";
+import { NOTE_FLOW_MOVEMENT_PRESETS, normalizeNoteFlowMovement, getNoteFlowMovementLabelKey } from "../model/NoteFlowMovement";
 
 export default {
   name: "NoteFlowMovementSelector",
@@ -22,7 +22,7 @@ export default {
     value: { type: String, default: "mixed" }
   },
   computed: {
-    movements() { return NOTE_FLOW_MOVEMENTS; },
+    movements() { return NOTE_FLOW_MOVEMENT_PRESETS; },
     selected() { return normalizeNoteFlowMovement(this.value); },
     labelKey() { return this.kind === "chord" ? "FLOW_CHORD_MOVEMENT" : "FLOW_MELODY_MOVEMENT"; },
     hintKey() { return this.labelKey + "_" + this.selected.toUpperCase(); }
@@ -39,7 +39,7 @@ export default {
 .flow-movement-choices button.selected { border-color: #85aeb7; background: #e8f5f7; }
 .flow-movement-field p { margin: 8px 0 0; color: #647a7f; font-size: 12px; line-height: 1.45; }
 @media (max-width: 480px) {
-  .flow-movement-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .flow-movement-choices button { min-width: 0; }
+  .flow-movement-choices { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .flow-movement-choices button { min-width: 0; padding-inline: 4px; overflow-wrap: anywhere; }
 }
 </style>

@@ -171,7 +171,7 @@ test("remembers both menu choices independently without changing Single Notes se
   const melodyView = instance(melody);
   melodyView.updateMovement("calm");
   const chordView = instance(chord);
-  chordView.update("movement", "leaping");
+  chordView.selectChordMovement("leaping");
   const saved = Lockr.get("options");
   assert.strictEqual(saved.noteFlowMelodyMovement, "calm");
   assert.strictEqual(saved.noteFlowChordMovement, "leaping");
@@ -226,9 +226,57 @@ test("renders the correct mode label and help in German and English", () => {
       assert(strings[view.movementLabelKey(level)]);
       const choices = view._render().children.find(node => node.tag === "div");
       const buttons = choices.children.filter(node => node.tag === "button");
-      assert.strictEqual(buttons.length, 4);
-      assert.strictEqual(buttons.filter(node => node.data.attrs["aria-pressed"]).length, 1);
+      assert.strictEqual(buttons.length, 3);
+      const selectedCount = level === "custom" ? 0 : 1;
+      assert.strictEqual(buttons.filter(node => node.data.attrs["aria-pressed"]).length, selectedCount);
     }
   }
+});
+
+test("melody presets fill the sliders and adjusted values are used and saved", () => {
+  const melody = component("NoteFlowMenu");
+  const menu = instance(melody);
+  menu.openSettingSection("algorithm");
+  for (const preset of movement.NOTE_FLOW_MOVEMENT_PRESETS) {
+    menu.updateMovement(preset);
+    const values = movement.resolveNoteFlowMelodyAlgorithmSettings(preset);
+    assert.deepStrictEqual(menu.previewOptions.algorithmSettings, values);
+    assert.deepStrictEqual(menu.algorithmMotionPreview.cycle.config.algorithmSettings, values);
+  }
+  const adjusted = Object.assign({}, menu.previewOptions.algorithmSettings, { noteDensity: 12 });
+  menu.updateAlgorithmSettings(adjusted);
+  assert.strictEqual(menu.previewOptions.movement, "custom");
+  assert.deepStrictEqual(menu.algorithmMotionPreview.cycle.config.algorithmSettings, adjusted);
+  assert.strictEqual(menu.algorithmMotionPreview.cycle.melodyPlan.profile, "leaping-primary");
+  const snapshot = require("../src/model/NoteFlowMenuConfig")
+    .createNoteFlowRhythmOptionsFromMenu(menu.previewOptions);
+  assert.strictEqual(snapshot.noteDensity, 12);
+  Options.loadOptions();
+  const reopened = instance(melody);
+  assert.deepStrictEqual(reopened.previewOptions.algorithmSettings, adjusted);
+  const mixed = movement.resolveNoteFlowMelodyAlgorithmSettings("mixed");
+  reopened.updateAlgorithmSettings(mixed);
+  assert.strictEqual(reopened.previewOptions.movement, "mixed");
+});
+
+test("chord presets set the active sliders and fine-tuning survives reopening Mixed", () => {
+  const chord = component("NoteFlowChordMenu");
+  const menu = instance(chord, { mixed: true });
+  for (const preset of movement.NOTE_FLOW_MOVEMENT_PRESETS) {
+    menu.selectChordMovement(preset);
+    const values = movement.resolveNoteFlowChordAlgorithmSettings(preset);
+    assert.deepStrictEqual(menu.localOptions.algorithmSettings, values);
+    assert.deepStrictEqual(menu.previewPlan.options.algorithmSettings, values);
+  }
+  const adjusted = Object.assign({}, menu.localOptions.algorithmSettings, { jumpSize: 5 });
+  menu.updateChordAlgorithmSettings(adjusted);
+  assert.strictEqual(menu.localOptions.movement, "custom");
+  assert.deepStrictEqual(menu.previewPlan.options.algorithmSettings, adjusted);
+  Options.loadOptions();
+  const reopened = instance(chord, { mixed: true });
+  assert.deepStrictEqual(reopened.localOptions.algorithmSettings, adjusted);
+  const mixed = movement.resolveNoteFlowChordAlgorithmSettings("mixed");
+  reopened.updateChordAlgorithmSettings(mixed);
+  assert.strictEqual(reopened.localOptions.movement, "mixed");
 });
 process.stdout.write("Note Flow movement tests passed.\n");

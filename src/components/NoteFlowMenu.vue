@@ -162,7 +162,7 @@
             </header>
             <div class="note-flow-card-body">
               <NoteFlowMovementSelector :value="previewOptions.movement" @input="updateMovement" />
-              <NoteFlowAlgorithmControls v-if="previewOptions.movement === 'custom'"
+              <NoteFlowAlgorithmControls
                 :value="previewOptions.algorithmSettings" @input="updateAlgorithmSettings" />
               <NoteFlowAlgorithmPreview v-if="algorithmMotionPreview"
                 :cycle="algorithmMotionPreview.cycle" :score="algorithmMotionPreview.score"
@@ -458,7 +458,10 @@ import NoteFlowModeHeader from "./NoteFlowModeHeader";
 import NoteFlowViewTabs from "./NoteFlowViewTabs";
 import SettingsSectionIcon from "./SettingsSectionIcon";
 import NoteFlowMovementSelector from "./NoteFlowMovementSelector";
-import { normalizeNoteFlowMovement, normalizeNoteFlowAlgorithmSettings, getNoteFlowMovementLabelKey } from "../model/NoteFlowMovement";
+import {
+  findNoteFlowMelodyMovement, getNoteFlowMovementLabelKey, normalizeNoteFlowAlgorithmSettings,
+  normalizeNoteFlowMovement, resolveNoteFlowMelodyAlgorithmSettings
+} from "../model/NoteFlowMovement";
 import Options from "../model/Options";
 import { normalizeNoteFlowMelodyPreferences } from "../model/NoteFlowPreferences";
 import Utils from "../model/Utils";
@@ -531,6 +534,9 @@ export default {
       vibration: Options.vibration,
       displayNote: Options.displayNote
     });
+    saved.menuOptions.algorithmSettings = resolveNoteFlowMelodyAlgorithmSettings(
+      saved.menuOptions.movement, saved.menuOptions.algorithmSettings
+    );
     return {
       activeView: "settings",
       activeSettingSection: null,
@@ -844,12 +850,16 @@ export default {
     },
     movementLabel(value) { return this.$t(getNoteFlowMovementLabelKey(value)); },
     updateAlgorithmSettings(value) {
-      this.previewOptions.algorithmSettings = normalizeNoteFlowAlgorithmSettings(value);
+      const settings = normalizeNoteFlowAlgorithmSettings(value);
+      this.previewOptions.algorithmSettings = settings;
+      this.previewOptions.movement = findNoteFlowMelodyMovement(settings);
       this.savePreferences();
     },
     updateMovement(value) {
       this.previewOptions.movement = normalizeNoteFlowMovement(value);
-      Options.noteFlowMelodyMovement = this.previewOptions.movement;
+      this.previewOptions.algorithmSettings = resolveNoteFlowMelodyAlgorithmSettings(
+        this.previewOptions.movement, this.previewOptions.algorithmSettings
+      );
       this.savePreferences();
     },
     goBack() {

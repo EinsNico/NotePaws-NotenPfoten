@@ -5,7 +5,7 @@
       <section class="flow-game-status">
         <div class="flow-game-title">
           <span class="flow-game-title-mark" aria-hidden="true"></span>
-          <div><small>{{$t('HOME_TRAINING_KICKER')}}</small><h1>{{$t('HOME_NOTE_FLOW')}} · {{$t('FLOW_HUB_CHORDS')}}</h1></div>
+          <div><small>{{$t('HOME_TRAINING_KICKER')}}</small><h1>{{$t('HOME_NOTE_FLOW')}} · {{$t(mixed ? 'FLOW_HUB_MIXED' : 'FLOW_HUB_CHORDS')}}</h1></div>
           <MidiConnectionStatus :connected="midiConnected" />
         </div>
         <p v-if="displayFit && displayFit.measured && !displayFit.fits" class="chord-space-warning" role="status">{{$t(roundStartedAt || roundIsActive ? 'FLOW_TRAINING_SPACE_DURING_ROUND' : 'FLOW_TRAINING_SPACE_BEFORE_START')}}</p>
@@ -22,7 +22,7 @@
       </section>
       <section class="flow-stage-card" ref="flowStage" :class="{ 'has-overlay': stageOverlayOpen }">
         <div class="chord-stage-key"><span>{{$t('FLOW_CHORD_PREVIEW_KEY')}}</span><strong>{{keyLabel}}</strong></div>
-        <p class="chord-stage-progress">{{$t('FLOW_CHORD_STREAM_PROGRESS', { index: targetNumber })}} · {{$t('FLOW_CHORD_MISTAKES', { count: roundScore.wrong })}}</p>
+        <p class="chord-stage-progress">{{$t(mixed ? 'FLOW_MIX_STREAM_PROGRESS' : 'FLOW_CHORD_STREAM_PROGRESS', { index: targetNumber })}} · {{$t('FLOW_CHORD_MISTAKES', { count: roundScore.wrong })}}</p>
         <div v-if="rhythmState && rhythmScore" class="chord-stage-score" aria-live="polite">
           <NoteFlowChordRhythmStream fit-height :score="rhythmScore" :elapsed-ms="practice.elapsedMs" :practice-state="practice" :tonality="tonality" :wrong-pitch-markers="visibleWrongPitchMarkers" :preparation-progress="isPreparing ? preparationProgress : 1" @notation-fit="displayFit = $event" />
           <p class="chord-training-feedback" :class="feedback" role="status">{{feedbackLabel}}</p>
@@ -123,7 +123,7 @@ import { getNoteFlowWrongPitchValue } from "../model/NoteFlowWrongPitchMarkers";
 export default {
   name: "NoteFlowChordTraining",
   components: { HomeMusicBackdrop, NoteFlowChordRhythmStream, MidiInput, MidiConnectionStatus },
-  props: { plan: { type: Object, required: true } },
+  props: { plan: { type: Object, required: true }, mixed: Boolean },
   mixins: [createScreenAwakeMixin(function () {
     return (this.isPreparing || this.roundTimer.status === 'running') && !this.roundResult;
   })],
@@ -196,14 +196,19 @@ export default {
     },
     feedbackLabel() {
       if (this.isPreparing) return "";
-      if (this.feedback === "wrong") return this.$t(this.practice.behavior === "wait"
-        ? "FLOW_CHORD_WRONG_WAIT" : "FLOW_CHORD_WRONG");
+      if (this.feedback === "wrong") {
+        const target = this.practice.timeline.targets[this.practice.targetIndex];
+        if (this.mixed && target && target.expectedValues.length === 1) return this.$t("FLOW_INPUT_WRONG");
+        return this.$t(this.practice.behavior === "wait" ? "FLOW_CHORD_WRONG_WAIT" : "FLOW_CHORD_WRONG");
+      }
       if (this.feedback === "late") return this.$t("FLOW_CHORD_TOO_SLOW");
-      if (this.feedback === "timing") return this.$t("FLOW_CHORD_TIMING_WRONG");
+      if (this.feedback === "timing") return this.$t(this.mixed ? "FLOW_MIX_TIMING_WRONG" : "FLOW_CHORD_TIMING_WRONG");
       if (this.feedback === "complete") return this.$t("FLOW_CHORD_CORRECT");
-      if (!this.practice || this.practice.status === "ready") return this.$t("FLOW_CHORD_PRESS_PLAY");
-      if (this.practice.status === "waiting") return this.$t("FLOW_CHORD_WAITING");
-      return this.$t("FLOW_CHORD_MIDI_INPUT_HINT");
+      if (!this.practice || this.practice.status === "ready") {
+        return this.$t(this.mixed ? "FLOW_MIX_PRESS_PLAY" : "FLOW_CHORD_PRESS_PLAY");
+      }
+      if (this.practice.status === "waiting") return this.$t(this.mixed ? "FLOW_INPUT_WAITING" : "FLOW_CHORD_WAITING");
+      return this.$t(this.mixed ? "FLOW_CHORD_PLAY_SHOWN_NOTES" : "FLOW_CHORD_MIDI_INPUT_HINT");
     }
   },
   watch: {
@@ -310,6 +315,7 @@ export default {
         meter: this.plan.options.rhythmMeter,
         allowedValues: this.plan.options.rhythmValues,
         bpm: this.plan.options.bpm,
+        chordPercent: this.plan.chordPercent,
         seed: this.roundSeed
       });
       this.rhythmState = createNoteFlowChordRhythmPractice(this.rhythmScore, {
@@ -404,6 +410,8 @@ export default {
             meter: this.plan.options.rhythmMeter,
             allowedValues: this.plan.options.rhythmValues,
             bpm: this.plan.options.bpm,
+            chordPercent: this.plan.chordPercent,
+            targetOffset: this.targetOffset + this.rhythmScore.targets.length,
             seed: `${this.roundSeed}:${next.cycleIndex}`
           });
           this.nextCycleIndex += 1;

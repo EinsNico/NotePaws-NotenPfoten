@@ -19,6 +19,7 @@ import {
 import { normalizeNoteNaming } from "./NoteNaming";
 import { DEFAULT_APP_VOLUME, normalizeAppVolume } from "./AppVolume";
 import { normalizeNoteFlowMovement } from "./NoteFlowMovement";
+import { normalizeNoteFlowChordPercent } from "./NoteFlowMix";
 import { normalizeRhythmSensePreferences } from "./RhythmSensePreferences";
 import { DEFAULT_PREPARATION_SECONDS, normalizePreparationSeconds } from "./PracticePreparation";
 
@@ -55,6 +56,7 @@ export default {
   noteFlowChordMovement: "mixed",
   noteFlowMelodySettings: null,
   noteFlowChordSettings: null,
+  noteFlowMixedChordPercent: undefined,
   rhythmSenseSettings: null,
 
   loadOptions() {
@@ -101,6 +103,9 @@ export default {
     // An older restored backup must not retain settings from the previous session.
     this.noteFlowMelodySettings = loadedOptions && loadedOptions.noteFlowMelodySettings || null;
     this.noteFlowChordSettings = loadedOptions && loadedOptions.noteFlowChordSettings || null;
+    const mixedChordPercent = loadedOptions && loadedOptions.noteFlowMixedChordPercent;
+    this.noteFlowMixedChordPercent = mixedChordPercent == null
+      ? undefined : normalizeNoteFlowChordPercent(mixedChordPercent);
     this.rhythmSenseSettings = loadedOptions && loadedOptions.rhythmSenseSettings != null
       ? normalizeRhythmSensePreferences(loadedOptions.rhythmSenseSettings) : null;
     this.clef = normalizeSingleNoteClefs(this.clef);

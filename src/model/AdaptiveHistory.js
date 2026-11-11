@@ -181,6 +181,28 @@ export function createAdaptiveHistory(progress = createAdaptiveProgress()) {
   };
 }
 
+function compareEvaluations(left, right) {
+  return left.completedAt - right.completedAt || left.id.localeCompare(right.id);
+}
+
+// Callers supply a sorted history and a validated, unique evaluation.
+export function insertAdaptiveEvaluation(evaluations, evaluation) {
+  const end = evaluations.length;
+  if (end === 0 || compareEvaluations(evaluations[end - 1], evaluation) <= 0) {
+    evaluations.push(evaluation);
+    return;
+  }
+  // A clock adjustment or equal timestamp can put a new answer before the tail.
+  let lower = 0;
+  let upper = end;
+  while (lower < upper) {
+    const middle = Math.floor((lower + upper) / 2);
+    if (compareEvaluations(evaluations[middle], evaluation) <= 0) lower = middle + 1;
+    else upper = middle;
+  }
+  evaluations.splice(lower, 0, evaluation);
+}
+
 export function normalizeAdaptiveHistory(history) {
   const normalized = createAdaptiveHistory();
   if (!history || typeof history !== "object") {
@@ -206,9 +228,7 @@ export function normalizeAdaptiveHistory(history) {
       }
     });
   }
-  normalized.evaluations.sort((left, right) => (
-    left.completedAt - right.completedAt || left.id.localeCompare(right.id)
-  ));
+  normalized.evaluations.sort(compareEvaluations);
   return normalized;
 }
 
@@ -262,10 +282,7 @@ export function addAdaptiveEvaluation(history, evaluation) {
   if (normalized.evaluations.some(value => value.id === validEvaluation.id)) {
     return normalized;
   }
-  normalized.evaluations.push(validEvaluation);
-  normalized.evaluations.sort((left, right) => (
-    left.completedAt - right.completedAt || left.id.localeCompare(right.id)
-  ));
+  insertAdaptiveEvaluation(normalized.evaluations, validEvaluation);
   return normalized;
 }
 

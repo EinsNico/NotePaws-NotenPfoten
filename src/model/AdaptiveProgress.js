@@ -6,10 +6,11 @@ import {
 } from "./AdaptiveLearning";
 import {
   ADAPTIVE_HISTORY_STORAGE_KEY,
-  addAdaptiveEvaluation,
   createAdaptiveEvaluation,
   createAdaptiveHistory,
   hasAdaptiveHistoryData,
+  insertAdaptiveEvaluation,
+  normalizeAdaptiveEvaluation,
   normalizeAdaptiveHistory,
   rebuildAdaptiveProgress
 } from "./AdaptiveHistory";
@@ -196,7 +197,10 @@ const AdaptiveProgress = {
   loadFromDatabase(inputMode = ADAPTIVE_INPUT_SCREEN) {
     const inputGroup = getAdaptiveInputGroup(inputMode);
     const fallbackProgress = this.load(inputGroup);
-    const fallbackHistory = this.history;
+    // Migration reads a snapshot while the live history can receive new answers.
+    const fallbackHistory = Object.assign({}, this.history, {
+      evaluations: this.history.evaluations.slice()
+    });
     const migrateLegacyHistory = shouldMigrateLegacyAdaptiveHistory(
       fallbackHistory
     );
@@ -345,7 +349,7 @@ const AdaptiveProgress = {
     context = {}
   ) {
     const storageKeys = getAdaptiveStorageKeys(this.inputGroup);
-    if (!hasAdaptiveHistoryData(this.history)) {
+    if (this.history.baselines.length === 0 && this.history.evaluations.length === 0) {
       this.history = createAdaptiveHistory(this.progress);
     }
     const evaluation = createAdaptiveEvaluation(
@@ -358,7 +362,11 @@ const AdaptiveProgress = {
     if (this.evaluationIds[evaluation.id]) {
       return this.progress;
     }
-    this.history = addAdaptiveEvaluation(this.history, evaluation);
+    const validEvaluation = normalizeAdaptiveEvaluation(evaluation);
+    if (!validEvaluation) {
+      throw new Error("Cannot store an invalid adaptive evaluation.");
+    }
+    insertAdaptiveEvaluation(this.history.evaluations, validEvaluation);
     this.evaluationIds[evaluation.id] = true;
     this.progress = updateAdaptiveProgress(
       this.progress,

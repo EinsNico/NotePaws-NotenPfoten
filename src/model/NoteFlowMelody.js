@@ -1,7 +1,9 @@
 import { createSeededNoteFlowRandom } from "./NoteFlowStructure";
 import { createNoteFlowHarmonicPlan } from "./NoteFlowHarmony";
 import { getNoteRange } from "./NoteRanges";
-import { normalizeNoteFlowMovement, normalizeNoteFlowAlgorithmSettings } from "./NoteFlowMovement";
+import {
+  findNoteFlowMelodyMovement, normalizeNoteFlowMovement, resolveNoteFlowMelodyAlgorithmSettings
+} from "./NoteFlowMovement";
 
 const MELODY_PROFILES = {
   calm: {
@@ -42,34 +44,27 @@ const MELODY_PROFILES = {
 };
 
 function getMelodyProfile(movement, algorithmSettings) {
-  if (normalizeNoteFlowMovement(movement) === "custom") {
-    return {
-      id: "custom-primary",
-      maxSpanSemitones: 24,
-      maxIntervalSemitones: 12,
-      leapThresholdSemitones: 13,
-      comfortableIntervalSemitones: 12,
-      stepBonus: 0,
-      largeIntervalPenalty: 0,
-      intervalScores: [0],
-      longIntervalPenalty: 0,
-      algorithmSettings: normalizeNoteFlowAlgorithmSettings(algorithmSettings)
-    };
-  }
-  return MELODY_PROFILES[normalizeNoteFlowMovement(movement)];
+  // Changing only the rhythm density keeps the preset's pitch profile.
+  const pitchMovement = movement === "custom"
+    ? findNoteFlowMelodyMovement(algorithmSettings, { pitchOnly: true }) : movement;
+  return MELODY_PROFILES[pitchMovement] || {
+    id: "custom-primary",
+    maxSpanSemitones: 24,
+    maxIntervalSemitones: 12,
+    leapThresholdSemitones: 13,
+    comfortableIntervalSemitones: 12,
+    stepBonus: 0,
+    largeIntervalPenalty: 0,
+    intervalScores: [0],
+    longIntervalPenalty: 0,
+    algorithmSettings
+  };
 }
 
 
 export function getNoteFlowPitchMovement(config, random) {
   const movement = normalizeNoteFlowMovement(config.movement);
-  const presets = {
-    calm: { jumpFrequency: 10, jumpSize: 3, repetition: 10 },
-    mixed: { jumpFrequency: 45, jumpSize: 7, repetition: 8 },
-    leaping: { jumpFrequency: 85, jumpSize: 10, repetition: 2 }
-  };
-  const settings = movement === "custom"
-    ? normalizeNoteFlowAlgorithmSettings(config.algorithmSettings)
-    : presets[movement];
+  const settings = resolveNoteFlowMelodyAlgorithmSettings(movement, config.algorithmSettings);
   return {
     preferredInterval: random() < settings.jumpFrequency / 100
       ? settings.jumpSize : (random() < settings.repetition / 100 ? 0 : 2),

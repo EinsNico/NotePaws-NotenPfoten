@@ -1,4 +1,10 @@
 import { createSeededNoteFlowRandom } from "./NoteFlowStructure";
+import { normalizeNoteFlowChordPercent } from "./NoteFlowMix";
+import {
+  chooseNoteFlowSuspendedChord, createNoteFlowDiatonicSeventh, createNoteFlowDominantSeventh
+} from "./NoteFlowChordPlan";
+import { NOTE_FLOW_DIATONIC_SEVENTH_TYPES, NOTE_FLOW_SEVENTH_TYPES, NOTE_FLOW_SUSPENSION_TYPES } from "./NoteFlowChordConfig";
+import { getNoteFlowTonality } from "./NoteFlowTonality";
 import {
   createNoteFlowRhythmMeasure,
   getNoteFlowDurationTicks,
@@ -57,7 +63,117 @@ function atMilliseconds(tick, bpm, pulseTicks) {
   return Math.round(tick * 60000 / (bpm * pulseTicks));
 }
 
-// One chord onset is one MIDI target; its value controls sounding/visible duration.
+function singleNoteFromChord(chord) {
+  const treble = chord.trebleValues || chord.values;
+  const bass = chord.bassValues || [];
+  const hand = treble.length ? treble : bass;
+  const value = hand[hand.length - 1];
+  return Object.assign({}, chord, {
+    values: [value],
+    trebleValues: treble.length ? [value] : [],
+    bassValues: treble.length ? [] : [value],
+    bassValue: treble.length ? null : value
+  });
+}
+
+function planDominantSevenths(chords, tonality, weight, random) {
+  const sevenths = new Map();
+  for (let index = 0; index < chords.length - 1; index += 1) {
+    const dominant = chords[index];
+    const tonic = chords[index + 1];
+    if (dominant.scaleDegree !== 5 || dominant.quality !== "major" || tonic.scaleDegree !== 1
+      || random() >= weight / 100) continue;
+    const chord = createNoteFlowDominantSeventh(dominant, tonic, tonality);
+    if (chord) sevenths.set(dominant.id, { chord, next: tonic });
+  }
+  return sevenths;
+}
+
+function planSeventhChords(chords, tonality, extensions, seed) {
+  const dominant = extensions.dominant7;
+  const sevenths = dominant && dominant.enabled
+    ? planDominantSevenths(chords, tonality, dominant.weight, createSeededNoteFlowRandom(`${seed}:dominant7`))
+    : new Map();
+  const reserved = new Set();
+  for (const pair of sevenths.values()) {
+    reserved.add(pair.chord.id);
+    reserved.add(pair.next.id);
+  }
+  const random = createSeededNoteFlowRandom(`${seed}:diatonicSevenths`);
+  const candidates = [];
+  for (let index = 0; index < chords.length - 1; index += 1) {
+    const original = chords[index];
+    const next = chords[index + 1];
+    const type = original.quality + "7";
+    if (!NOTE_FLOW_DIATONIC_SEVENTH_TYPES.includes(type)
+      || reserved.has(original.id) || reserved.has(next.id)) continue;
+    const setting = extensions[type];
+    const roll = random();
+    const order = random();
+    if (!setting || !setting.enabled || roll >= setting.weight / 100) continue;
+    const chord = createNoteFlowDiatonicSeventh(original, next, tonality, type);
+    if (chord) candidates.push({ chord, next, order });
+  }
+  // Adjacent pairs compete for their shared chord. Vary the order so that
+  // a seventh chord does not always lose because it comes later in the phrase.
+  candidates.sort((first, second) => first.order - second.order);
+  for (const pair of candidates) {
+    if (reserved.has(pair.chord.id) || reserved.has(pair.next.id)) continue;
+    sevenths.set(pair.chord.id, pair);
+    reserved.add(pair.chord.id);
+    reserved.add(pair.next.id);
+  }
+  return sevenths;
+}
+
+function replaceTargetChord(target, chord) {
+  target.chord = chord;
+  target.expectedValues = chord.values.slice();
+}
+
+function placeSeventhChords(targets, sevenths) {
+  const targetIndices = new Map();
+  const protectedTargets = new Set();
+  targets.forEach((target, index) => {
+    targetIndices.set(target.chord.id, index);
+    if (NOTE_FLOW_SUSPENSION_TYPES.includes(target.chord.quality)) {
+      protectedTargets.add(target);
+      protectedTargets.add(targets[index + 1]);
+    }
+  });
+  for (const [id, pair] of sevenths) {
+    const index = targetIndices.get(id);
+    const target = targets[index];
+    const resolution = targets[index + 1];
+    if (!resolution || resolution.chord.id !== pair.next.id
+      || target.globalEndTick !== resolution.globalStartTick
+      || protectedTargets.has(target) || protectedTargets.has(resolution)) continue;
+
+    // Move full-chord slots to the pair when needed in Mixed mode. Reserve
+    // each pair once placed so later substitutions cannot break its resolution.
+    const missingChordSlots = Number(target.expectedValues.length === 1)
+      + Number(resolution.expectedValues.length === 1);
+    const donors = [];
+    for (let earlier = index - 1; earlier >= 0 && donors.length < missingChordSlots; earlier -= 1) {
+      const donor = targets[earlier];
+      if (donor.expectedValues.length > 1 && !protectedTargets.has(donor)) donors.push(donor);
+    }
+    if (pair.chord.quality !== "dominant7") {
+      for (let later = index + 2; later < targets.length - 1 && donors.length < missingChordSlots; later += 1) {
+        const donor = targets[later];
+        if (donor.expectedValues.length > 1 && !protectedTargets.has(donor)) donors.push(donor);
+      }
+    }
+    if (donors.length !== missingChordSlots) continue;
+    donors.forEach(donor => replaceTargetChord(donor, singleNoteFromChord(donor.chord)));
+    replaceTargetChord(target, pair.chord);
+    replaceTargetChord(resolution, pair.next);
+    protectedTargets.add(target);
+    protectedTargets.add(resolution);
+  }
+}
+
+// Each onset is one MIDI target, whether it contains a chord or one note.
 export function generateNoteFlowChordRhythmicScore(plan, options = {}) {
   const chords = plan && Array.isArray(plan.blocks)
     ? plan.blocks.reduce((all, block) => all.concat(block.chords || []), [])
@@ -77,11 +193,30 @@ export function generateNoteFlowChordRhythmicScore(plan, options = {}) {
     ? `${plan.keyId}:${plan.cycleIndex}:${plan.chordSize}:${plan.bassNotePlanned}`
     : options.seed;
   const random = createSeededNoteFlowRandom(seed);
+  const chordPercent = options.chordPercent === undefined ? 100
+    : normalizeNoteFlowChordPercent(options.chordPercent);
+  const targetOffset = options.targetOffset || 0;
+  const extensions = plan.options.chordExtensions || plan.options.suspensions || {};
+  const useSuspensions = NOTE_FLOW_SUSPENSION_TYPES.some(type => extensions[type] && extensions[type].enabled);
+  const scheduledChords = Math.round((targetOffset + chords.length) * chordPercent / 100)
+    - Math.round(targetOffset * chordPercent / 100);
+  const useSevenths = plan.chordSize >= 4 && scheduledChords >= 2
+    && NOTE_FLOW_SEVENTH_TYPES.some(type => extensions[type] && extensions[type].enabled);
+  const tonality = (useSuspensions || useSevenths) && getNoteFlowTonality(plan.keyId);
+  const suspensionRandom = useSuspensions && createSeededNoteFlowRandom(`${seed}:suspensions`);
+  const sevenths = useSevenths && tonality
+    ? planSeventhChords(chords, tonality, extensions, seed)
+    : new Map();
+  const isChordSlot = index => Math.round((index + 1) * chordPercent / 100)
+    !== Math.round(index * chordPercent / 100);
   const hands = Array.isArray(plan.hands) ? plan.hands.slice()
     : plan.bassNotePlanned ? ["treble", "bass"] : ["treble"];
   const measures = [];
   const targets = [];
   let chordIndex = 0;
+  let resolutionPending = false;
+  let borrowedChordSlot = null;
+  let nextSuspensionIndex = 0;
 
   while (chordIndex < chords.length) {
     if (measures.length >= MAX_MEASURES) {
@@ -92,10 +227,43 @@ export function generateNoteFlowChordRhythmicScore(plan, options = {}) {
     let startTick = 0;
     while (startTick < meter.durationTicks) {
       const duration = chooseDuration(startTick, meter, values, random);
-      // Every new bar begins with a chord. Later rests never discard harmony.
+      // Every new bar begins with an onset while targets remain.
       const isRest = chordIndex >= chords.length
-        || (events.length > 0 && random() < restChance);
-      const chord = isRest ? null : chords[chordIndex++];
+        || (!resolutionPending && events.length > 0 && random() < restChance);
+      const targetIndex = targetOffset + targets.length;
+      let chord = isRest ? null : chords[chordIndex];
+      if (chord) {
+        let suspension = null;
+        if (targetIndex === borrowedChordSlot) {
+          chord = singleNoteFromChord(chord);
+          borrowedChordSlot = null;
+        } else if (!resolutionPending && !isChordSlot(targetIndex)) {
+          chord = singleNoteFromChord(chord);
+        } else if (!resolutionPending && useSuspensions && tonality && borrowedChordSlot === null
+          && chordIndex >= nextSuspensionIndex && chordIndex < chords.length - 1
+          && startTick % meter.pulseTicks === 0 && !sevenths.has(chord.id)
+          && !(chordIndex > 0 && sevenths.has(chords[chordIndex - 1].id))) {
+          // A mixed exercise may move the next chord slot forward for the resolution.
+          // Pay it back in this cycle, before its closing chord.
+          let resolutionSlot = targetIndex + 1;
+          const lastBorrowableSlot = targetIndex + chords.length - chordIndex - 1;
+          while (resolutionSlot < lastBorrowableSlot && !isChordSlot(resolutionSlot)) {
+            resolutionSlot += 1;
+          }
+          if (isChordSlot(resolutionSlot)) {
+            suspension = chooseNoteFlowSuspendedChord(chord, tonality, extensions, suspensionRandom);
+            if (suspension && resolutionSlot > targetIndex + 1) borrowedChordSlot = resolutionSlot;
+          }
+        }
+        if (suspension) {
+          chord = suspension;
+          resolutionPending = true;
+          nextSuspensionIndex = chordIndex + 2;
+        } else {
+          chordIndex += 1;
+          resolutionPending = false;
+        }
+      }
       const globalStartTick = measureIndex * meter.durationTicks + startTick;
       const event = {
         kind: isRest ? "rest" : "note",
@@ -131,6 +299,7 @@ export function generateNoteFlowChordRhythmicScore(plan, options = {}) {
     measures.push({ index: measureIndex, events });
   }
 
+  if (sevenths.size) placeSeventhChords(targets, sevenths);
   const durationTicks = measures.length * meter.durationTicks;
   return {
     rhythmVersion: NOTE_FLOW_RHYTHM_VERSION,

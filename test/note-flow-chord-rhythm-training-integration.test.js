@@ -45,14 +45,15 @@ function test(name, body) {
   process.stdout.write(`\u2713 ${name}\n`);
 }
 
-function training(behavior = "wait", meter = "3/4", chordSize = 3) {
+function training(behavior = "wait", meter = "3/4", chordSize = 3, chordPercent, chordExtensions) {
   const plan = createNoteFlowChordPlan({
     tonalityMode: "circle", selectedKey: "C-major", chordSize,
     bassNote: true, bpm: 60, behavior, rhythmMeter: meter,
     rhythmValues: meter === "6/8" ? ["dotted-quarter"] : ["quarter"],
-    gameLength: 0, seed: 71
+    gameLength: 0, seed: 71, chordExtensions
   });
-  return new Training({ propsData: { plan } });
+  if (chordPercent !== undefined) plan.chordPercent = chordPercent;
+  return new Training({ propsData: { plan, mixed: chordPercent !== undefined } });
 }
 
 test("live training uses selected meter and MIDI pitches from the displayed score", () => {
@@ -114,6 +115,81 @@ test("wait training keeps recognized MIDI notes visible after a wrong key", () =
     global.performance = originalPerformance;
     global.requestAnimationFrame = originalFrame;
   }
+});
+
+test("mixed training accepts a single MIDI note followed by a complete chord", () => {
+  const originalPerformance = global.performance;
+  const originalFrame = global.requestAnimationFrame;
+  let now = 1000;
+  global.performance = { now: () => now };
+  global.requestAnimationFrame = () => 1;
+  const view = training("wait", "4/4", 3, 25);
+  try {
+    const [single, chord] = view.rhythmScore.targets;
+    assert.strictEqual(single.expectedValues.length, 1);
+    assert(chord.expectedValues.length > 1);
+    view.rhythmState = startNoteFlowChordRhythmPractice(view.rhythmState);
+    view.lastFrameAt = now;
+    view.midiConnected = true;
+    view.pressMidi(single.expectedValues[0]);
+    assert.strictEqual(view.practice.correctCount, 1);
+    view.releaseMidi(single.expectedValues[0]);
+    now += chord.startMs;
+    chord.expectedValues.forEach((value, index) => {
+      view.pressMidi(value);
+      assert.strictEqual(view.practice.correctCount, index === chord.expectedValues.length - 1 ? 2 : 1);
+    });
+    assert.strictEqual(view.practice.targetIndex, 2);
+  } finally {
+    global.performance = originalPerformance;
+    global.requestAnimationFrame = originalFrame;
+  }
+});
+
+test("live MIDI training accepts sus and dominant seventh chords and their resolutions", () => {
+  const originalPerformance = global.performance;
+  const originalFrame = global.requestAnimationFrame;
+  let now = 1000;
+  global.performance = { now: () => now };
+  global.requestAnimationFrame = () => 1;
+  try {
+    for (const type of ["sus4", "dominant7"]) {
+      now = 1000;
+      const view = training("wait", "4/4", 3, 50, { [type]: { enabled: true, weight: 100 } });
+      const targets = view.rhythmScore.targets;
+      const index = targets.findIndex(target => target.chord.quality === type);
+      assert(index >= 0, type);
+      const resolutionDegree = type === "dominant7" ? 1 : targets[index].chord.scaleDegree;
+      assert.strictEqual(targets[index + 1].chord.scaleDegree, resolutionDegree);
+      view.rhythmState = startNoteFlowChordRhythmPractice(view.rhythmState);
+      view.lastFrameAt = now;
+      view.midiConnected = true;
+      targets.slice(0, index + 2).forEach(target => {
+        now = 1000 + target.startMs;
+        target.expectedValues.forEach(value => view.pressMidi(value));
+        target.expectedValues.forEach(value => view.releaseMidi(value));
+      });
+      assert.strictEqual(view.practice.correctCount, index + 2);
+      assert.strictEqual(view.practice.wrongCount, 0);
+    }
+  } finally {
+    global.performance = originalPerformance;
+    global.requestAnimationFrame = originalFrame;
+  }
+});
+
+test("a mixed training round keeps its ratio when another cycle is appended", () => {
+  const view = training("continuous", "3/4", 3, 37);
+  const initial = view.rhythmScore;
+  view.rhythmState = startNoteFlowChordRhythmPractice(view.rhythmState);
+  view.rhythmState = advanceNoteFlowChordRhythmPractice(
+    view.rhythmState, initial.durationMs - 1, initial.durationMs - 1
+  );
+  view.ensureScoreAhead();
+  const targets = view.rhythmScore.targets;
+  assert(targets.length > initial.targets.length);
+  assert.strictEqual(targets.filter(event => event.expectedValues.length > 1).length,
+    Math.round(targets.length * 0.37));
 });
 
 test("live training extends and trims long streams without losing totals", () => {

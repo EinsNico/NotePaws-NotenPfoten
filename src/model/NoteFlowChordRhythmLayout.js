@@ -146,7 +146,9 @@ export function createNoteFlowChordRhythmLayout(score, options = {}) {
     throw new TypeError("A non-empty chord rhythm score is required");
   }
   const measureCount = Math.min(options.measureCount || 2, score.measures.length);
-  const firstChord = score.targets[0].chord;
+  // Mixed scores may open with a single treble note before both staves are needed.
+  const firstChord = (score.targets.find(target => target.expectedValues.length > 1)
+    || score.targets[0]).chord;
   const firstNotation = createNoteFlowChordNotation(firstChord, options);
   const staves = firstNotation.staves;
   const lastSignatureX = Math.max(0, ...staves.reduce((all, staff) =>

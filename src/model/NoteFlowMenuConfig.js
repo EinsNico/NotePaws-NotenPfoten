@@ -1,7 +1,10 @@
 import { DEFAULT_POSITIONS_PER_BLOCK } from "./NoteFlowStructure";
 import { getAvailableNoteFlowTonalities } from "./NoteFlowTonality";
 import { getNoteFlowDurationTicks, getNoteFlowMeter } from "./NoteFlowRhythm";
-import { normalizeNoteFlowMovement, normalizeNoteFlowAlgorithmSettings, getNoteFlowRhythmDensity } from "./NoteFlowMovement";
+import {
+  normalizeNoteFlowMovement, normalizeNoteFlowAlgorithmSettings,
+  resolveNoteFlowMelodyAlgorithmSettings, getNoteFlowRhythmDensity
+} from "./NoteFlowMovement";
 
 const VALID_CLEFS = ["bass", "treble"];
 const VALID_MENU_CLEFS = ["bass", "treble", "piano"];
@@ -105,7 +108,7 @@ export function createNoteFlowConfigFromMenu(menuOptions = {}) {
       : 0,
     difficulty: resolved.difficulty || "easy",
     movement: resolved.movement,
-    algorithmSettings: resolved.algorithmSettings,
+    algorithmSettings: resolveNoteFlowMelodyAlgorithmSettings(resolved.movement, resolved.algorithmSettings),
     tonalityMode: resolved.tonalityMode,
     selectedKey: resolved.selectedKey,
     clefs: getAlgorithmClefs(resolved),

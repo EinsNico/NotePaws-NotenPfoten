@@ -5,6 +5,7 @@ import {
 
 const GERMAN_TONICS = {
   "C-flat": "Ces",
+  "F-flat": "Fes",
   "G-flat": "Ges",
   "D-flat": "Des",
   "A-flat": "As",
@@ -17,6 +18,8 @@ const GERMAN_TONICS = {
   A: "A",
   E: "E",
   B: "H",
+  "B-sharp": "His",
+  "E-sharp": "Eis",
   "F-sharp": "Fis",
   "C-sharp": "Cis",
   "G-sharp": "Gis",
