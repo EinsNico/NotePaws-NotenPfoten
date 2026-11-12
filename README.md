@@ -28,7 +28,7 @@ Noten lesen, Melodien spielen und Rhythmus üben – auf dem Bildschirm oder mit
 
 ## Installation
 
-Die signierten Android-APKs stehen unter **[Releases und Downloads](https://github.com/EinsNico/NotePaws-NotenPfoten/releases)**. Version 2.5.41 ist als Testversion verfügbar.
+Die signierte Android-APK steht im **[aktuellen Release](https://github.com/EinsNico/NotePaws-NotenPfoten/releases/latest)** bereit.
 
 1. APK auf das Android-Gerät laden und öffnen.
 2. Falls Android danach fragt, die Installation für die zum Öffnen verwendete App erlauben.
