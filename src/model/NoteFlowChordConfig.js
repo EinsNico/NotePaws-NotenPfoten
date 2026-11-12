@@ -111,6 +111,7 @@ export function normalizeNoteFlowChordOptions(options = {}) {
     gameLength: VALID_ROUND_LENGTHS.indexOf(Number(options.gameLength)) !== -1
       ? Number(options.gameLength) : 0,
     behavior: options.behavior === "continuous" ? "continuous" : "wait",
+    metronomeEnabled: options.metronomeEnabled === true,
     tonalityMode: options.tonalityMode === "random" ? "random" : "circle",
     selectedKey,
     accidentals,

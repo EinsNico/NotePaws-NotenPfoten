@@ -8,13 +8,15 @@ const model=require('../src/model/Workshop');
 const {createWorkshopPlayback}=require('../src/model/WorkshopPlayback');
 const {createWorkshopPracticePlan}=require('../src/model/WorkshopPractice');
 const {createWorkshopPracticeMetronome}=require('../src/model/WorkshopPracticeMetronome');
+const {createNoteFlowMetronome}=require('../src/model/NoteFlowMetronome');
+const {getNoteFlowMeter}=require('../src/model/NoteFlowRhythm');
 const silent={play(){return null;},stopAll(){}};
 const tests=[];function test(name,run){tests.push([name,run]);}
 function score(count=1){return model.createWorkshopDraft('Metronome',count).score;}
 function note(id,startSlot,extra={}){return Object.assign({id,kind:'note',noteValue:'quarter',startSlot,pitch:{step:'C',alter:0,octave:4}},extra);}
 function near(actual,expected){assert(Math.abs(actual-expected)<1e-6,actual+' differs from '+expected);}
 function beatTimes(timeline){return timeline.beats.map(beat=>beat.startMs);}
-function fixture(beats,options={}){
+function fixture(beats,options={},createHelper=audioOptions=>createWorkshopPracticeMetronome({beats},audioOptions)){
   let elapsed=0,counter=0,volume=50;
   const timers=new Map(),sources=[],gains=[],stale=[];
   const context={currentTime:10,state:'running',destination:{},
@@ -25,7 +27,7 @@ function fixture(beats,options={}){
       sources.push(source);return source;},
     createGain(){const gain={connected:false,gain:{setValueAtTime(value,at){gain.level=value;gain.at=at;},exponentialRampToValueAtTime(){}},
       connect(to){gain.connected=true;gain.destination=to;},disconnect(){gain.connected=false;}};gains.push(gain);return gain;}};
-  const helper=createWorkshopPracticeMetronome({beats},Object.assign({getContext:()=>context,getVolume:()=>volume,
+  const helper=createHelper(Object.assign({getContext:()=>context,getVolume:()=>volume,
     setTimeoutFn(fn,delay){const id=++counter;timers.set(id,{fn,due:elapsed+delay});stale.push(fn);return id;},clearTimeoutFn:id=>timers.delete(id)},options));
   function advance(target){
     assert(target>=elapsed);let safety=100000;
@@ -143,4 +145,22 @@ test('unavailable contexts remain silent and live app volume changes apply to th
   const f=fixture(beats([0,1000,2000]));f.helper.start(0,{audibleAtSeconds:10});assert.strictEqual(f.gains[0].level,.08);
   f.setVolume(0);f.advance(1000);assert.strictEqual(f.sources.length,1);f.setVolume(100);f.advance(2000);assert.strictEqual(f.gains.filter(gain=>gain.destination!==f.context.destination)[1].level,.16);f.helper.destroy();
 });
-for(const[name,run]of tests){run();console.log('PASS '+name);}console.log('All '+tests.length+' workshop practice metronome checks passed.');
+test("Note Flow repeats the two pulses of 6/8 and resumes on the same bar phase", () => {
+  const meter = getNoteFlowMeter("6/8");
+  const f = fixture([], {}, options => createNoteFlowMetronome(120, meter, options));
+  f.helper.start(0, { audibleAtSeconds: 10 });
+  f.advance(2250);
+  assert.deepStrictEqual(f.sources.map(source => source.when), [10, 10.5, 11, 11.5, 12]);
+  assert.deepStrictEqual(f.sources.map(source => source.frequencyValue), [1100, 720, 1100, 720, 1100]);
+  f.helper.stop();
+  assert.strictEqual(f.timers.size, 0);
+  f.helper.start(1250, { audibleAtSeconds: 13 });
+  f.advance(3800);
+  assert.deepStrictEqual(f.sources.slice(5).map(source => source.when), [13.25, 13.75]);
+  assert.deepStrictEqual(f.sources.slice(5).map(source => source.frequencyValue), [720, 1100]);
+  f.stall(4240);
+  assert.strictEqual(f.sources[7].when, 14.25);
+  f.helper.destroy();
+  assert.strictEqual(f.timers.size, 0);
+});
+for(const[name,run]of tests){run();console.log('PASS '+name);}console.log('All '+tests.length+' practice metronome checks passed.');

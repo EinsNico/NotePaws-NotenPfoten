@@ -23,6 +23,7 @@ export function normalizeNoteFlowMelodyPreferences(preferences = {}, defaults = 
       speed: Object.prototype.hasOwnProperty.call(NOTE_FLOW_SPEED_DURATIONS_MS, source.speed) ? source.speed : "normal",
       bpm: normalizeNoteFlowBpm(source.bpm) || 50,
       behavior: source.behavior === "continuous" ? "continuous" : "wait",
+      metronomeEnabled: source.metronomeEnabled === true,
       rhythmMeter: resolved.rhythmMeter,
       rhythmValues: resolved.rhythmValues,
       handMode: resolved.handMode,
@@ -87,6 +88,12 @@ export function isValidNoteFlowMelodyPreferences(value) {
       })
     });
   }
+  if (compatible && compatible.menuOptions
+    && !Object.prototype.hasOwnProperty.call(compatible.menuOptions, "metronomeEnabled")) {
+    compatible = Object.assign({}, compatible, {
+      menuOptions: Object.assign({}, compatible.menuOptions, { metronomeEnabled: false })
+    });
+  }
   return value === null || Boolean(value && typeof value === "object"
     && matchesNormalized(compatible, normalizeNoteFlowMelodyPreferences(value)));
 }
@@ -102,6 +109,9 @@ export function isValidNoteFlowChordPreferences(value) {
   // receives the legacy default; present malformed values must fail validation.
   if (!Object.prototype.hasOwnProperty.call(value, "displayNote")) {
     compatible = Object.assign({}, compatible, { displayNote: true });
+  }
+  if (!Object.prototype.hasOwnProperty.call(value, "metronomeEnabled")) {
+    compatible = Object.assign({}, compatible, { metronomeEnabled: false });
   }
   const normalized = normalizeNoteFlowChordPreferences(value);
   if (!Object.prototype.hasOwnProperty.call(value, "chordExtensions")) {

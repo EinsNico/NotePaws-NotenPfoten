@@ -63,6 +63,7 @@
           :score="generatedRhythmScore"
           :bpm="preview.menuOptions.bpm"
           :behavior="preview.menuOptions.behavior"
+          :metronome-enabled="preview.menuOptions.metronomeEnabled"
           :input-mode="preview.menuOptions.inputMode"
           :display-note="preview.menuOptions.displayNote"
           :rhythm-options="rhythmOptions"

@@ -62,6 +62,10 @@ const backupModel = loadEsModule(
 const fileModel = loadEsModule(
   path.resolve(__dirname, "../src/model/SaveDataFiles.js")
 );
+const {
+  normalizeNoteFlowMelodyPreferences,
+  normalizeNoteFlowChordPreferences
+} = loadEsModule(path.resolve(__dirname, "../src/model/NoteFlowPreferences.js"));
 
 function createCompleteStorage(options = { language: "de", clef: ["bass", "treble"] }) {
   return createStorage({
@@ -393,6 +397,11 @@ test("rejects incomplete data and duplicate or foreign statistics keys", () => {
   const appVolumeOptions = backupModel.createSaveDataBackup(createCompleteStorage());
   appVolumeOptions.data.options.appVolume = 35;
   assert.strictEqual(backupModel.validateSaveDataBackup(appVolumeOptions).valid, true);
+  appVolumeOptions.data.options.metronomeVolume = 0;
+  assert.strictEqual(backupModel.validateSaveDataBackup(appVolumeOptions).valid, true);
+  appVolumeOptions.data.options.metronomeVolume = 101;
+  assert.strictEqual(backupModel.validateSaveDataBackup(appVolumeOptions).valid, false);
+  appVolumeOptions.data.options.metronomeVolume = 75;
   appVolumeOptions.data.options.appVolume = 101;
   assert.strictEqual(backupModel.validateSaveDataBackup(appVolumeOptions).valid, false);
 
@@ -410,6 +419,27 @@ test("rejects incomplete data and duplicate or foreign statistics keys", () => {
     backupModel.validateSaveDataBackup(unsafeAdaptiveToggle).valid,
     false
   );
+});
+
+test("backs up the metronome preference and still accepts older Note Flow settings", () => {
+  const melody = normalizeNoteFlowMelodyPreferences({ menuOptions: { metronomeEnabled: true } });
+  const chord = normalizeNoteFlowChordPreferences({ metronomeEnabled: true });
+  const backup = backupModel.createSaveDataBackup(createCompleteStorage({
+    noteFlowMelodySettings: melody,
+    noteFlowChordSettings: chord
+  }));
+  const saved = backup.data.options;
+  assert.strictEqual(saved.noteFlowMelodySettings.menuOptions.metronomeEnabled, true);
+  assert.strictEqual(saved.noteFlowChordSettings.metronomeEnabled, true);
+  assert.strictEqual(backupModel.validateSaveDataBackup(backup).valid, true);
+  delete saved.noteFlowMelodySettings.menuOptions.metronomeEnabled;
+  delete saved.noteFlowChordSettings.metronomeEnabled;
+  assert.strictEqual(backupModel.validateSaveDataBackup(backup).valid, true);
+  saved.noteFlowMelodySettings.menuOptions.metronomeEnabled = "on";
+  assert.strictEqual(backupModel.validateSaveDataBackup(backup).valid, false);
+  delete saved.noteFlowMelodySettings.menuOptions.metronomeEnabled;
+  saved.noteFlowChordSettings.metronomeEnabled = "on";
+  assert.strictEqual(backupModel.validateSaveDataBackup(backup).valid, false);
 });
 
 test("stops an export when an app value in storage is corrupted", () => {

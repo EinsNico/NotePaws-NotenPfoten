@@ -78,7 +78,9 @@
 </template>
 
 <script>
+import AudioSync from "../model/AudioSynchronization";
 import { watchAudioTimingChanges } from "../model/AudioSynchronizationPlayback";
+import { startNoteFlowMetronome } from "../model/NoteFlowMetronome";
 import HomeMusicBackdrop from "./HomeMusicBackdrop";
 import NoteFlowChordRhythmStream from "./NoteFlowChordRhythmStream";
 import MidiInput from "./MidiInput";
@@ -325,6 +327,7 @@ export default {
       this.nextChordState = roundPlan.nextState;
       this.streamExhausted = false;
       this.targetOffset = 0;
+      this._metronomeOffsetMs = 0;
       this.lastFrameAt = null;
       this.feedback = "";
       this.roundTimer = createNoteFlowRoundTimer(this.plan.options.gameLength);
@@ -437,10 +440,15 @@ export default {
         this.rhythmState, this.rhythmScore, shiftMs
       );
       this.targetOffset += removedTargets;
+      this._metronomeOffsetMs += shiftMs;
     },
     stopAnimation() {
       if (this.animationFrame !== null) cancelAnimationFrame(this.animationFrame);
       this.animationFrame = null;
+      if (this._metronome) {
+        this._metronome.destroy();
+        this._metronome = null;
+      }
     },
     updateMotion() {
       const now = performance.now();
@@ -457,6 +465,7 @@ export default {
       this.pruneWrongPitchMarkers();
       this.animationFrame = this.practice.status === "running" || this.practice.status === "waiting"
         ? requestAnimationFrame(this.updateMotion) : null;
+      if (this.animationFrame === null) this.stopAnimation();
     },
     cancelPreparation() {
       if (!this.isPreparing) return;
@@ -477,6 +486,15 @@ export default {
       this.roundTimer = startNoteFlowRoundTimer(this.roundTimer, now);
       this.startTimerTicker();
       this.stopAnimation();
+      if (this.plan.options.metronomeEnabled && this.plan.behavior === "continuous") {
+        this._metronome = startNoteFlowMetronome({
+          bpm: this.rhythmScore.bpm,
+          meter: this.rhythmScore.meter,
+          positionMs: this._metronomeOffsetMs + this.practice.elapsedMs,
+          startedAt: now,
+          audioReady: this._audioReady
+        });
+      }
       this.animationFrame = requestAnimationFrame(this.updateMotion);
     },
     updatePreparation(now) {
@@ -500,6 +518,9 @@ export default {
       }
       if (this.isPreparing
         || !this.practice || !["ready", "paused"].includes(this.practice.status)) return;
+      if (this.plan.options.metronomeEnabled && this.plan.behavior === "continuous") {
+        this._audioReady = AudioSync.resume();
+      }
       this.ensureScoreAhead();
       const durationMs = normalizePreparationSeconds(Options.preparationSeconds) * 1000;
       if (durationMs === 0) {

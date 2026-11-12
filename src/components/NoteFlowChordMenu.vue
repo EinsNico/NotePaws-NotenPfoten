@@ -137,6 +137,9 @@
             <div class="chord-bpm-scale"><span>{{bpmMin}} BPM</span><span>{{bpmMax}} BPM</span></div>
             <p class="chord-bpm-hint">{{$t('FLOW_BPM_HINT')}}</p>
           </div>
+          <NoteFlowMetronomeSetting :value="localOptions.metronomeEnabled"
+            :disabled="localOptions.behavior !== 'continuous'" @input="update('metronomeEnabled', $event)"
+            @notice="metronomeNoticeVisible = $event" />
         </section>
 
         <section v-if="activeSettingSection === 'tonality'" class="chord-panel">
@@ -356,12 +359,14 @@
       </section>
     </div>
     <FloatingTrainingStart anchor-selector=".chord-start" :view-key="tab"
+      :notice="metronomeNoticeVisible ? $t('FLOW_METRONOME_WAIT_NOTICE') : ''"
       :label="$t('FLOW_CHORD_TRAINING_START')" :disabled="!previewPlan" @start="startTraining" />
   </main>
 </template>
 
 <script>
 import FloatingTrainingStart from './FloatingTrainingStart';
+import NoteFlowMetronomeSetting from './NoteFlowMetronomeSetting';
 import AudioSync from "../model/AudioSynchronization";
 import { watchAudioTimingChanges } from "../model/AudioSynchronizationPlayback";
 import HomeMusicBackdrop from "./HomeMusicBackdrop";
@@ -405,7 +410,7 @@ const CHORD_EXTENSION_LABELS = {
 
 export default {
   name: "NoteFlowChordMenu",
-  components: { FloatingTrainingStart, StatisticsMetric, HomeMusicBackdrop, NoteFlowModeHeader, NoteFlowViewTabs, SettingsSectionIcon, CustomKeyboardPreview, NoteFlowCircleSelector, NoteFlowChordRhythmScore, NoteFlowMovementSelector, NoteFlowAlgorithmControls, NoteFlowHistoryChart },
+  components: { FloatingTrainingStart, NoteFlowMetronomeSetting, StatisticsMetric, HomeMusicBackdrop, NoteFlowModeHeader, NoteFlowViewTabs, SettingsSectionIcon, CustomKeyboardPreview, NoteFlowCircleSelector, NoteFlowChordRhythmScore, NoteFlowMovementSelector, NoteFlowAlgorithmControls, NoteFlowHistoryChart },
   props: { options: { type: Object, default: null }, mixed: Boolean },
   data() {
     const localOptions = normalizeNoteFlowChordPreferences(Object.assign({}, Options.noteFlowChordSettings || this.options || {}, {
@@ -415,6 +420,7 @@ export default {
     return {
       tab: "settings",
       activeSettingSection: null,
+      metronomeNoticeVisible: false,
       summaryExpanded: false,
       bpmMin: NOTE_FLOW_MIN_BPM,
       bpmMax: NOTE_FLOW_MAX_BPM,
@@ -735,7 +741,7 @@ export default {
       this.localOptions = normalizeNoteFlowChordOptions(Object.assign({}, this.localOptions, patch));
       this.savePreferences();
       this.$emit("change", Object.assign({}, this.localOptions));
-      if (["bpm", "gameLength", "behavior", "displayNote", "rhythmMeter", "rhythmValues", "chordExtensions"].includes(key)
+      if (["bpm", "gameLength", "behavior", "displayNote", "rhythmMeter", "rhythmValues", "chordExtensions", "metronomeEnabled"].includes(key)
         && this.previewPlan) {
         this.previewPlan = Object.assign({}, this.previewPlan, {
           options: Object.assign({}, this.localOptions),

@@ -76,6 +76,7 @@ const NORMAL_OPTION_KEYS = [
   "language",
   "noteNaming",
   "appVolume",
+  "metronomeVolume",
   "noteFlowMelodyMovement",
   "noteFlowChordMovement",
   "noteFlowMelodySettings",
@@ -89,6 +90,7 @@ const ADAPTIVE_OPTION_KEYS = NORMAL_OPTION_KEYS.filter(key => (
   && key !== "language"
   && key !== "noteNaming"
   && key !== "appVolume"
+  && key !== "metronomeVolume"
   && key !== "keepScreenAwake"
   && key !== "preparationSeconds"
   && key !== "noteFlowMelodyMovement"
@@ -172,6 +174,10 @@ function isValidNormalOptions(value) {
       && value.noteFlowMixedChordPercent >= 0 && value.noteFlowMixedChordPercent <= 100
     ))
     && (!hasOwn(value, "rhythmSenseSettings") || isValidRhythmSensePreferences(value.rhythmSenseSettings))
+    && (!hasOwn(value, "metronomeVolume") || (
+      Number.isInteger(value.metronomeVolume)
+      && value.metronomeVolume >= 0 && value.metronomeVolume <= 100
+    ))
     && ["noteFlowMelodyMovement", "noteFlowChordMovement"].every(key => (
       !hasOwn(value, key) || NOTE_FLOW_MOVEMENTS.indexOf(value[key]) !== -1
     ))

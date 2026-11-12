@@ -11,6 +11,7 @@
         class="value-box" 
         :class="{selected: value === item.value}"
         :aria-pressed="value === item.value"
+        :aria-disabled="disabled || null"
         @click="select(item.value)">
           {{item.label}}
       </button>
@@ -28,10 +29,15 @@ export default {
     },
     items: Array,
     label: String,
-    value: [String, Number, Boolean]
+    value: [String, Number, Boolean],
+    disabled: Boolean
   },
   methods: {
     select(value){
+      if (this.disabled) {
+        this.$emit('blocked');
+        return;
+      }
       this.$emit('input', value);
     }
   }
@@ -149,6 +155,11 @@ export default {
   background: #fff0e8;
   box-shadow: inset 0 0 0 1px rgba(231, 101, 48, 0.12);
   color: #a6411e;
+}
+
+.select-option--single-notes .value-box[aria-disabled="true"] {
+  opacity: .55;
+  cursor: not-allowed;
 }
 
 @media (prefers-reduced-motion: reduce) {

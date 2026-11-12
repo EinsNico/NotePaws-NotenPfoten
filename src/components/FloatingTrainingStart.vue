@@ -1,9 +1,13 @@
 <template>
-  <div v-show="visible" class="floating-training-start">
-    <div class="floating-start-space" aria-hidden="true"></div>
+  <div v-show="visible || notice" class="floating-training-start">
+    <div v-if="notice" class="floating-start-notice-space" aria-hidden="true">
+      <p class="floating-start-notice">{{notice}}</p>
+    </div>
+    <div v-if="visible" class="floating-start-space" aria-hidden="true"></div>
     <div class="floating-start-bar">
       <div class="floating-start-inner">
-        <button type="button" class="floating-start" :disabled="disabled" @click="$emit('start')">
+        <p v-if="notice" class="floating-start-notice" role="status">{{notice}}</p>
+        <button v-show="visible" type="button" class="floating-start" :disabled="disabled" @click="$emit('start')">
           <span>{{label}}</span><span aria-hidden="true">→</span>
         </button>
       </div>
@@ -19,7 +23,8 @@ export default {
     label: { type: String, required: true },
     disabled: { type: Boolean, default: false },
     enabled: { type: Boolean, default: true },
-    viewKey: { type: String, default: '' }
+    viewKey: { type: String, default: '' },
+    notice: { type: String, default: '' }
   },
   data() { return { visible: false }; },
   watch: {
@@ -56,6 +61,16 @@ export default {
   box-shadow: 0 -5px 18px rgba(65,54,44,.13); backdrop-filter: blur(9px);
 }
 .floating-start-inner { max-width: 696px; margin: 0 auto; }
+.floating-start-notice-space {
+  visibility: hidden;
+  padding: 8px max(12px, env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+}
+.floating-start-notice {
+  max-width: 696px; margin: 0 auto; padding: 8px 12px; box-sizing: border-box;
+  border-radius: 10px; background: #fff0e8; color: #80381f;
+  font-size: 12px; font-weight: 700; line-height: 1.35; text-align: center;
+}
+.floating-start-notice + button.floating-start { margin-top: 8px; }
 button.floating-start {
   display: flex; width: 100%; min-height: 48px; align-items: center; justify-content: space-between;
   padding: 10px 17px; border: none; border-radius: 14px; background: linear-gradient(135deg,#e76530,#cf5124);

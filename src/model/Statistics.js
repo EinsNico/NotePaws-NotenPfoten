@@ -15,22 +15,49 @@ import {
   summarizeNormalRounds
 } from "./RoundStatistics";
 
-// Only locally uncommitted rounds are merged into the current stored history.
-// A stale tab's old snapshot must never replace (or restore deleted) history.
+function compareRounds(first, second) {
+  const firstTime = Number(first && first.completedAt) || 0;
+  const secondTime = Number(second && second.completedAt) || 0;
+  return firstTime - secondTime
+    || String(first && first.id).localeCompare(String(second && second.id));
+}
+
+function insertRound(rounds, round) {
+  const end = rounds.length;
+  if (end === 0 || compareRounds(rounds[end - 1], round) <= 0) {
+    rounds.push(round);
+    return;
+  }
+  let lower = 0;
+  let upper = end;
+  while (lower < upper) {
+    const middle = Math.floor((lower + upper) / 2);
+    if (compareRounds(rounds[middle], round) <= 0) lower = middle + 1;
+    else upper = middle;
+  }
+  rounds.splice(lower, 0, round);
+}
+
+// Merge only uncommitted results with the latest storage snapshot, so a stale
+// tab cannot restore rounds that another tab removed.
 function mergeRounds(current, additions) {
   const rounds = current.slice();
-  const ids = new Set(rounds.map(round => round && round.id));
+  const ids = new Set();
+  let ordered = true;
+  rounds.forEach((round, index) => {
+    ids.add(round && round.id);
+    if (ordered && index > 0 && compareRounds(rounds[index - 1], round) > 0) {
+      ordered = false;
+    }
+  });
+  if (!ordered) rounds.sort(compareRounds);
   additions.forEach(round => {
     if (!ids.has(round.id)) {
-      rounds.push(round);
+      insertRound(rounds, round);
       ids.add(round.id);
     }
   });
-  return rounds.sort((a, b) => {
-    const timeA = Number(a && a.completedAt) || 0;
-    const timeB = Number(b && b.completedAt) || 0;
-    return timeA - timeB || String(a && a.id).localeCompare(String(b && b.id));
-  });
+  return rounds;
 }
 
 export default {
@@ -106,19 +133,26 @@ export default {
   addRound(result, options, context = {}) {
     const round = createNormalRoundRecord(result, options, context);
     const pending = this.pendingRounds.find(entry => entry.round.id === round.id);
-    let persisted = [];
-    try { persisted = normalizeRoundHistory(Lockr.get(ROUND_HISTORY_STORAGE_KEY)).rounds; }
-    catch (error) { /* The immutable new result is still queued below. */ }
-    if (!pending && persisted.some(entry => entry && entry.id === round.id)) {
-      this.rounds = mergeRounds(persisted, this.pendingRounds.map(entry => entry.round));
-      return persisted.find(entry => entry && entry.id === round.id);
+    // Explicit IDs may be retries of a previously committed round. Fresh rounds
+    // can use the in-memory history until the save reads the latest snapshot.
+    if (context.id && !pending) {
+      try {
+        const storedRounds = normalizeRoundHistory(Lockr.get(ROUND_HISTORY_STORAGE_KEY)).rounds;
+        const storedRound = storedRounds.find(entry => entry && entry.id === round.id);
+        if (storedRound) {
+          this.rounds = mergeRounds(storedRounds, this.pendingRounds.map(entry => entry.round));
+          return storedRound;
+        }
+      } catch (error) { /* The new result is still queued below. */ }
     }
     if (!pending) {
       this.pendingRounds.push({
         round, clefs: options.clef.slice(), scoresSaved: false, recordSaved: false
       });
+      const rounds = this.rounds.slice();
+      insertRound(rounds, round);
+      this.rounds = rounds;
     }
-    this.rounds = mergeRounds(persisted, this.pendingRounds.map(entry => entry.round));
     this.retryPendingRounds();
     return pending ? pending.round : round;
   },
@@ -146,10 +180,7 @@ export default {
     return this.commitPendingRounds();
   },
   commitPendingRounds() {
-    let storedRounds;
     try {
-      storedRounds = normalizeRoundHistory(Lockr.get(ROUND_HISTORY_STORAGE_KEY)).rounds;
-      this.rounds = mergeRounds(storedRounds, this.pendingRounds.map(entry => entry.round));
       this.pendingRounds.forEach(entry => {
         const round = entry.round;
         const difficulty = round.settings.statisticsDifficulty;
@@ -167,9 +198,9 @@ export default {
             this.getRecordKey(entry.clefs, difficulty, accidentals), this.record);
         }
       });
-      // Read again just before the commit: another already-open tab may have
-      // completed its round since this tab loaded its settings or statistics.
-      storedRounds = normalizeRoundHistory(Lockr.get(ROUND_HISTORY_STORAGE_KEY)).rounds;
+      // Read immediately before writing, so older WebViews without Web Locks
+      // still merge against the most recent history they can see.
+      const storedRounds = normalizeRoundHistory(Lockr.get(ROUND_HISTORY_STORAGE_KEY)).rounds;
       this.rounds = mergeRounds(storedRounds, this.pendingRounds.map(entry => entry.round));
       const historySaved = writeVerified(Lockr, ROUND_HISTORY_STORAGE_KEY, {
         version: ROUND_HISTORY_VERSION, rounds: this.rounds

@@ -284,7 +284,7 @@ export default {
       if (!this.metronomeEnabled) return;
       if (this._metronome) this._metronome.destroy();
       this._metronome=createWorkshopPracticeMetronome(this.plan.timeline,{
-        getContext:() => AudioSync.getContext(), getVolume:() => Options.appVolume,
+        getContext:() => AudioSync.getContext(), getVolume:() => Options.metronomeVolume,
         delayMs:AudioSync.getDelayMs()
       });
       const context=AudioSync.getContext();

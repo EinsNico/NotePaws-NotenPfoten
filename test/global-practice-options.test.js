@@ -98,6 +98,21 @@ for (const invalid of ["invalid", true, 8, null]) {
 Options.preparationSeconds = "5";
 Options.saveOptions();
 assert.strictEqual(Lockr.get("options").preparationSeconds, 5, "UI string values are saved as numbers");
+
+const legacyVolume = Object.assign({}, chosen, { appVolume: 35 });
+delete legacyVolume.metronomeVolume;
+Lockr.set("options", legacyVolume);
+Options.loadOptions();
+assert.strictEqual(Options.appVolume, 35);
+assert.strictEqual(Options.metronomeVolume, 35, "the old volume supplies both channels");
+Options.appVolume = 60;
+Options.metronomeVolume = 0;
+Options.saveOptions();
+Options.metronomeVolume = 100;
+Options.loadOptions();
+assert.strictEqual(Options.appVolume, 60);
+assert.strictEqual(Options.metronomeVolume, 0, "a muted metronome survives reload");
+
 for (const [key, model] of [["options", Options], ["adaptiveOptions", AdaptiveOptions]]) {
   const saved = Object.assign({}, chosen, {
     clef: ["piano"], customMinValue: 36, customBassMaxValue: 55,

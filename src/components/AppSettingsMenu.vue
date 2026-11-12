@@ -66,6 +66,28 @@
               max="100"
               step="5"
               :aria-describedby="'app-settings-audio-description'"
+              :aria-valuetext="`${options.appVolume} %`"
+            />
+            <div class="app-settings-volume-scale" aria-hidden="true">
+              <span>{{$t('APP_SETTINGS_VOLUME_QUIET')}}</span>
+              <span>{{$t('APP_SETTINGS_VOLUME_LOUD')}}</span>
+            </div>
+          </div>
+          <div class="app-settings-control app-settings-volume-control">
+            <label for="metronome-volume">
+              <span>{{$t('APP_SETTINGS_METRONOME_VOLUME')}}</span>
+              <output for="metronome-volume">{{options.metronomeVolume}} %</output>
+            </label>
+            <input
+              id="metronome-volume"
+              v-model.number="options.metronomeVolume"
+              type="range"
+              :disabled="settingsBusy || !options.sound"
+              min="0"
+              max="100"
+              step="5"
+              :aria-describedby="'app-settings-audio-description'"
+              :aria-valuetext="`${options.metronomeVolume} %`"
             />
             <div class="app-settings-volume-scale" aria-hidden="true">
               <span>{{$t('APP_SETTINGS_VOLUME_QUIET')}}</span>
@@ -444,6 +466,9 @@ export default {
       this.saveOptions();
     },
     "options.appVolume": function updateAppVolume() {
+      this.saveOptions();
+    },
+    "options.metronomeVolume": function updateMetronomeVolume() {
       this.saveOptions();
     },
     "options.sound": function updateSound() {

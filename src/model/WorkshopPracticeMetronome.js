@@ -7,6 +7,8 @@ const CLICK_SECONDS = .055;
 /** Schedule optional practice clicks on the shared WebAudio clock. */
 export function createWorkshopPracticeMetronome(timeline, options = {}) {
   const beats=(timeline.beats || []).filter(beat=>Number.isFinite(beat.startMs) && beat.startMs>=0).slice().sort((a,b)=>a.startMs-b.startMs);
+  const repeatMs = Number.isFinite(timeline.repeatEveryMs) && beats.length
+    && timeline.repeatEveryMs > beats[beats.length - 1].startMs ? timeline.repeatEveryMs : 0;
   const getContext=options.getContext || (()=>options.context || null);
   const getVolume=options.getVolume || (()=>options.volume === undefined ? 100 : options.volume);
   const schedule=options.setTimeoutFn || setTimeout,cancel=options.clearTimeoutFn || clearTimeout;
@@ -23,9 +25,16 @@ export function createWorkshopPracticeMetronome(timeline, options = {}) {
       && typeof value.createGain==='function' && (!value.state || value.state==='running');
   }
   function lowerBound(at) {
+    const repetitions = repeatMs ? Math.max(0, Math.floor((at + EPSILON) / repeatMs)) : 0;
+    const positionInCycle = at - repetitions * repeatMs;
     let left=0,right=beats.length;
-    while(left<right) {const middle=(left+right)>>>1;if(beats[middle].startMs<at-EPSILON)left=middle+1;else right=middle;}
-    return left;
+    while(left<right) {const middle=(left+right)>>>1;if(beats[middle].startMs<positionInCycle-EPSILON)left=middle+1;else right=middle;}
+    return repetitions * beats.length + left;
+  }
+  function beatAt(index) {
+    if (!repeatMs || index < beats.length) return beats[index];
+    const beat = beats[index % beats.length];
+    return { startMs: Math.floor(index / beats.length) * repeatMs + beat.startMs, accent: beat.accent };
   }
   function release(entry) {
     if(!sources.delete(entry))return;
@@ -56,8 +65,12 @@ export function createWorkshopPracticeMetronome(timeline, options = {}) {
     const now=context.currentTime;
     Array.from(sources).forEach(entry=>{if(entry.end<now)release(entry);});
     try {
-      while(nextIndex<beats.length) {
-        const beat=beats[nextIndex];if(beat.startMs>limitMs+EPSILON)break;
+      if (repeatMs) {
+        const earliestMs = originPosition + delayMs + (now - audibleOrigin - .005) * 1000;
+        nextIndex = Math.max(nextIndex, lowerBound(earliestMs));
+      }
+      for (let beat = beatAt(nextIndex); beat; beat = beatAt(nextIndex)) {
+        if(beat.startMs>limitMs+EPSILON)break;
         const at=audibleOrigin+(beat.startMs-originPosition-delayMs)/1000;
         if(at>now+lookAheadSeconds)break;
         const index=nextIndex++;
@@ -68,7 +81,8 @@ export function createWorkshopPracticeMetronome(timeline, options = {}) {
         pulse(beat,index,Math.max(now,at));
       }
     } catch(error) {fail(error);return;}
-    if(nextIndex<beats.length && beats[nextIndex].startMs<=limitMs+EPSILON) {
+    const nextBeat = beatAt(nextIndex);
+    if(nextBeat && nextBeat.startMs<=limitMs+EPSILON) {
       const run=generation;
       timer=schedule(()=>{if(run!==generation)return;timer=null;queue();},refillMs);
     }

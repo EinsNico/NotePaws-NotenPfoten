@@ -140,6 +140,7 @@
 import { heldNoteGripColor } from '../model/HeldNoteGrip';
 import AudioSync from "../model/AudioSynchronization";
 import { watchAudioTimingChanges } from "../model/AudioSynchronizationPlayback";
+import { startNoteFlowMetronome } from "../model/NoteFlowMetronome";
 import Glyphs from "abcjs/src/write/creation/glyphs";
 import ButtonInput from "./ButtonInput";
 import KeyboardInput from "./KeyboardInput";
@@ -184,6 +185,7 @@ export default {
     score: { type: Object, required: true },
     bpm: { type: Number, default: 50 },
     behavior: { type: String, default: "wait" },
+    metronomeEnabled: Boolean,
     inputMode: { type: String, default: "button" },
     displayNote: { type: Boolean, default: true },
     training: { type: Boolean, default: false },
@@ -471,6 +473,10 @@ export default {
     stopFrame() {
       if (this.frameRequest !== null) cancelAnimationFrame(this.frameRequest);
       this.frameRequest = null;
+      if (this._metronome) {
+        this._metronome.destroy();
+        this._metronome = null;
+      }
     },
     resetPreview() {
       this.clearWrongPitchMarkers();
@@ -480,6 +486,7 @@ export default {
       this.renderCycle = createNoteFlowRenderingSnapshot(this.cycle);
       this.activeScore = createNoteFlowRenderingSnapshot(this.score);
       this.nextCycleIndex = 1;
+      this._metronomeOffsetMs = 0;
       this.continuationState = this.activeScore.nextState || this.renderCycle.nextState;
       this.practiceState = createNoteFlowRhythmPractice(this.timeline, {
         behavior: this.behavior,
@@ -516,6 +523,7 @@ export default {
         && this.practiceState.elapsedMs
           > this.timeline.measures[RETAIN_MEASURES - 1].endMs + measureMs) {
         const shiftMs = this.timeline.measures[RETAIN_MEASURES - 1].endMs;
+        this._metronomeOffsetMs += shiftMs;
         this.activeScore = createNoteFlowRenderingSnapshot(Object.assign({}, this.activeScore, {
           measures: this.activeScore.measures.slice(RETAIN_MEASURES)
         }));
@@ -551,6 +559,7 @@ export default {
       if (this.practiceState.missedCount !== before) this.emitRoundProgress();
       this.frameRequest = this.practiceState.status === "running"
         ? requestAnimationFrame(this.updateFrame) : null;
+      if (this.frameRequest === null) this.stopFrame();
     },
     submitTouch(value) {
       this.submitInput(value, "touch");
@@ -614,6 +623,15 @@ export default {
       if (this.training) this.$emit(wasPaused ? "round-resume" : "round-start");
       this.lastFrameAt = performance.now();
       if (this.practiceState.status === "running") {
+        if (this.training && this.metronomeEnabled && this.behavior === "continuous") {
+          this._metronome = startNoteFlowMetronome({
+            bpm: this.bpm,
+            meter: this.timeline.meter,
+            positionMs: this._metronomeOffsetMs + this.practiceState.elapsedMs,
+            startedAt: this.lastFrameAt,
+            audioReady: this._audioReady
+          });
+        }
         this.frameRequest = requestAnimationFrame(this.updateFrame);
       }
     },
@@ -642,7 +660,7 @@ export default {
       }
       if (this.inputMode === "midi" && !this.midiConnected) return;
       // Unlock Web Audio in the Play/Resume gesture, before the visual approach.
-      AudioSync.resume();
+      this._audioReady = AudioSync.resume();
       if (!this.practiceState || this.practiceState.status === "complete") {
         this.resetPreview();
         if (this.training) this.$emit("round-reset");

@@ -8,7 +8,7 @@
 
 Noten lesen, Melodien spielen und Rhythmus üben – auf dem Bildschirm oder mit einem MIDI-Instrument.
 
-**Version 2.5.41 · Android 7.0 oder neuer · Deutsch und Englisch**
+**Version 2.5.42 · Android 7.0 oder neuer · Deutsch und Englisch**
 
 [Hinweis zur bereinigten Projektgeschichte](docs/HISTORY_CLEANUP.md)
 

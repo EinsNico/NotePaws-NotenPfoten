@@ -1,8 +1,8 @@
 {
   "name": "noten-pfoten",
-  "version": "2.5.41",
+  "version": "2.5.42",
   "description": "Learn to read sheet music",
-  "author": "NicronTheFox (based on original work by MelvilQ)",
+  "author": "EinsNico (based on original work by MelvilQ)",
   "license": "AGPL-3.0-only",
   "private": true,
   "scripts": {

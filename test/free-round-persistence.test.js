@@ -37,10 +37,14 @@ function realm(overrides = {}) {
 const values = new Map();
 let failure = null;
 let warnings = 0;
+let historyReads = 0;
 const previousWarn = console.warn;
 console.warn = () => { warnings++; };
 global.localStorage = {
-  getItem(key) { return values.has(key) ? values.get(key) : null; },
+  getItem(key) {
+    if (key === 'roundHistory') historyReads++;
+    return values.has(key) ? values.get(key) : null;
+  },
   setItem(key, value) {
     if(failure && failure(key)) { const error = new Error('Synthetic full storage'); error.name = 'QuotaExceededError'; throw error; }
     values.set(key, String(value));
@@ -83,6 +87,25 @@ function test(name, body) {
     Lockr.set('roundHistory', { version: 1, rounds: [] });
     stale.addRound(result(2), options, { id: 'new-round', completedAt: 2000 });
     assert.deepStrictEqual(newStatistics().statistics.rounds.map(round => round.id), ['new-round']);
+  });
+
+  test('a new 1500-note round reads history once to merge and once to verify, keeping older rounds ordered', () => {
+    const { statistics } = newStatistics();
+    const seed = statistics.addRound(result(10), options, { completedAt: 1000 });
+    const previous = Array.from({ length: 1500 }, (_, index) => Object.assign({}, seed, {
+      id: 'previous-' + index, completedAt: 1000 + index * 2
+    }));
+    Lockr.set('roundHistory', { version: 1, rounds: previous.slice().reverse() });
+    statistics.init();
+    historyReads = 0;
+    const round = statistics.addRound({
+      score: 1500, accuracy: 100, numAnswers: 1500, numCorrect: 1500, numWrong: 0
+    }, options, { completedAt: 2501 });
+    assert.strictEqual(historyReads, 2, 'one latest snapshot and one write verification');
+    const persisted = Lockr.get('roundHistory').rounds;
+    assert.strictEqual(persisted.length, previous.length + 1);
+    assert.deepStrictEqual(persisted[751], round);
+    assert.deepStrictEqual(persisted.slice(0, 751).concat(persisted.slice(752)), previous);
   });
 
   test('actual Lockr quota failure preserves immutable results, reports globally and survives menu init until retry', () => {

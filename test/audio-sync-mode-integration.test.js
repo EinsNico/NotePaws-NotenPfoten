@@ -27,6 +27,12 @@ const helper = evaluate(fs.readFileSync(path.resolve(__dirname, "../src/model/Au
 const renderingSnapshot = evaluate(fs.readFileSync(path.resolve(__dirname,
   "../src/model/NoteFlowRenderingSnapshot.js"), "utf8"), {});
 let active = false, startCount = 0, lastOptions = null, playerOptions = null, plays = [];
+const volumeOptions = { appVolume: 37, metronomeVolume: 62 };
+const metronomeVolumes = [];
+function createTestMetronome(timeline, options) {
+  metronomeVolumes.push(options.getVolume());
+  return { start() {}, destroy() {} };
+}
 const player = { stopAll() {}, play(value, volume) { plays.push([value, volume]); return {}; } };
 function playback(options) {
   lastOptions = options;
@@ -41,7 +47,8 @@ function component(name) {
     "../model/PianoAudio": { createPianoSamplePlayer(options) { playerOptions = options; return player; } },
     "../model/WorkshopPianoAudio": { createWorkshopPianoPlayer() { return Object.assign({ prepare:async () => true },player); } },
     "../model/WorkshopPracticePersistence": { flushWorkshopPracticePersistence() { return true; } },
-    "../model/Options": { appVolume: 37 },
+    "../model/Options": volumeOptions,
+    "../model/WorkshopPracticeMetronome": { createWorkshopPracticeMetronome: createTestMetronome },
     "../model/ScreenAwakeMixin": {createScreenAwakeMixin:()=>({})},
     "../model/MidiConnection": {connectedMidiInputs:()=>[],MIDI_CONNECTION_CHECK_INTERVAL_MS:1000},
     "../model/NoteFlowViewport": { lockNoteFlowViewport() { return () => {}; } },
@@ -118,6 +125,21 @@ async function run() {
     definition.data.call({ cycle: {}, score: {} });
     assert.deepStrictEqual(playerOptions, { feedback: true }, name + " uses the shared player for live input");
   }
-  console.log("Audio mode wiring: delay snapshots, output-change stop/pause, unmount cancellation, and shared feedback players OK.");
+  const workshop = context(component("WorkshopPractice"), {
+    metronomeEnabled: true, plan: { timeline: {}, durationMs: 1000 },
+    practice: { positionMs: 0, status: "running" }
+  });
+  workshop.startMetronome();
+  const noteFlow = evaluate(fs.readFileSync(path.resolve(__dirname, "../src/model/NoteFlowMetronome.js"), "utf8"), {
+    "./AudioSynchronization": sync,
+    "./Options": volumeOptions,
+    "./WorkshopPracticeMetronome": { createWorkshopPracticeMetronome: createTestMetronome }
+  });
+  noteFlow.startNoteFlowMetronome({
+    bpm: 60, meter: { pulseTicks: 96, pulseStarts: [0, 96, 192, 288], durationTicks: 384 },
+    positionMs: 0, startedAt: performance.now()
+  });
+  assert.deepStrictEqual(metronomeVolumes, [62, 62], "both metronomes use the click volume independently of note volume");
+  console.log("Audio mode wiring: delay snapshots, lifecycle, and separate metronome volume OK.");
 }
 run().catch(error => { console.error(error); process.exitCode = 1; });

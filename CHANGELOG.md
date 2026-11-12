@@ -1,5 +1,11 @@
 # Änderungen
 
+## 2.5.42 – 12. November 2026
+
+- Notenfluss: Metronom für Melodie, Akkorde und Gemischt im durchlaufenden Training. Ein Tipp auf den Schalter im Wartemodus zeigt, wie sich das Metronom aktivieren lässt.
+- App-Einstellungen → Audio: separate Regler für Noten und Metronom. Der Metronomregler gilt für Notenfluss, Taktgefühl und Notenwerkstatt.
+- Einzelnoten: Freies Training speichert abgeschlossene Runden mit weniger Zugriffen auf den bisherigen Verlauf.
+
 ## 2.5.41 – 11. November 2026
 
 - Einzelnoten-Lernmodus verarbeitet neue Antworten, ohne den bisherigen Verlauf bei jeder Eingabe neu einzulesen und zu sortieren.

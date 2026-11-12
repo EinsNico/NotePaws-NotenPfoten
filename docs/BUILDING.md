@@ -1,4 +1,4 @@
-# Bauanleitung für 2.5.41
+# Bauanleitung für 2.5.42
 
 Die Paketidentität ist `de.nico.notenpfoten`. Die APK kann die mit demselben Zertifikat signierte Version 2.5.40 aktualisieren. Beim Wechsel von 2.5.39 oder älter gilt die in [PACKAGE_ID_MIGRATION.md](PACKAGE_ID_MIGRATION.md) beschriebene Datenübernahme.
 
@@ -6,7 +6,7 @@ Die Paketidentität ist `de.nico.notenpfoten`. Die APK kann die mit demselben Ze
 
 ## Verwendeter Stand
 
-Version **2.5.41**, Android-Paket **de.nico.notenpfoten**, VersionCode **20541**.
+Version **2.5.42**, Android-Paket **de.nico.notenpfoten**, VersionCode **20542**.
 
 Für diese Version sind die folgenden Werkzeugstände vorgesehen:
 
@@ -60,7 +60,7 @@ Die unsignierte Release-APK liegt anschließend unter `cordova/platforms/android
 
 Für einen reproduzierbaren Vergleich mit der Entwicklersignatur muss bei Android Build Tools ab 35 die vorhandene ZIP-Ausrichtung erhalten bleiben: vorab `zipalign -P 16 -f 4` ausführen und beim anschließenden `apksigner sign` ausdrücklich `--alignment-preserved true` setzen. Das ist die vom [Signaturkopierer dokumentierte Vorgehensweise](https://github.com/obfusk/apksigcopier#what-about-signatures-made-by-apksigner-from-build-tools--3500-rc1). Signatur und 16-KB-Ausrichtung anschließend prüfen.
 
-Der private Originalschlüssel ist absichtlich nicht enthalten. Selbst signierte Fremdbuilds können die mit dem Originalschlüssel installierte App nicht regulär aktualisieren. Die signierte Entwickler-APK steht im [Release v2.5.41](https://github.com/EinsNico/NotePaws-NotenPfoten/releases/tag/v2.5.41) bereit.
+Der private Originalschlüssel ist absichtlich nicht enthalten. Selbst signierte Fremdbuilds können die mit dem Originalschlüssel installierte App nicht regulär aktualisieren. Die signierte Entwickler-APK steht im [Release v2.5.42](https://github.com/EinsNico/NotePaws-NotenPfoten/releases/tag/v2.5.42) bereit.
 
 ## Vorhandene Prüfskripte
 

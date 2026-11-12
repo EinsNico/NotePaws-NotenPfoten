@@ -30,7 +30,7 @@ function setup(delayMs = 0, preferences = null, soundEnabled = true) {
   let subscriber;
   let resume = () => Promise.resolve(true);
   let preferenceSaves = 0;
-  const options = { sound:soundEnabled, appVolume: 100, rhythmSenseSettings: preferences,
+  const options = { sound:soundEnabled, appVolume: 100, metronomeVolume: 100, rhythmSenseSettings: preferences,
     saveOptions() { preferenceSaves++; } };
   const master = soundModule.exports.createAppSoundController(()=>options.sound);
   const saved = [], sources = [], timeouts = new Map(), intervals = new Map();
@@ -54,7 +54,7 @@ function setup(delayMs = 0, preferences = null, soundEnabled = true) {
     get currentTime() { return now / 1000; },
     createOscillator() { return source('oscillator'); },
     createBufferSource() { return source('noise'); },
-    createGain() { return Object.assign(node(), { gain: { setValueAtTime() {}, exponentialRampToValueAtTime() {} } }); },
+    createGain() { return Object.assign(node(), { gain: { setValueAtTime(value) { this.level = value; }, exponentialRampToValueAtTime() {} } }); },
     createBiquadFilter() { return Object.assign(node(), { frequency: { setValueAtTime() {} } }); },
     createBuffer(channels, length) { return { getChannelData() { return new Float32Array(length); } }; },
     addEventListener(name, fn) { contextListeners[name] = fn; },
@@ -121,6 +121,23 @@ function setup(delayMs = 0, preferences = null, soundEnabled = true) {
 }
 
 async function run() {
+  const channels = setup();
+  channels.app.audioContext = channels.context;
+  channels.options.appVolume = 0;
+  channels.options.metronomeVolume = 25;
+  channels.app.playMetronome(true);
+  channels.app.playDrum(false);
+  assert.strictEqual(channels.sources.length, 1, "muted drum leaves the metronome audible");
+  assert.strictEqual(channels.sources[0].destination.gain.level, 0.04);
+  channels.options.appVolume = 50;
+  channels.options.metronomeVolume = 0;
+  channels.app.playMetronome(true);
+  channels.app.playDrum(false);
+  assert.strictEqual(channels.sources.length, 3, "muted metronome leaves both drum layers audible");
+  assert.strictEqual(channels.sources[1].destination.gain.level, 0.18);
+  assert.strictEqual(channels.sources[2].destination.destination.gain.level, 0.16);
+  channels.destroy();
+
   const preferences = setup();
   assert.deepStrictEqual(preferences.app.noteValues, ['whole', 'half', 'quarter']);
   assert.strictEqual(preferences.app.previewVibration, false);

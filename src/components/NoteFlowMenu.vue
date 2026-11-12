@@ -296,6 +296,9 @@
                 </div>
                 <p class="flow-bpm-hint">{{$t('FLOW_BPM_HINT')}}</p>
               </div>
+              <NoteFlowMetronomeSetting v-model="previewOptions.metronomeEnabled"
+                :disabled="previewOptions.behavior !== 'continuous'"
+                @notice="metronomeNoticeVisible = $event" />
             </div>
           </section>
 
@@ -440,12 +443,14 @@
       </section>
     </div>
     <FloatingTrainingStart anchor-selector=".note-flow-start" :view-key="activeView"
+      :notice="metronomeNoticeVisible ? $t('FLOW_METRONOME_WAIT_NOTICE') : ''"
       :label="$t('FLOW_START_PREVIEW')" :disabled="!inputAvailability.inputAvailable" @start="startPreview" />
   </main>
 </template>
 
 <script>
 import FloatingTrainingStart from './FloatingTrainingStart';
+import NoteFlowMetronomeSetting from './NoteFlowMetronomeSetting';
 import HomeMusicBackdrop from "./HomeMusicBackdrop";
 import SelectOption from "./SelectOption";
 import CustomKeyboardPreview from "./CustomKeyboardPreview";
@@ -498,6 +503,7 @@ export default {
   name: "NoteFlowMenu",
   components: {
     FloatingTrainingStart,
+    NoteFlowMetronomeSetting,
     HomeMusicBackdrop,
     SelectOption,
     CustomKeyboardPreview,
@@ -540,6 +546,7 @@ export default {
     return {
       activeView: "settings",
       activeSettingSection: null,
+      metronomeNoticeVisible: false,
       rhythmSelectionNotice: null,
       algorithmPreviewIndex: 0,
       statisticsInputGroup: saved.menuOptions.inputMode === "midi" ? "midi" : "screen",

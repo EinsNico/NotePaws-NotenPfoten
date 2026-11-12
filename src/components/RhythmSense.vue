@@ -743,11 +743,9 @@ export default {
         else this.playDrum(false, Math.max(now, sound.at));
       }
     },
-    tone(frequency, duration, level, endFrequency, at){
+    tone(frequency, duration, volume, endFrequency, at){
       const context = this.audioContext;
-      if(!context) return;
-      const volume = level * appVolumeToAudioLevel(Options.appVolume);
-      if(volume <= 0) return;
+      if(!context || volume <= 0) return;
       const start = Number.isFinite(at) ? at : context.currentTime;
       const oscillator = context.createOscillator();
       const gain = context.createGain();
@@ -760,13 +758,17 @@ export default {
       this.trackAudioSource(oscillator, [oscillator, gain]);
       oscillator.start(start); oscillator.stop(start + duration);
     },
-    playMetronome(accent, at){ this.tone(accent ? 1100 : 720, 0.055, 0.16, accent ? 600 : 400, at); },
+    playMetronome(accent, at){
+      const volume = appVolumeToAudioLevel(Options.metronomeVolume);
+      this.tone(accent ? 1100 : 720, 0.055, 0.16 * volume, accent ? 600 : 400, at);
+    },
     playDrum(dull, at){
       const context = this.audioContext;
-      if(!context || appVolumeToAudioLevel(Options.appVolume) <= 0) return;
+      const volume = appVolumeToAudioLevel(Options.appVolume);
+      if(!context || volume <= 0) return;
       // The short noise burst gives a snare its rattle; the low body stays audible
       // on small phone speakers. A muffled strike uses the same sound components.
-      this.tone(dull ? 115 : 185, 0.13, dull ? 0.28 : 0.36, dull ? 58 : 82, at);
+      this.tone(dull ? 115 : 185, 0.13, (dull ? 0.28 : 0.36) * volume, dull ? 58 : 82, at);
       if(!this.snareNoise){
         const length = Math.ceil(context.sampleRate * 0.2);
         const buffer = context.createBuffer(1, length, context.sampleRate);
@@ -781,7 +783,7 @@ export default {
       source.buffer = this.snareNoise;
       filter.type = dull ? 'lowpass' : 'highpass';
       filter.frequency.setValueAtTime(dull ? 520 : 1700, start);
-      gain.gain.setValueAtTime((dull ? 0.12 : 0.32) * appVolumeToAudioLevel(Options.appVolume), start);
+      gain.gain.setValueAtTime((dull ? 0.12 : 0.32) * volume, start);
       gain.gain.exponentialRampToValueAtTime(0.001, start + (dull ? 0.12 : 0.17));
       source.connect(filter); filter.connect(gain); gain.connect(getAppAudioDestination(context));
       this.trackAudioSource(source, [source, filter, gain]);

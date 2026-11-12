@@ -8,7 +8,7 @@
 
 Practice reading notes, playing melodies and keeping rhythm — using on-screen controls or a MIDI instrument.
 
-**Version 2.5.41 · Android 7.0 or later · German and English**
+**Version 2.5.42 · Android 7.0 or later · German and English**
 
 [Project history cleanup](docs/HISTORY_CLEANUP.md) (currently in German)
 

@@ -140,7 +140,7 @@ test("shows separate, initially collapsed legal information in both languages", 
   assert(infoDialog.indexOf("showLegal: false") !== -1);
   assert(infoDialog.indexOf('aria-controls="app-info-legal"') !== -1);
   assert(infoDialog.indexOf("APP_INFO_LEGAL_PROJECT_NAMES") !== -1);
-  assert(germanTranslations.indexOf('APP_INFO_LEGAL_COPYRIGHT: "© 2026 NicronTheFox"') !== -1);
+  assert(germanTranslations.indexOf('APP_INFO_LEGAL_COPYRIGHT: "© 2026 EinsNico"') !== -1);
   assert(germanTranslations.indexOf('APP_INFO_LEGAL_SOURCE_LICENSE: "Das Gesamtprojekt steht unter AGPL-3.0; der ursprüngliche Projektcode behält seinen MIT-Lizenzhinweis."') !== -1);
   assert(englishTranslations.indexOf('APP_INFO_LEGAL_SOURCE_LICENSE: "The combined project is under AGPL-3.0; the original project code retains its MIT license notice."') !== -1);
 });

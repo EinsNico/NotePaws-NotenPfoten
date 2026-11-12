@@ -52,6 +52,7 @@ export default {
   language: null,
   noteNaming: null,
   appVolume: DEFAULT_APP_VOLUME,
+  metronomeVolume: DEFAULT_APP_VOLUME,
   noteFlowMelodyMovement: "mixed",
   noteFlowChordMovement: "mixed",
   noteFlowMelodySettings: null,
@@ -70,6 +71,8 @@ export default {
       const migration = migrateLegacyCustomDefaults(loadedOptions);
       Object.assign(this, migration.options);
       this.appVolume = normalizeAppVolume(loadedOptions.appVolume);
+      this.metronomeVolume = loadedOptions.metronomeVolume === undefined
+        ? this.appVolume : normalizeAppVolume(loadedOptions.metronomeVolume);
       this.convertOldClefValues();
       const clefMigration = migrateLegacyCustomRangeClefs(
         this.clef,
@@ -140,6 +143,7 @@ export default {
     this.sanitizeCustomRange();
     this.noteNaming = normalizeNoteNaming(this.noteNaming, this.language);
     this.appVolume = normalizeAppVolume(this.appVolume);
+    this.metronomeVolume = normalizeAppVolume(this.metronomeVolume);
     this.sound = this.sound === true;
     this.keepScreenAwake = this.keepScreenAwake !== false;
     this.vibration = this.vibration !== false;
